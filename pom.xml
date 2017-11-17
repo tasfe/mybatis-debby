@@ -4,4 +4,21 @@
 	<groupId>org.mybatis.debby</groupId>
 	<artifactId>mybatis-debby</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
+
+	<dependencies>
+	
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.4.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mybatis.generator</groupId>
+			<artifactId>mybatis-generator-core</artifactId>
+			<version>1.3.5</version>
+		</dependency>
+	</dependencies>
+
+
 </project>
