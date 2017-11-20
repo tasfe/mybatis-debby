@@ -9,6 +9,8 @@ import java.util.Properties;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
 import org.mybatis.debby.codegen.XConfiguration;
+import org.mybatis.debby.codegen.util.XMyBatis3FormattingUtilities;
+import org.mybatis.generator.api.dom.OutputUtilities;
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
@@ -91,10 +93,47 @@ public class XInsertElementGenerator extends XAbstractXmlElementGenerator {
             answer.addElement(selectKeyElement);
         }
         
+        StringBuilder insertClause = new StringBuilder();
+        StringBuilder valuesClause = new StringBuilder();
         
+        insertClause.append(" insert into ");
+        insertClause.append(introspectedContext.getTableName());
+        insertClause.append(" (");
+        
+        valuesClause.append(" values(");
+        
+        List<String> valuesClauses = new ArrayList<String>();
+        List<ResultMapping> propertyResultMappings = resultMap.getPropertyResultMappings();
+        for (int i=0; i < propertyResultMappings.size(); i++) {
+        	ResultMapping resultMapping = propertyResultMappings.get(i);
+        	insertClause.append(XMyBatis3FormattingUtilities.getEscapedColumnName(resultMapping));
+        	valuesClause.append(XMyBatis3FormattingUtilities.getParameterClause(resultMapping));
+        	
+        	if (i + 1 < propertyResultMappings.size()) {
+                insertClause.append(", "); 
+                valuesClause.append(", "); 
+            }
+        	
+        	if (valuesClause.length() > 80) {
+                answer.addElement(new TextElement(insertClause.toString()));
+                insertClause.setLength(0);
+                OutputUtilities.xmlIndent(insertClause, 1);
 
+                valuesClauses.add(valuesClause.toString());
+                valuesClause.setLength(0);
+                OutputUtilities.xmlIndent(valuesClause, 1);
+            }
+        }
         
-        
+        insertClause.append(')');
+        answer.addElement(new TextElement(insertClause.toString()));
+
+        valuesClause.append(')');
+        valuesClauses.add(valuesClause.toString());
+
+        for (String clause : valuesClauses) {
+            answer.addElement(new TextElement(clause));
+        }
         
         parentElement.addElement(answer);
     }
