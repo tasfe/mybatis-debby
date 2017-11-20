@@ -25,6 +25,7 @@ public abstract class XIntrospectedContext {
 
     private String tableName;
     private ResultMap resultMap;
+    private XConfiguration xConfiguration;
 
     public String getTableName() {
         return tableName;
@@ -40,6 +41,14 @@ public abstract class XIntrospectedContext {
 
     public void setResultMap(ResultMap resultMap) {
         this.resultMap = resultMap;
+    }
+
+    public XConfiguration getxConfiguration() {
+        return xConfiguration;
+    }
+
+    public void setxConfiguration(XConfiguration xConfiguration) {
+        this.xConfiguration = xConfiguration;
     }
 
 }

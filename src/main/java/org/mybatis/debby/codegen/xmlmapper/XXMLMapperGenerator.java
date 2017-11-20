@@ -18,6 +18,7 @@ package org.mybatis.debby.codegen.xmlmapper;
 import org.mybatis.debby.codegen.XAbstractXmlGenerator;
 import org.mybatis.debby.codegen.xmlmapper.elements.XAbstractXmlElementGenerator;
 import org.mybatis.debby.codegen.xmlmapper.elements.XBaseColumnListElementGenerator;
+import org.mybatis.debby.codegen.xmlmapper.elements.XInsertElementGenerator;
 import org.mybatis.debby.codegen.xmlmapper.elements.XTableNameElementGenerator;
 import org.mybatis.generator.api.dom.xml.Document;
 import org.mybatis.generator.api.dom.xml.XmlElement;
@@ -50,6 +51,11 @@ public class XXMLMapperGenerator extends XAbstractXmlGenerator {
     
     protected void addBaseColumnListElement(XmlElement parentElement) {
         XAbstractXmlElementGenerator elementGenerator = new XBaseColumnListElementGenerator();
+        initializeAndExecuteGenerator(elementGenerator, parentElement);
+    }
+    
+    protected void addInsertElement(XmlElement parentElement) {
+        XAbstractXmlElementGenerator elementGenerator = new XInsertElementGenerator();
         initializeAndExecuteGenerator(elementGenerator, parentElement);
     }
     
