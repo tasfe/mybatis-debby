@@ -1,7 +1,6 @@
 package org.mybatis.debby.codegen.xmlmapper.elements;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -15,6 +14,8 @@ import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.internal.db.DatabaseDialects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 
@@ -23,6 +24,8 @@ import com.google.common.base.Strings;
  * @date Nov 20, 2017 10:14:03 AM
  */
 public class XInsertElementGenerator extends XAbstractXmlElementGenerator {
+    
+    private static final Logger logger = LoggerFactory.getLogger(XInsertElementGenerator.class);
     
     public XInsertElementGenerator() {
         super();
@@ -36,23 +39,22 @@ public class XInsertElementGenerator extends XAbstractXmlElementGenerator {
         ResultMap resultMap = introspectedContext.getResultMap();
         answer.addAttribute(new Attribute("parameterType", resultMap.getType().getName()));
         
-        List<ResultMapping> idResultMappingList = new ArrayList<ResultMapping>();
-        Iterator<ResultMapping> iter = resultMap.getIdResultMappings().iterator();
+        StringBuilder sb = new StringBuilder();
+        
+        // Handle <SelectKey> element.
+        // Composite keys is not supported.
         int index = 0;
-        while (iter.hasNext()) {
-            ResultMapping resultMapping = iter.next();
+        for (ResultMapping resultMapping : resultMap.getIdResultMappings()) {
             if (!Strings.isNullOrEmpty(resultMapping.getColumn()) && !Strings.isNullOrEmpty(resultMapping.getProperty())) {
-                idResultMappingList.add(resultMapping);
                 index++;
             }
         }
         
-        StringBuilder sb = new StringBuilder();
-        
         if (index > 1) {
-            return; // Composite keys is not supported.
+            logger.warn("Coposite keys is not supported. ResultMap[{}]", resultMap.getId());
+            return; 
         } else if (index == 1) {
-            ResultMapping idMappings = idResultMappingList.get(0);
+            ResultMapping idMappings = resultMap.getIdResultMappings().get(0);
             XmlElement selectKeyElement = new XmlElement("selectKey");
             selectKeyElement.addAttribute(new Attribute("keyProperty", idMappings.getProperty()));
             selectKeyElement.addAttribute(new Attribute("resultType", idMappings.getJavaType().getName()));
@@ -105,7 +107,12 @@ public class XInsertElementGenerator extends XAbstractXmlElementGenerator {
         List<String> valuesClauses = new ArrayList<String>();
         List<ResultMapping> propertyResultMappings = resultMap.getPropertyResultMappings();
         for (int i=0; i < propertyResultMappings.size(); i++) {
+            
         	ResultMapping resultMapping = propertyResultMappings.get(i);
+        	if (!Strings.isNullOrEmpty(resultMapping.getNestedQueryId()) || !Strings.isNullOrEmpty(resultMapping.getNestedResultMapId())) {
+        	    continue;
+        	}
+        	
         	insertClause.append(XMyBatis3FormattingUtilities.getEscapedColumnName(resultMapping));
         	valuesClause.append(XMyBatis3FormattingUtilities.getParameterClause(resultMapping));
         	

@@ -53,12 +53,15 @@ public class XMyBatis3FormattingUtilities {
 
         sb.append("#{");
         sb.append(resultMapping.getProperty());
-        sb.append(",jdbcType=");
-        sb.append(resultMapping.getJdbcType());
-
+        
+        if (resultMapping.getJdbcType() != null) {
+            sb.append(",jdbcType=");
+            sb.append(resultMapping.getJdbcType());
+        }
+        
         if (resultMapping.getTypeHandler() != null) {
             sb.append(",typeHandler=");
-            sb.append(resultMapping.getTypeHandler().getClass().getName());
+            sb.append(resultMapping.getTypeHandler().getClass().getSimpleName());
         }
 
         sb.append('}');

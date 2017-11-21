@@ -16,6 +16,7 @@
 package org.mybatis.debby.codegen;
 
 import org.apache.ibatis.mapping.ResultMap;
+import org.apache.ibatis.session.Configuration;
 
 /**
  * @author rocky.hu
@@ -26,6 +27,7 @@ public abstract class XIntrospectedContext {
     private String tableName;
     private ResultMap resultMap;
     private XConfiguration xConfiguration;
+    private Configuration configuration;
 
     public String getTableName() {
         return tableName;
@@ -49,6 +51,14 @@ public abstract class XIntrospectedContext {
 
     public void setxConfiguration(XConfiguration xConfiguration) {
         this.xConfiguration = xConfiguration;
+    }
+
+    public Configuration getConfiguration() {
+        return configuration;
+    }
+
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
     }
 
 }

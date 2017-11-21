@@ -22,6 +22,8 @@ import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
+import com.google.common.base.Strings;
+
 /**
  * @author rocky.hu
  * @date Nov 17, 2017 2:33:02 PM
@@ -40,7 +42,12 @@ public class XBaseColumnListElementGenerator extends XAbstractXmlElementGenerato
         StringBuilder sb = new StringBuilder();
         Iterator<ResultMapping> iter = introspectedContext.getResultMap().getPropertyResultMappings().iterator();
         while (iter.hasNext()) {
-            sb.append(iter.next().getColumn());
+            
+            ResultMapping resultMapping = iter.next();
+            if (!Strings.isNullOrEmpty(resultMapping.getNestedQueryId()) || !Strings.isNullOrEmpty(resultMapping.getNestedResultMapId())) {
+                continue;
+            }
+            sb.append(resultMapping.getColumn());
             
             if (iter.hasNext()) {
                 sb.append(", ");
