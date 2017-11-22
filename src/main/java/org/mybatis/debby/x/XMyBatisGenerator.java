@@ -15,9 +15,20 @@
  */
 package org.mybatis.debby.x;
 
-import org.apache.ibatis.session.Configuration;
+import java.util.Set;
+
+import javax.persistence.Table;
+
+import org.apache.ibatis.builder.BuilderException;
+import org.apache.ibatis.builder.xml.XMLMapperBuilder;
+import org.apache.ibatis.mapping.ResultMap;
+import org.apache.ibatis.session.XConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+
+import com.google.common.base.CaseFormat;
 
 /**
  * @author rocky.hu
@@ -27,28 +38,48 @@ public class XMyBatisGenerator {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(XMyBatisGenerator.class);
     
-    private boolean debugEnabled;
-    private Configuration configuration;
+    private XConfiguration xConfiguration;
     
-    public void generate() {
+    public XMyBatisGenerator(XConfiguration xConfiguration) {
+		super();
+		this.xConfiguration = xConfiguration;
+	}
+
+	public void generate() {
         LOGGER.info("[Start] Support debby mapper support function...");
+        try {
+        	Resource commonMapperXMLResource = new ClassPathResource("x/CommonMapper.xml");
+			new XMLMapperBuilder(commonMapperXMLResource.getInputStream(), xConfiguration.getConfiguration(), null, xConfiguration.getConfiguration()
+			        .getSqlFragments(), "mybatis.debby.CommonMapper").parse();
+			
+			Set<String> loadedResources = xConfiguration.getLoadedResources();
+	        for (String resource : loadedResources) {
+	        	if (resource.startsWith("interface ")) {
+	                String namespace = resource.substring(resource.indexOf(" ") + 1);
+	                ResultMap resultMap = xConfiguration.getConfiguration().getResultMap(namespace + ".baseResultMap");
+	                if (resultMap != null) {
+	                	
+	                	// parse the table name
+	                    String tableName = "";
+	                    Class<?> type = resultMap.getType();
+	                    Table table = type.getAnnotation(Table.class);
+	                    if (table != null) {
+	                        tableName = table.name();
+	                    } else {
+	                        tableName = xConfiguration.getTablePrefix() + CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, type.getSimpleName());
+	                    }
+	                    
+	                    
+	                    
+	                }
+	        	}
+	        }
+			
+		} catch (Exception e) {
+            LOGGER.error("[Exception]: Support debby mapper support functio...", e);
+            throw new BuilderException("[Exception] Support debby mapper support function.");
+		}
         LOGGER.info("[End] Support debby mapper support function...");
-    }
-
-    public boolean isDebugEnabled() {
-        return debugEnabled;
-    }
-
-    public void setDebugEnabled(boolean debugEnabled) {
-        this.debugEnabled = debugEnabled;
-    }
-
-    public Configuration getConfiguration() {
-        return configuration;
-    }
-
-    public void setConfiguration(Configuration configuration) {
-        this.configuration = configuration;
     }
 
 }

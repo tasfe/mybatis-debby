@@ -7,7 +7,7 @@ import java.util.Properties;
 
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
-import org.mybatis.debby.codegen.XConfiguration;
+import org.apache.ibatis.session.XConfiguration;
 import org.mybatis.debby.codegen.util.XMyBatis3FormattingUtilities;
 import org.mybatis.generator.api.dom.OutputUtilities;
 import org.mybatis.generator.api.dom.xml.Attribute;

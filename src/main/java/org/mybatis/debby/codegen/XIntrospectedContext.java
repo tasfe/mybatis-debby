@@ -17,6 +17,7 @@ package org.mybatis.debby.codegen;
 
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.XConfiguration;
 
 /**
  * @author rocky.hu

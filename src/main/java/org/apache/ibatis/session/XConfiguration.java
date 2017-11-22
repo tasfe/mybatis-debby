@@ -13,9 +13,10 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.mybatis.debby.codegen;
+package org.apache.ibatis.session;
 
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * @author rocky.hu
@@ -23,7 +24,22 @@ import java.util.Properties;
  */
 public class XConfiguration {
     
+    private boolean debugEnabled;
+	private String tablePrefix = ""; 
     private Properties additionalDatabaseDialects;
+    private org.apache.ibatis.session.Configuration configuration;
+    
+    public XConfiguration(org.apache.ibatis.session.Configuration configuration) {
+        this.configuration = configuration;
+    }
+
+    public org.apache.ibatis.session.Configuration getConfiguration() {
+		return configuration;
+	}
+
+	public Set<String> getLoadedResources() {
+        return configuration.loadedResources;
+    }
 
     public Properties getAdditionalDatabaseDialects() {
         return additionalDatabaseDialects;
@@ -32,5 +48,21 @@ public class XConfiguration {
     public void setAdditionalDatabaseDialects(Properties additionalDatabaseDialects) {
         this.additionalDatabaseDialects = additionalDatabaseDialects;
     }
+    
+	public boolean isDebugEnabled() {
+		return debugEnabled;
+	}
+
+	public void setDebugEnabled(boolean debugEnabled) {
+		this.debugEnabled = debugEnabled;
+	}
+
+	public String getTablePrefix() {
+		return tablePrefix;
+	}
+
+	public void setTablePrefix(String tablePrefix) {
+		this.tablePrefix = tablePrefix;
+	}
     
 }
