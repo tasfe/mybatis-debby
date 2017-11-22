@@ -18,6 +18,8 @@ package org.mybatis.debby.codegen.util;
 import org.apache.ibatis.mapping.ResultMapping;
 import org.mybatis.generator.internal.util.StringUtility;
 
+import com.google.common.base.Strings;
+
 /**
  * @author rocky.hu
  * @date Nov 20, 2017 10:42:07 PM
@@ -52,7 +54,12 @@ public class XMyBatis3FormattingUtilities {
         StringBuilder sb = new StringBuilder();
 
         sb.append("#{");
-        sb.append(resultMapping.getProperty());
+        if (Strings.isNullOrEmpty(prefix)) {
+            sb.append(resultMapping.getProperty());
+        } else {
+            sb.append(prefix);
+            sb.append(resultMapping.getProperty());
+        }
         
         if (resultMapping.getJdbcType() != null) {
             sb.append(",jdbcType=");

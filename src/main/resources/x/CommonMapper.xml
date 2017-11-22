@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.debby.CommonMapper">
+
+    <!-- Where SQL Fragment -->
+    <sql id="criteriaSqlFragment">
+        <if test="criteria.valid">
+            <trim prefix="(" prefixOverrides="AND" suffix=")">
+                <foreach collection="criteria.criterions" item="criterion" separator="AND">
+                    <choose>
+                        <when test="criterion.matchMode != null"> <!-- This is just for LIKE -->
+                            ${criterion.propertyName} LIKE
+                            <if test="criterion.matchMode.getNotation() == 'EXACT'">
+                                #{criterion.value}
+                            </if>
+                            <if test="criterion.matchMode.getNotation() == 'START'">
+                                <if test="_databaseId == 'mysql' || _databaseId == 'h2'">
+                                    concat('', #{criterion.value}, '%')
+                                </if>
+                                <if test="_databaseId == 'oracle'">
+                                    '' || #{name} || '%'
+                                </if>
+                            </if>
+                            <if test="criterion.matchMode.getNotation() == 'END'">
+                                <if test="_databaseId == 'mysql' || _databaseId == 'h2'">
+                                    concat('%', #{criterion.value}, '')
+                                </if>
+                                <if test="_databaseId == 'oracle'">
+                                    '%' || #{name} || ''
+                                </if>
+                            </if>
+                            <if test="criterion.matchMode.getNotation() == 'ANYWHERE'">
+                                <if test="_databaseId == 'mysql' || _databaseId == 'h2'">
+                                    concat('%', #{criterion.value}, '%')
+                                </if>
+                                <if test="_databaseId == 'oracle'">
+                                    '%' || #{name} || '%'
+                                </if>
+                            </if>
+                        </when>
+                        <when test="criterion.listValue != null">
+                            ${criterion.propertyName} ${criterion.sqlOperators}
+                            <foreach collection="criterion.listValue" item="listItem" open="(" close=")" separator=",">
+                                #{listItem}
+                            </foreach>
+                        </when>
+                        <when test="criterion.value != null and criterion.secondValue != null">
+                            (${criterion.propertyName} ${criterion.sqlOperators} #{criterion.value} AND
+                            #{criterion.secondValue})
+                        </when>
+                        <when test="criterion.value != null">
+                            ${criterion.propertyName} ${criterion.sqlOperators} #{criterion.value}
+                        </when>
+                        <when test="criterion.value == null">
+                            ${criterion.propertyName} ${criterion.sqlOperators}
+                        </when>
+                    </choose>
+                </foreach>
+            </trim>
+        </if>
+    </sql>
+
+    <sql id="whereSqlFragment">
+        <where>
+            <foreach collection="oredCriteriaList" item="criteria" separator="or">
+                <include refid="mybatis.debby.CommonMapper.criteriaSqlFragment"/>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="updatedWhereSqlFragment">
+        <where>
+            <foreach collection="updatedCriteria.oredCriteriaList" item="criteria" separator="or">
+                <include refid="mybatis.debby.CommonMapper.criteriaSqlFragment"/>
+            </foreach>
+        </where>
+    </sql>
+
+    <!-- Pagination SQL Fragment -->
+    <sql id="paginationPrefixSql">
+        <if test="_databaseId == 'oracle'">
+            <![CDATA[ SELECT * FROM ( SELECT ROW_.*, ROWNUM ROWNUM_ FROM ( ]]>
+        </if>
+    </sql>
+
+    <sql id="paginationSuffixSql">
+        <if test="_databaseId == 'oracle'">
+            <![CDATA[ ) ROW_ ) WHERE ROWNUM_ > #{firstResult} AND ROWNUM_ <= #{maxResults} ]]>
+        </if>
+        <if test="_databaseId == 'mysql'">
+            <![CDATA[ LIMIT #{firstResult}, #{maxResults} ]]>
+        </if>
+        <if test="_databaseId == 'h2'">
+            <![CDATA[ LIMIT #{firstResult}, #{maxResults} ]]>
+        </if>
+    </sql>
+
+    <sql id="selectById">
+        SELECT
+        <include refid="${columns}"/>
+        FROM
+        <include refid="${tableName}"/>
+        WHERE id = #{id}
+    </sql>
+
+    <sql id="selectByCriteria">
+        SELECT
+        <if test="distinct">
+            DISTINCT
+        </if>
+        <include refid="${columns}"/>
+        FROM
+        <include refid="${tableName}"/>
+        <if test="oredCriteriaList != null">
+            <include refid="mybatis.debby.CommonMapper.whereSqlFragment"/>
+        </if>
+        <if test="entityOrderList != null">
+            ORDER BY
+            <foreach collection="entityOrderList" item="entityOrder" separator=",">
+                ${entityOrder}
+            </foreach>
+        </if>
+    </sql>
+
+    <sql id="selectWithCountByCriteria">
+        <include refid="mybatis.debby.CommonMapper.paginationPrefixSql"/>
+        SELECT
+        <if test="distinct">
+            DISTINCT
+        </if>
+        <include refid="${columns}"/>
+        FROM
+        <include refid="${tableName}"/>
+        <if test="oredCriteriaList != null">
+            <include refid="mybatis.debby.CommonMapper.whereSqlFragment"/>
+        </if>
+        <if test="entityOrderList != null">
+            ORDER BY
+            <foreach collection="entityOrderList" item="entityOrder" separator=",">
+                ${entityOrder}
+            </foreach>
+        </if>
+        <include refid="mybatis.debby.CommonMapper.paginationSuffixSql"/>
+    </sql>
+
+    <sql id="countByCriteria">
+        SELECT count(*) FROM
+        <include refid="${tableName}"/>
+        <if test="oredCriteriaList != null">
+            <include refid="mybatis.debby.CommonMapper.whereSqlFragment"/>
+        </if>
+    </sql>
+
+    <sql id="deleteById">
+        DELETE FROM
+        <include refid="${tableName}"/>
+        WHERE id = #{id}
+    </sql>
+
+    <sql id="deleteByCriteria">
+        DELETE FROM
+        <include refid="${tableName}"/>
+        <if test="oredCriteriaList != null">
+            <include refid="mybatis.debby.CommonMapper.whereSqlFragment"/>
+        </if>
+    </sql>
+
+</mapper>

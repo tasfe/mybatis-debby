@@ -15,7 +15,15 @@
  */
 package org.mybatis.debby.codegen.xmlmapper.elements;
 
+import java.util.List;
+
+import org.apache.ibatis.mapping.ResultMapping;
+import org.mybatis.debby.codegen.util.XMyBatis3FormattingUtilities;
+import org.mybatis.generator.api.dom.xml.Attribute;
+import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
+
+import com.google.common.base.Strings;
 
 /**
  * @author rocky.hu
@@ -29,7 +37,46 @@ public class XUpdateByCriteriaElementGenerator extends XAbstractXmlElementGenera
 
     @Override
     public void addElements(XmlElement parentElement) {
+        XmlElement answer = new XmlElement("update");
+        answer.addAttribute(new Attribute("id", "updateByCriteria"));
+        answer.addAttribute(new Attribute("parameterType", "map"));
         
+        StringBuilder sb = new StringBuilder();
+        sb.append("update ");
+        sb.append(introspectedContext.getTableName());
+        answer.addElement(new TextElement(sb.toString()));
+        
+        XmlElement dynamicElement = new XmlElement("set");
+        answer.addElement(dynamicElement);
+        
+        List<ResultMapping> resultMappingList = introspectedContext.getResultMap().getPropertyResultMappings();
+        for (ResultMapping resultMapping : resultMappingList) {
+            
+            if (resultMapping.getFlags() != null && resultMapping.getFlags().size() > 0 || !Strings.isNullOrEmpty(resultMapping.getNestedQueryId()) || 
+                    !Strings.isNullOrEmpty(resultMapping.getNestedResultMapId())) {
+                continue;
+            }
+            
+            sb.setLength(0);
+            sb.append("record.");
+            sb.append(resultMapping.getProperty());
+            sb.append(" != null");
+            XmlElement isNotNullElement = new XmlElement("if");
+            isNotNullElement.addAttribute(new Attribute("test", sb.toString()));
+            dynamicElement.addElement(isNotNullElement);
+            
+            sb.setLength(0);
+            sb.append(XMyBatis3FormattingUtilities.getEscapedColumnName(resultMapping));
+            sb.append(" = "); 
+            sb.append(XMyBatis3FormattingUtilities.getParameterClause(resultMapping, "record."));
+            sb.append(',');
+            
+            isNotNullElement.addElement(new TextElement(sb.toString()));
+        }
+        
+        answer.addElement(getUpdateByCriteriaIfElement());
+        
+        parentElement.addElement(answer);
     }
 
 }

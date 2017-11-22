@@ -16,6 +16,7 @@
 package org.mybatis.debby.codegen.xmlmapper.elements;
 
 import org.mybatis.debby.codegen.XAbstractGenerator;
+import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
 /**
@@ -28,6 +29,23 @@ public abstract class XAbstractXmlElementGenerator extends XAbstractGenerator {
 
     public XAbstractXmlElementGenerator() {
         super();
+    }
+    
+    /**
+     * Get "if" element for "updateByCriteria" statement.
+     *
+     * @return
+     */
+    protected XmlElement getUpdateByCriteriaIfElement()
+    {
+        XmlElement ifElement = new XmlElement("if");
+        ifElement.addAttribute(new Attribute("test", "_parameter != null and _parameter.updatedCriteria != null"));
+
+        XmlElement includeElement = new XmlElement("include");
+        includeElement.addAttribute(new Attribute("refid", "mybatis.debby.CommonMapper.updatedWhereSqlFragment"));
+        ifElement.addElement(includeElement);
+
+        return ifElement;
     }
 
 }
