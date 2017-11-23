@@ -46,11 +46,13 @@ public class XMyBatisGenerator {
 	}
 
 	public void generate() {
-        LOGGER.info("[Start] Support debby mapper support function...");
+        LOGGER.info("[Start] debby mapper support...");
         try {
         	Resource commonMapperXMLResource = new ClassPathResource("x/CommonMapper.xml");
 			new XMLMapperBuilder(commonMapperXMLResource.getInputStream(), xConfiguration.getConfiguration(), null, xConfiguration.getConfiguration()
 			        .getSqlFragments(), "mybatis.debby.CommonMapper").parse();
+			
+			Resource debbyMapperXMLResource = new ClassPathResource("x/DebbyMapper.xml");
 			
 			Set<String> loadedResources = xConfiguration.getLoadedResources();
 	        for (String resource : loadedResources) {
@@ -76,10 +78,10 @@ public class XMyBatisGenerator {
 	        }
 			
 		} catch (Exception e) {
-            LOGGER.error("[Exception]: Support debby mapper support functio...", e);
-            throw new BuilderException("[Exception] Support debby mapper support function.");
+            LOGGER.error("[Exception]: debby mapper support...", e);
+            throw new BuilderException("[Exception] debby mapper support.");
 		}
-        LOGGER.info("[End] Support debby mapper support function...");
+        LOGGER.info("[End] debby mapper support...");
     }
 
 }

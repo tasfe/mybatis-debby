@@ -15,39 +15,36 @@
  */
 package org.mybatis.debby.codegen.xmlmapper.elements;
 
-import org.mybatis.debby.codegen.XAbstractGenerator;
+import org.mybatis.debby.codegen.XInternalStatements;
 import org.mybatis.generator.api.dom.xml.Attribute;
+import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
 /**
  * @author rocky.hu
- * @date Nov 17, 2017 2:20:48 PM
+ * @date Nov 23, 2017 4:56:12 PM
  */
-public abstract class XAbstractXmlElementGenerator extends XAbstractGenerator {
-    
-    public abstract void addElements(XmlElement parentElement);
+public class XDeleteByCriteriaElementGenerator extends XAbstractXmlElementGenerator {
 
-    protected XmlElement getBaseColumnListElement() {
-        XmlElement answer = new XmlElement("include");
-        answer.addAttribute(new Attribute("refid", "baseColumns")); 
-        return answer;
-    }
-    
-    /**
-     * Get "if" element for "updateByCriteria" statement.
-     *
-     * @return
-     */
-    protected XmlElement getUpdateByCriteriaIfElement()
-    {
+    @Override
+    public void addElements(XmlElement parentElement) {
+        XmlElement answer = new XmlElement("delete");
+        answer.addAttribute(new Attribute("id", XInternalStatements.DELETE_BY_CRITERIA.getId()));
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append(" DELETE FROM ");
+        sb.append(introspectedContext.getTableName());
+        answer.addElement(new TextElement(sb.toString()));
+        
         XmlElement ifElement = new XmlElement("if");
-        ifElement.addAttribute(new Attribute("test", "_parameter != null and _parameter.updatedCriteria != null"));
-
+        ifElement.addAttribute(new Attribute("test", "oredCriteriaList != null"));
         XmlElement includeElement = new XmlElement("include");
-        includeElement.addAttribute(new Attribute("refid", "updateWhereSqlFragment"));
+        includeElement.addAttribute(new Attribute("refid", "selectWhereSqlFragment"));
         ifElement.addElement(includeElement);
-
-        return ifElement;
+        
+        answer.addElement(ifElement);
+        
+        parentElement.addElement(answer);
     }
 
 }

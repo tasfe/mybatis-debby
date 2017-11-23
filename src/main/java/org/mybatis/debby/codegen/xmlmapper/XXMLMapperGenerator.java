@@ -19,7 +19,6 @@ import org.mybatis.debby.codegen.XAbstractXmlGenerator;
 import org.mybatis.debby.codegen.xmlmapper.elements.XAbstractXmlElementGenerator;
 import org.mybatis.debby.codegen.xmlmapper.elements.XBaseColumnListElementGenerator;
 import org.mybatis.debby.codegen.xmlmapper.elements.XInsertElementGenerator;
-import org.mybatis.debby.codegen.xmlmapper.elements.XTableNameElementGenerator;
 import org.mybatis.debby.codegen.xmlmapper.elements.XUpdateByCriteriaElementGenerator;
 import org.mybatis.generator.api.dom.xml.Document;
 import org.mybatis.generator.api.dom.xml.XmlElement;
@@ -38,16 +37,10 @@ public class XXMLMapperGenerator extends XAbstractXmlGenerator {
     protected XmlElement getSqlMapElement() {
         XmlElement answer = new XmlElement("mapper");
         
-        addTableNameElement(answer);
         addBaseColumnListElement(answer);
         addInsertElement(answer);
         addUpdateByCriteriaElement(answer);
         return answer;
-    }
-    
-    protected void addTableNameElement(XmlElement parentElement) {
-        XAbstractXmlElementGenerator elementGenerator = new XTableNameElementGenerator();
-        initializeAndExecuteGenerator(elementGenerator, parentElement);
     }
     
     protected void addBaseColumnListElement(XmlElement parentElement) {

@@ -32,8 +32,7 @@ public class XMyBatis3FormattingUtilities {
     /** The ending delimiter. */
     private static String endingDelimiter = "\"";
 	
-	public static String getEscapedColumnName(
-            ResultMapping resultMapping) {
+	public static String getEscapedColumnName(ResultMapping resultMapping) {
 		String column = resultMapping.getColumn();
 		StringBuilder sb = new StringBuilder();
 		sb.append(escapeStringForMyBatis3(column));
@@ -59,6 +58,32 @@ public class XMyBatis3FormattingUtilities {
         } else {
             sb.append(prefix);
             sb.append(resultMapping.getProperty());
+        }
+        
+        if (resultMapping.getJdbcType() != null) {
+            sb.append(",jdbcType=");
+            sb.append(resultMapping.getJdbcType());
+        }
+        
+        if (resultMapping.getTypeHandler() != null) {
+            sb.append(",typeHandler=");
+            sb.append(resultMapping.getTypeHandler().getClass().getSimpleName());
+        }
+
+        sb.append('}');
+
+        return sb.toString();
+    }
+	
+	public static String getParameterClause(ResultMapping resultMapping, String property, String prefix) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("#{");
+        if (Strings.isNullOrEmpty(prefix)) {
+            sb.append(property);
+        } else {
+            sb.append(prefix);
+            sb.append(property);
         }
         
         if (resultMapping.getJdbcType() != null) {

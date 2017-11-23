@@ -14,28 +14,31 @@
                                 #{criterion.value}
                             </if>
                             <if test="criterion.matchMode.getNotation() == 'START'">
-                                <if test="_databaseId == 'mysql' || _databaseId == 'h2'">
+                                <!-- <if test="_databaseId == 'mysql' || _databaseId == 'h2'">
                                     concat('', #{criterion.value}, '%')
                                 </if>
                                 <if test="_databaseId == 'oracle'">
                                     '' || #{name} || '%'
-                                </if>
+                                </if> -->
+                                concat(concat('',#{criterion.value}),'%')
                             </if>
                             <if test="criterion.matchMode.getNotation() == 'END'">
-                                <if test="_databaseId == 'mysql' || _databaseId == 'h2'">
+                                <!-- <if test="_databaseId == 'mysql' || _databaseId == 'h2'">
                                     concat('%', #{criterion.value}, '')
                                 </if>
                                 <if test="_databaseId == 'oracle'">
                                     '%' || #{name} || ''
-                                </if>
+                                </if> -->
+                                concat(concat('%',#{criterion.value}),'')
                             </if>
                             <if test="criterion.matchMode.getNotation() == 'ANYWHERE'">
-                                <if test="_databaseId == 'mysql' || _databaseId == 'h2'">
+                                <!-- <if test="_databaseId == 'mysql' || _databaseId == 'h2'">
                                     concat('%', #{criterion.value}, '%')
                                 </if>
                                 <if test="_databaseId == 'oracle'">
                                     '%' || #{name} || '%'
-                                </if>
+                                </if> -->
+                                concat(concat('%',#{criterion.value}),'%')
                             </if>
                         </when>
                         <when test="criterion.listValue != null">
@@ -60,7 +63,7 @@
         </if>
     </sql>
 
-    <sql id="whereSqlFragment">
+    <sql id="selectWhereSqlFragment">
         <where>
             <foreach collection="oredCriteriaList" item="criteria" separator="or">
                 <include refid="mybatis.debby.CommonMapper.criteriaSqlFragment"/>
@@ -68,7 +71,7 @@
         </where>
     </sql>
 
-    <sql id="updatedWhereSqlFragment">
+    <sql id="updateWhereSqlFragment">
         <where>
             <foreach collection="updatedCriteria.oredCriteriaList" item="criteria" separator="or">
                 <include refid="mybatis.debby.CommonMapper.criteriaSqlFragment"/>
@@ -95,7 +98,7 @@
         </if>
     </sql>
 
-    <sql id="selectById">
+    <sql id="selectByPrimaryKey">
         SELECT
         <include refid="${columns}"/>
         FROM
@@ -112,7 +115,7 @@
         FROM
         <include refid="${tableName}"/>
         <if test="oredCriteriaList != null">
-            <include refid="mybatis.debby.CommonMapper.whereSqlFragment"/>
+            <include refid="mybatis.debby.CommonMapper.selectWhereSqlFragment"/>
         </if>
         <if test="entityOrderList != null">
             ORDER BY
@@ -132,7 +135,7 @@
         FROM
         <include refid="${tableName}"/>
         <if test="oredCriteriaList != null">
-            <include refid="mybatis.debby.CommonMapper.whereSqlFragment"/>
+            <include refid="mybatis.debby.CommonMapper.selectWhereSqlFragment"/>
         </if>
         <if test="entityOrderList != null">
             ORDER BY
@@ -143,15 +146,15 @@
         <include refid="mybatis.debby.CommonMapper.paginationSuffixSql"/>
     </sql>
 
-    <sql id="countByCriteria">
+    <sql id="selectCountByCriteria">
         SELECT count(*) FROM
         <include refid="${tableName}"/>
         <if test="oredCriteriaList != null">
-            <include refid="mybatis.debby.CommonMapper.whereSqlFragment"/>
+            <include refid="mybatis.debby.CommonMapper.selectWhereSqlFragment"/>
         </if>
     </sql>
 
-    <sql id="deleteById">
+    <sql id="deleteByPrimaryKey">
         DELETE FROM
         <include refid="${tableName}"/>
         WHERE id = #{id}
@@ -161,7 +164,7 @@
         DELETE FROM
         <include refid="${tableName}"/>
         <if test="oredCriteriaList != null">
-            <include refid="mybatis.debby.CommonMapper.whereSqlFragment"/>
+            <include refid="mybatis.debby.CommonMapper.selectWhereSqlFragment"/>
         </if>
     </sql>
 

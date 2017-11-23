@@ -16,31 +16,32 @@
 package org.mybatis.debby.codegen.xmlmapper.elements;
 
 import org.mybatis.generator.api.dom.xml.Attribute;
-import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
 /**
  * @author rocky.hu
- * @date Nov 17, 2017 2:22:32 PM
+ * @date Nov 23, 2017 2:57:56 PM
  */
-public class XTableNameElementGenerator extends XAbstractXmlElementGenerator {
-    
-    public XTableNameElementGenerator() {
-        super();
-    }
+public class XUpdateWhereSqlFragmentElementGenerator extends XAbstractXmlElementGenerator {
 
     @Override
     public void addElements(XmlElement parentElement) {
         XmlElement answer = new XmlElement("sql");
-        answer.addAttribute(new Attribute("id", "tableName"));
+        answer.addAttribute(new Attribute("id", "updateWhereSqlFragment"));
         
-        StringBuilder sb = new StringBuilder();
-        sb.append(introspectedContext.getTableName());
+        XmlElement whereElement = new XmlElement("where");
+        XmlElement forEachElement = new XmlElement("foreach");
+        forEachElement.addAttribute(new Attribute("collection", "updatedCriteria.oredCriteriaList"));
+        forEachElement.addAttribute(new Attribute("item", "criteria"));
+        forEachElement.addAttribute(new Attribute("separator", "or"));
+        XmlElement includeElement = new XmlElement("include");
+        includeElement.addAttribute(new Attribute("refid", "criteriaSqlFragment"));
         
-        if (sb.length() > 0) {
-            answer.addElement(new TextElement(sb.toString()));
-            parentElement.addElement(answer);
-        }
+        forEachElement.addElement(includeElement);
+        whereElement.addElement(forEachElement);
+        answer.addElement(whereElement);
+        
+        parentElement.addElement(answer);
     }
 
 }

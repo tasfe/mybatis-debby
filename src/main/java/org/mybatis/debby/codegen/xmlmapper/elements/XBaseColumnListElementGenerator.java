@@ -30,10 +30,6 @@ import com.google.common.base.Strings;
  */
 public class XBaseColumnListElementGenerator extends XAbstractXmlElementGenerator {
     
-    public XBaseColumnListElementGenerator() {
-        super();
-    }
-
     @Override
     public void addElements(XmlElement parentElement) {
         XmlElement answer = new XmlElement("sql");

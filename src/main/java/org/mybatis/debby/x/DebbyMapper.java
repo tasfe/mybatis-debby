@@ -25,22 +25,22 @@ import org.mybatis.debby.criteria.EntityCriteria;
  * @author rocky.hu
  * @date Aug 6, 2016 11:03:23 PM
  */
-public interface DebbyMapper<ENTITY, ID extends Serializable> {
+public interface DebbyMapper<ENTITY, PK extends Serializable> {
     
     /**
      * Insert an entity object.
-     * After, it has the primary id value assigned and we can get from the entity object we just inserted.
+     * After, it has the primary key value assigned and we can get from the entity object we just inserted.
      *
      * @param entity
      */
     void insert(ENTITY entity);
 
     /**
-     * Update an entity object. Mare sure that the value of property "id" is not null.
+     * Update an entity object by primary key.
      *
      * @param entity
-     *//*
-    void updateById(ENTITY entity);*/
+     */
+    void updateByPrimaryKey(ENTITY entity);
 
     /**
      * A enhanced update method that accept different updated conditions.
@@ -52,12 +52,12 @@ public interface DebbyMapper<ENTITY, ID extends Serializable> {
     int updateByCriteria(@Param("record") ENTITY record, @Param("updatedCriteria") EntityCriteria updatedCriteria);
 
     /**
-     * Select an entity by id.
+     * Select an entity by primary key.
      *
-     * @param id
+     * @param pk
      * @return
      */
-    ENTITY selectById(ID id);
+    ENTITY selectByPrimaryKey(PK pk);
 
     /**
      * A enhanced select method that accept different selective conditions.
@@ -66,6 +66,14 @@ public interface DebbyMapper<ENTITY, ID extends Serializable> {
      * @return
      */
     List<ENTITY> selectByCriteria(EntityCriteria criteria);
+    
+    /**
+     * Count the records by different conditions.
+     *
+     * @param criteria
+     * @return
+     */
+    long selectCountByCriteria(EntityCriteria criteria);
 
     /**
      * Select specified count of records with criteria.
@@ -80,11 +88,11 @@ public interface DebbyMapper<ENTITY, ID extends Serializable> {
     List<ENTITY> selectWithCountByCriteria(EntityCriteria criteria);
 
     /**
-     * Delete a entity by id.
+     * Delete a entity by primary key.
      *
-     * @param id
+     * @param pk
      */
-    void deleteById(ID id);
+    void deleteByPrimaryKey(PK pk);
 
     /**
      * A enhanced select method that accept different deleted conditions.
@@ -93,13 +101,5 @@ public interface DebbyMapper<ENTITY, ID extends Serializable> {
      * @return
      */
     int deleteByCriteria(EntityCriteria criteria);
-
-    /**
-     * Count the records by different conditions.
-     *
-     * @param criteria
-     * @return
-     */
-    long countByCriteria(EntityCriteria criteria);
 
 }

@@ -4,8 +4,8 @@
 <mapper namespace="mybatis.debby.DebbyMapper">
 
     <!-- == Base Statements Begin == -->
-    <select id="selectById" parameterType="int" resultMap="baseResultMap">
-        <include refid="mybatis.debby.CommonMapper.selectById">
+    <select id="selectByPrimaryKey" parameterType="int" resultMap="baseResultMap">
+        <include refid="mybatis.debby.CommonMapper.selectByPrimaryKey">
             <property name="tableName" value="tableName"/>
             <property name="columns" value="baseColumns"/>
         </include>
@@ -22,13 +22,13 @@
             <property name="columns" value="baseColumns"/>
         </include>
     </select>
-    <select id="countByCriteria" parameterType="EntityCriteria" resultType="long">
+    <select id="selectCountByCriteria" parameterType="EntityCriteria" resultType="long">
         <include refid="mybatis.debby.CommonMapper.countByCriteria">
             <property name="tableName" value="tableName"/>
         </include>
     </select>
-    <delete id="deleteById" parameterType="int">
-        <include refid="mybatis.debby.CommonMapper.deleteById">
+    <delete id="deleteByPrimaryKey" parameterType="int">
+        <include refid="mybatis.debby.CommonMapper.deleteByPrimaryKey">
             <property name="tableName" value="tableName"/>
         </include>
     </delete>

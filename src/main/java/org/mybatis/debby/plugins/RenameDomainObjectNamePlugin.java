@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package net.oxmall.base.dal.mybatis.plugins;
+package org.mybatis.debby.plugins;
 
 import java.util.List;
 import java.util.regex.Matcher;

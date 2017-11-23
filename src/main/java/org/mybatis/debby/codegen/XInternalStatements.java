@@ -15,29 +15,35 @@
  */
 package org.mybatis.debby.codegen;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * @author rocky.hu
- * @date Nov 17, 2017 11:53:21 AM
+ * @date Nov 23, 2017 11:12:03 AM
  */
-public abstract class XAbstractGenerator {
+public enum XInternalStatements {
+
+    INSERT("insert"),
+    UPDATE_BY_PRIMARY_KEY("updateByPrimaryKey"),
+    UPDATE_BY_CRITERIA("updateByCriteria"),
+    SELECT_BY_PRIMARY_KEY("selectByPrimaryKey"),
+    SELECT_BY_CRITERIA("selectByCriteria"),
+    SELECT_COUNT_BY_CRITERIA("selectCountByCriteria"),
+    SELECT_WITH_COUNT_BY_CRITERIA("selectWithCountByCriteria"),
+    DELETE_BY_PRIMARY_KEY("deleteByPrimaryKey"),
+    DELETE_BY_CRITERIA("deleteByCriteria");
     
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
-    
-    protected XIntrospectedContext introspectedContext;
-    
-    public XAbstractGenerator() {
-        super();
+    private String id;
+
+    private XInternalStatements(String id) {
+        this.id = id;
     }
 
-    public XIntrospectedContext getIntrospectedContext() {
-        return introspectedContext;
+    public String getId() {
+        return id;
     }
 
-    public void setIntrospectedContext(XIntrospectedContext introspectedContext) {
-        this.introspectedContext = introspectedContext;
+    public void setId(String id) {
+        this.id = id;
     }
-
+    
+    
 }

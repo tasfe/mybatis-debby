@@ -18,6 +18,7 @@ package org.mybatis.debby.codegen.xmlmapper.elements;
 import java.util.List;
 
 import org.apache.ibatis.mapping.ResultMapping;
+import org.mybatis.debby.codegen.XInternalStatements;
 import org.mybatis.debby.codegen.util.XMyBatis3FormattingUtilities;
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
@@ -31,14 +32,10 @@ import com.google.common.base.Strings;
  */
 public class XUpdateByCriteriaElementGenerator extends XAbstractXmlElementGenerator {
     
-    public XUpdateByCriteriaElementGenerator() {
-        super();
-    }
-
     @Override
     public void addElements(XmlElement parentElement) {
         XmlElement answer = new XmlElement("update");
-        answer.addAttribute(new Attribute("id", "updateByCriteria"));
+        answer.addAttribute(new Attribute("id", XInternalStatements.UPDATE_BY_CRITERIA.getId()));
         answer.addAttribute(new Attribute("parameterType", "map"));
         
         StringBuilder sb = new StringBuilder();
