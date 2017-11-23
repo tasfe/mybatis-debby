@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<properties resource="config.properties"/>
+
+	<settings>  
+        <setting name="lazyLoadingEnabled" value="true" />  
+        <setting name="aggressiveLazyLoading" value="false" />  
+        <setting name="cacheEnabled" value="false" />
+    </settings>  
+
+	<typeAliases>
+		<typeAlias type="org.mybatis.debby.entity.Blog" alias="Blog" />
+		<typeAlias type="org.mybatis.debby.entity.Member" alias="Member" />
+		<typeAlias type="org.mybatis.debby.criteria.EntityCriteria" alias="EntityCriteria" />
+	</typeAliases>
+
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}" />
+				<property name="url" value="${url}" />
+				<property name="username" value="${username}" />
+				<property name="password" value="${password}" />
+			</dataSource>
+		</environment>
+	</environments>
+
+	<databaseIdProvider type="DB_VENDOR">
+		<property name="SQL Server" value="sqlserver" />
+		<property name="DB2" value="db2" />
+		<property name="Oracle" value="oracle" />
+		<property name="MySQL" value="mysql" />
+		<property name="H2" value="h2" />
+	</databaseIdProvider>
+
+	<mappers>
+		<mapper resource="mappers/BlogMapper.xml" />
+	</mappers>
+
+</configuration>

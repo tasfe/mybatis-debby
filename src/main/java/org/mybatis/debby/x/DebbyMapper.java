@@ -76,18 +76,6 @@ public interface DebbyMapper<ENTITY, PK extends Serializable> {
     long selectCountByCriteria(EntityCriteria criteria);
 
     /**
-     * Select specified count of records with criteria.
-     * <p>
-     * <p>
-     * set the firstResult and maxResult property of criteria
-     * </p>
-     *
-     * @param criteria
-     * @return
-     */
-    List<ENTITY> selectWithCountByCriteria(EntityCriteria criteria);
-
-    /**
      * Delete a entity by primary key.
      *
      * @param pk

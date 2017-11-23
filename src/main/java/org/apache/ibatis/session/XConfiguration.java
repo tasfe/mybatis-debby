@@ -23,17 +23,20 @@ import java.util.Set;
  * @date Nov 20, 2017 4:30:52 PM
  */
 public class XConfiguration {
-    
+
+	/** debug or not */
     private boolean debugEnabled;
+    /** when debug mode is enabled, it will write the auto generated mapper xml to this directory */
+    private String mapperXMLOuputDirectory;
 	private String tablePrefix = ""; 
     private Properties additionalDatabaseDialects;
-    private org.apache.ibatis.session.Configuration configuration;
+    private Configuration configuration;
     
-    public XConfiguration(org.apache.ibatis.session.Configuration configuration) {
+    public XConfiguration(Configuration configuration) {
         this.configuration = configuration;
     }
 
-    public org.apache.ibatis.session.Configuration getConfiguration() {
+    public Configuration getConfiguration() {
 		return configuration;
 	}
 
@@ -64,5 +67,13 @@ public class XConfiguration {
 	public void setTablePrefix(String tablePrefix) {
 		this.tablePrefix = tablePrefix;
 	}
-    
+
+	public String getMapperXMLOuputDirectory() {
+		return mapperXMLOuputDirectory;
+	}
+
+	public void setMapperXMLOuputDirectory(String mapperXMLOuputDirectory) {
+		this.mapperXMLOuputDirectory = mapperXMLOuputDirectory;
+	}
+
 }

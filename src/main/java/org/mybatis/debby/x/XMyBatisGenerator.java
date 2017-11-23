@@ -15,14 +15,20 @@
  */
 package org.mybatis.debby.x;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Set;
 
 import javax.persistence.Table;
 
+import com.google.common.base.Strings;
 import org.apache.ibatis.builder.BuilderException;
 import org.apache.ibatis.builder.xml.XMLMapperBuilder;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.session.XConfiguration;
+import org.mybatis.debby.codegen.XIntrospectedContext;
+import org.mybatis.debby.codegen.xmlmapper.XXMLMapperGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -47,13 +53,13 @@ public class XMyBatisGenerator {
 
 	public void generate() {
         LOGGER.info("[Start] debby mapper support...");
+
+        if (xConfiguration.isDebugEnabled() && Strings.isNullOrEmpty(xConfiguration.getMapperXMLOuputDirectory())) {
+			throw new BuilderException("[Exception] 'mapperXMLOuputDirectory' must be set on debug mode.");
+		}
+
         try {
-        	Resource commonMapperXMLResource = new ClassPathResource("x/CommonMapper.xml");
-			new XMLMapperBuilder(commonMapperXMLResource.getInputStream(), xConfiguration.getConfiguration(), null, xConfiguration.getConfiguration()
-			        .getSqlFragments(), "mybatis.debby.CommonMapper").parse();
-			
-			Resource debbyMapperXMLResource = new ClassPathResource("x/DebbyMapper.xml");
-			
+			XIntrospectedContext context = null;
 			Set<String> loadedResources = xConfiguration.getLoadedResources();
 	        for (String resource : loadedResources) {
 	        	if (resource.startsWith("interface ")) {
@@ -70,9 +76,33 @@ public class XMyBatisGenerator {
 	                    } else {
 	                        tableName = xConfiguration.getTablePrefix() + CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, type.getSimpleName());
 	                    }
-	                    
-	                    
-	                    
+
+	                    context = new XIntrospectedContext();
+						context.setConfiguration(xConfiguration.getConfiguration());
+						context.setResultMap(resultMap);
+						context.setTableName(tableName);
+						context.setxConfiguration(xConfiguration);
+
+						XXMLMapperGenerator mapperGenerator = new XXMLMapperGenerator();
+						mapperGenerator.setIntrospectedContext(context);
+
+						String formattedContent = mapperGenerator.getDocument().getFormattedContent();
+						FileWriter writer;
+						try {
+							File file = new File(xConfiguration.getMapperXMLOuputDirectory() + namespace.replace(".", "_") + ".xml");
+							if (!file.exists()) {
+								File dir = new File(file.getParent());
+								dir.mkdirs();
+								file.createNewFile();
+							}
+							writer = new FileWriter(file);
+							writer.write(formattedContent);
+							writer.flush();
+							writer.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+
 	                }
 	        	}
 	        }

@@ -23,7 +23,7 @@ import org.apache.ibatis.session.XConfiguration;
  * @author rocky.hu
  * @date Nov 17, 2017 11:48:16 AM
  */
-public abstract class XIntrospectedContext {
+public class XIntrospectedContext {
 
     private String tableName;
     private ResultMap resultMap;

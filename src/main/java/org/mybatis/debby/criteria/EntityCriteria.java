@@ -20,48 +20,51 @@ package org.mybatis.debby.criteria;
  * @date Aug 23, 2016, 11:18:24 PM
  */
 public interface EntityCriteria {
-    
-    /**
-     * Create Criteria that use for warping Criterion.
-     *
-     * @return Criteria
-     */
-    public Criteria createCriteria();
 
-    /**
-     * Add another Criteria for OR function.
-     *
-     * @return Criteria
-     */
-    public Criteria or();
+	/**
+	 * Create Criteria that use for warping Criterion.
+	 *
+	 * @return Criteria
+	 */
+	Criteria createCriteria();
 
-    /**
-     * Set a limit upon the number of objects to be retrieved.
-     *
-     * @param maxResults the maximum number of results
-     */
-    public void setMaxResults(Integer maxResults);
+	/**
+	 * Add another Criteria for OR function.
+	 *
+	 * @return Criteria
+	 */
+	Criteria or();
 
-    /**
-     * Set the first result to be retrieved.
-     *
-     * @param firstResult the first result to retrieve, numbered from <tt>0</tt>
-     */
-    public void setFirstResult(Integer firstResult);
+	/**
+	 * Set a limit upon the number of objects to be retrieved.
+	 *
+	 * @param maxResults
+	 *            the maximum number of results
+	 */
+	void setMaxResults(Integer maxResults);
 
-    /**
-     * Set distinct for select records.
-     *
-     * @param distinct
-     */
-    public void setDistinct(Boolean distinct);
+	/**
+	 * Set the first result to be retrieved.
+	 *
+	 * @param firstResult
+	 *            the first result to retrieve, numbered from <tt>0</tt>
+	 */
+	void setFirstResult(Integer firstResult);
 
-    /**
-     * Add an {@link EntityOrder ordering} to the result set.
-     *
-     * @param entityOrder The {@link EntityOrder entityOrder} object representing an ordering
-     *                    to be applied to the results.
-     */
-    public void addEntityOrder(EntityOrder entityOrder);
+	/**
+	 * Set distinct for select records.
+	 *
+	 * @param distinct
+	 */
+	void setDistinct(Boolean distinct);
+
+	/**
+	 * Add an {@link EntityOrder ordering} to the result set.
+	 *
+	 * @param entityOrder
+	 *            The {@link EntityOrder entityOrder} object representing an
+	 *            ordering to be applied to the results.
+	 */
+	void addEntityOrder(EntityOrder entityOrder);
 
 }

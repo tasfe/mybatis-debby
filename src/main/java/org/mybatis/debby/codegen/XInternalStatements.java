@@ -27,7 +27,6 @@ public enum XInternalStatements {
     SELECT_BY_PRIMARY_KEY("selectByPrimaryKey"),
     SELECT_BY_CRITERIA("selectByCriteria"),
     SELECT_COUNT_BY_CRITERIA("selectCountByCriteria"),
-    SELECT_WITH_COUNT_BY_CRITERIA("selectWithCountByCriteria"),
     DELETE_BY_PRIMARY_KEY("deleteByPrimaryKey"),
     DELETE_BY_CRITERIA("deleteByCriteria");
     

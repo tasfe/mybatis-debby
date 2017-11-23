@@ -17,10 +17,11 @@ package org.mybatis.debby.helper;
 
 import java.lang.reflect.Method;
 
+import javax.persistence.Table;
+
 import org.springframework.util.ReflectionUtils;
 
 import com.google.common.base.CaseFormat;
-import com.google.common.collect.Table;
 
 /**
  * @author rocky.hu

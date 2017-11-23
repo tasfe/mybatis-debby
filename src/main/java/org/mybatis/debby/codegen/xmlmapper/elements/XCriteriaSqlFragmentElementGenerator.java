@@ -30,75 +30,85 @@ public class XCriteriaSqlFragmentElementGenerator extends XAbstractXmlElementGen
         XmlElement answer = new XmlElement("sql");
         answer.addAttribute(new Attribute("id", "criteriaSqlFragment"));
         
-        XmlElement criteriaValidIfElement = new XmlElement("if");
-        criteriaValidIfElement.addAttribute(new Attribute("test", "criteria.valid"));
+        XmlElement ifElement = new XmlElement("if");
+        ifElement.addAttribute(new Attribute("test", "criteria.valid"));
+        answer.addElement(ifElement);
         
         XmlElement trimElement = new XmlElement("trim");
         trimElement.addAttribute(new Attribute("prefix", "("));
-        trimElement.addAttribute(new Attribute("prefixOverrides", "AND"));
         trimElement.addAttribute(new Attribute("suffix", ")"));
+        trimElement.addAttribute(new Attribute("prefixOverrides", "AND"));
+        ifElement.addElement(trimElement);
         
         XmlElement forEachElement = new XmlElement("foreach");
         forEachElement.addAttribute(new Attribute("collection", "criteria.criterions"));
         forEachElement.addAttribute(new Attribute("item", "criterion"));
         forEachElement.addAttribute(new Attribute("separator", "AND"));
+        trimElement.addElement(forEachElement);
         
         XmlElement chooseElement = new XmlElement("choose");
+        forEachElement.addElement(chooseElement);
         
-        XmlElement firstWhenElement = new XmlElement("when");
-        firstWhenElement.addAttribute(new Attribute("test", "criterion.matchMode != null"));
-        firstWhenElement.addElement(new TextElement("${criterion.propertyName} LIKE"));
+        /** match */
+        XmlElement when = new XmlElement("when");
+        when.addAttribute(new Attribute("test", "criterion.matchMode != null"));
+        when.addElement(new TextElement("${criterion.propertyName} LIKE"));
+        
         XmlElement exactIfElement = new XmlElement("if");
         exactIfElement.addAttribute(new Attribute("test", "criterion.matchMode.getNotation() == 'EXACT'"));
         exactIfElement.addElement(new TextElement("#{criterion.value}"));
+        when.addElement(exactIfElement);
+        
         XmlElement startIfElement = new XmlElement("if");
         startIfElement.addAttribute(new Attribute("test", "criterion.matchMode.getNotation() == 'START'"));
         startIfElement.addElement(new TextElement("concat(concat('',#{criterion.value}),'%')"));
+        when.addElement(startIfElement);
+        
         XmlElement endIfElement = new XmlElement("if");
         endIfElement.addAttribute(new Attribute("test", "criterion.matchMode.getNotation() == 'END'"));
         endIfElement.addElement(new TextElement("concat(concat('%',#{criterion.value}),'')"));
+        when.addElement(endIfElement);
+        
         XmlElement anywhereIfElement = new XmlElement("if");
         anywhereIfElement.addAttribute(new Attribute("test", "criterion.matchMode.getNotation() == 'ANYWHERE'"));
         anywhereIfElement.addElement(new TextElement("concat(concat('%',#{criterion.value}),'%')"));
-        firstWhenElement.addElement(exactIfElement);
-        firstWhenElement.addElement(startIfElement);
-        firstWhenElement.addElement(endIfElement);
-        firstWhenElement.addElement(anywhereIfElement);
+        when.addElement(anywhereIfElement);
         
-        XmlElement secondWhenElement = new XmlElement("when");
-        secondWhenElement.addAttribute(new Attribute("test", "criterion.listValue != null"));
-        secondWhenElement.addElement(new TextElement("${criterion.propertyName} ${criterion.sqlOperators}"));
-        XmlElement secondWhenForeachElement = new XmlElement("foreach");
-        secondWhenForeachElement.addAttribute(new Attribute("collection", "criterion.listValue"));
-        secondWhenForeachElement.addAttribute(new Attribute("item", "listItem"));
-        secondWhenForeachElement.addAttribute(new Attribute("open", "("));
-        secondWhenForeachElement.addAttribute(new Attribute("close", ")"));
-        secondWhenForeachElement.addAttribute(new Attribute("separator", ","));
-        secondWhenForeachElement.addElement(new TextElement("#{listItem}"));
-        secondWhenElement.addElement(secondWhenForeachElement);
+        chooseElement.addElement(when);
         
-        XmlElement thirdWhenElement = new XmlElement("when");
-        thirdWhenElement.addAttribute(new Attribute("test", "criterion.value != null and criterion.secondValue != null"));
-        thirdWhenElement.addElement(new TextElement("(${criterion.propertyName} ${criterion.sqlOperators} #{criterion.value} AND #{criterion.secondValue})"));
+        /** list value */
+        when = new XmlElement("when");
+        when.addAttribute(new Attribute("test", "criterion.listValue != null"));
+        when.addElement(new TextElement("${criterion.propertyName} ${criterion.sqlOperators}"));
         
-        XmlElement fourWhenElement = new XmlElement("when");
-        fourWhenElement.addAttribute(new Attribute("test", "criterion.value != null"));
-        fourWhenElement.addElement(new TextElement("${criterion.propertyName} ${criterion.sqlOperators} #{criterion.value}"));
+        XmlElement whenForeachElement = new XmlElement("foreach");
+        whenForeachElement.addAttribute(new Attribute("collection", "criterion.listValue"));
+        whenForeachElement.addAttribute(new Attribute("item", "listItem"));
+        whenForeachElement.addAttribute(new Attribute("open", "("));
+        whenForeachElement.addAttribute(new Attribute("close", ")"));
+        whenForeachElement.addAttribute(new Attribute("separator", ","));
+        whenForeachElement.addElement(new TextElement("#{listItem}"));
+        when.addElement(whenForeachElement);
         
-        XmlElement fiveWhenElement = new XmlElement("when");
-        fiveWhenElement.addAttribute(new Attribute("test", "criterion.value == null"));
-        fiveWhenElement.addElement(new TextElement("${criterion.propertyName} ${criterion.sqlOperators}"));
+        chooseElement.addElement(when);
         
-        chooseElement.addElement(firstWhenElement);
-        chooseElement.addElement(secondWhenElement);
-        chooseElement.addElement(thirdWhenElement);
-        chooseElement.addElement(fourWhenElement);
-        chooseElement.addElement(fiveWhenElement);
+        /** value && secondValue */
+        when = new XmlElement("when");
+        when.addAttribute(new Attribute("test", "criterion.value != null and criterion.secondValue != null"));
+        when.addElement(new TextElement("(${criterion.propertyName} ${criterion.sqlOperators} #{criterion.value} AND #{criterion.secondValue})"));
+        chooseElement.addElement(when);
         
-        forEachElement.addElement(chooseElement);
-        trimElement.addElement(forEachElement);
-        criteriaValidIfElement.addElement(trimElement);
-        answer.addElement(criteriaValidIfElement);
+        /** value != null */
+        when = new XmlElement("when");
+        when.addAttribute(new Attribute("test", "criterion.value != null"));
+        when.addElement(new TextElement("${criterion.propertyName} ${criterion.sqlOperators} #{criterion.value}"));
+        chooseElement.addElement(when);
+        
+        /** value == null */
+        when = new XmlElement("when");
+        when.addAttribute(new Attribute("test", "criterion.value == null"));
+        when.addElement(new TextElement("${criterion.propertyName} ${criterion.sqlOperators}"));
+        chooseElement.addElement(when);
         
         parentElement.addElement(answer);
     }

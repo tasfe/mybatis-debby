@@ -23,114 +23,94 @@ import java.util.List;
  * @date Aug 24, 2016, 11:20:59 PM
  */
 public class EntityCriteriaImpl implements EntityCriteria {
-    
-    private Integer maxResults;
-    private Integer firstResult;
-    private Boolean distinct;
 
-    private List<Criteria> oredCriteriaList;
-    private List<EntityOrder> entityOrderList;
+	private Integer maxResults;
+	private Integer firstResult;
+	private Boolean distinct;
 
-    public EntityCriteriaImpl()
-    {
-    }
+	private List<Criteria> oredCriteriaList;
+	private List<EntityOrder> entityOrderList;
 
-    public Integer getMaxResults()
-    {
-        return maxResults;
-    }
+	public EntityCriteriaImpl() {
+	}
 
-    public void setMaxResults(Integer maxResults)
-    {
-        this.maxResults = maxResults;
-    }
+	public Integer getMaxResults() {
+		return maxResults;
+	}
 
-    public Integer getFirstResult()
-    {
-        return firstResult;
-    }
+	@Override
+	public void setMaxResults(Integer maxResults) {
+		this.maxResults = maxResults;
+	}
 
-    public void setFirstResult(Integer firstResult)
-    {
-        this.firstResult = firstResult;
-    }
+	public Integer getFirstResult() {
+		return firstResult;
+	}
 
-    public Boolean getDistinct()
-    {
-        return distinct;
-    }
+	@Override
+	public void setFirstResult(Integer firstResult) {
+		this.firstResult = firstResult;
+	}
 
-    public void setDistinct(Boolean distinct)
-    {
-        this.distinct = distinct;
-    }
+	public Boolean getDistinct() {
+		return distinct;
+	}
 
-    public List<Criteria> getOredCriteriaList()
-    {
-        return oredCriteriaList;
-    }
+	@Override
+	public void setDistinct(Boolean distinct) {
+		this.distinct = distinct;
+	}
 
-	/*public void setOredCriteriaList(List<Criteria> oredCriteriaList)
-    {
-		this.oredCriteriaList = oredCriteriaList;
-	}*/
+	public List<Criteria> getOredCriteriaList() {
+		return oredCriteriaList;
+	}
 
-    public List<EntityOrder> getEntityOrderList()
-    {
-        return entityOrderList;
-    }
+	public List<EntityOrder> getEntityOrderList() {
+		return entityOrderList;
+	}
 
-	/*public void setEntityOrderList(List<EntityOrder> entityOrderList)
-	{
-		this.entityOrderList = entityOrderList;
-	}*/
+	@Override
+	public void addEntityOrder(EntityOrder entityOrder) {
+		if (entityOrderList == null) {
+			entityOrderList = new ArrayList<EntityOrder>();
+		}
 
-    @Override
-    public void addEntityOrder(EntityOrder entityOrder)
-    {
-        if (entityOrderList == null) {
-            entityOrderList = new ArrayList<EntityOrder>();
-        }
+		entityOrderList.add(entityOrder);
+	}
 
-        entityOrderList.add(entityOrder);
-    }
+	/**
+	 * Create and add a Criteria.
+	 * <p>
+	 * WARN: this method can only call once, if you want to add another
+	 * Criteria, please use {@link #or()} method.
+	 */
+	@Override
+	public Criteria createCriteria() {
+		if (oredCriteriaList == null) {
+			oredCriteriaList = new ArrayList<Criteria>();
+		} else if (oredCriteriaList.size() > 1) {
+			throw new RuntimeException(
+					"A Criteria has been existed, if you want add another criteria, please use or" + "() method.");
+		}
 
-    /**
-     * Create and add a Criteria.
-     * <p>
-     * WARN: this method can only call once, if you want to add another Criteria, please use {@link #or()} method.
-     */
-    @Override
-    public Criteria createCriteria()
-    {
-        if (oredCriteriaList == null) {
-            oredCriteriaList = new ArrayList<Criteria>();
-        }
-        else if (oredCriteriaList.size() > 1) {
-            throw new RuntimeException("A Criteria has been existed, if you want add another criteria, please use or" +
-                    "() method.");
-        }
+		Criteria criteria = createCriteriaInternal();
+		oredCriteriaList.add(criteria);
+		return criteria;
+	}
 
-        Criteria criteria = createCriteriaInternal();
-        oredCriteriaList.add(criteria);
-        return criteria;
-    }
+	@Override
+	public Criteria or() {
+		if (oredCriteriaList == null || oredCriteriaList.size() == 0) {
+			throw new RuntimeException("Use createCriteria() method instead.");
+		}
+		Criteria criteria = createCriteriaInternal();
+		oredCriteriaList.add(criteria);
+		return criteria;
+	}
 
-    @Override
-    public Criteria or()
-    {
-        if (oredCriteriaList == null || oredCriteriaList.size() == 0) {
-            throw new RuntimeException("Use createCriteria() method instead.");
-        }
-        Criteria criteria = createCriteriaInternal();
-        oredCriteriaList.add(criteria);
-        return criteria;
-    }
-
-    private Criteria createCriteriaInternal()
-    {
-        Criteria criteria = new Criteria();
-        return criteria;
-    }
+	private Criteria createCriteriaInternal() {
+		Criteria criteria = new Criteria();
+		return criteria;
+	}
 
 }
