@@ -33,7 +33,7 @@ public class XSelectCountByCriteriaElementGenerator extends XAbstractXmlElementG
         
         StringBuilder sb = new StringBuilder();
         
-        sb.append(" SELECT count(*) FROM ");
+        sb.append(" select count(*) from ");
         sb.append(introspectedContext.getTableName());
         answer.addElement(new TextElement(sb.toString()));
         

@@ -32,7 +32,7 @@ public class XDeleteByCriteriaElementGenerator extends XAbstractXmlElementGenera
         answer.addAttribute(new Attribute("id", XInternalStatements.DELETE_BY_CRITERIA.getId()));
         
         StringBuilder sb = new StringBuilder();
-        sb.append(" DELETE FROM ");
+        sb.append(" delete from ");
         sb.append(introspectedContext.getTableName());
         answer.addElement(new TextElement(sb.toString()));
         

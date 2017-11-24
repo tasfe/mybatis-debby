@@ -1,7 +1,5 @@
 package org.mybatis.debby.entity;
 
-import java.util.Set;
-
 /**
  * Created by rocky on 3/15/16.
  */

@@ -22,19 +22,16 @@ import java.util.Set;
 
 import javax.persistence.Table;
 
-import com.google.common.base.Strings;
 import org.apache.ibatis.builder.BuilderException;
-import org.apache.ibatis.builder.xml.XMLMapperBuilder;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.session.XConfiguration;
 import org.mybatis.debby.codegen.XIntrospectedContext;
 import org.mybatis.debby.codegen.xmlmapper.XXMLMapperGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 import com.google.common.base.CaseFormat;
+import com.google.common.base.Strings;
 
 /**
  * @author rocky.hu
@@ -66,7 +63,7 @@ public class XMyBatisGenerator {
 	                String namespace = resource.substring(resource.indexOf(" ") + 1);
 	                ResultMap resultMap = xConfiguration.getConfiguration().getResultMap(namespace + ".baseResultMap");
 	                if (resultMap != null) {
-	                	
+	                    
 	                	// parse the table name
 	                    String tableName = "";
 	                    Class<?> type = resultMap.getType();

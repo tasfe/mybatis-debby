@@ -24,7 +24,7 @@ public class XMyBatisGeneratorTest {
 
         XConfiguration xConfiguration = new XConfiguration(configuration);
         xConfiguration.setDebugEnabled(true);
-        xConfiguration.setMapperXMLOuputDirectory("/Users/rocky/Work/project/temp/");
+        xConfiguration.setMapperXMLOuputDirectory("F:/temp/xml/");
         xConfiguration.setTablePrefix("t_");
 
         XMyBatisGenerator xMyBatisGenerator = new XMyBatisGenerator(xConfiguration);
