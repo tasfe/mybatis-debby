@@ -17,6 +17,7 @@ package org.mybatis.debby.codegen.xmlmapper.elements;
 
 import java.util.List;
 
+import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
 import org.mybatis.debby.codegen.XInternalStatements;
 import org.mybatis.debby.codegen.util.XMyBatis3FormattingUtilities;
@@ -38,22 +39,16 @@ public class XUpdateByPrimaryKeyElementGenerator extends XAbstractXmlElementGene
 		XmlElement answer = new XmlElement("update");
 		answer.addAttribute(new Attribute("id", XInternalStatements.UPDATE_BY_PRIMARY_KEY.getId()));
 		answer.addAttribute(new Attribute("parameterType", introspectedContext.getResultMap().getType().getName()));
-		
-		// Composite keys is not supported.
-        int index = 0;
-        for (ResultMapping resultMapping : introspectedContext.getResultMap().getIdResultMappings()) {
-            if (!Strings.isNullOrEmpty(resultMapping.getColumn()) && !Strings.isNullOrEmpty(resultMapping.getProperty())) {
-                index++;
-            }
-        }
-        
-        if (index != 1) {
-            logger.warn("Composite keys is not supported by Mybatis-Debby!");
+
+        ResultMap resultMap = introspectedContext.getResultMap();
+        if (idResultCount(resultMap) > 1) {
+            logger.warn("[UpdateByPrimaryKey] [{}] : Composite keys is not supported by Mybatis-Debby!", resultMap.getId());
             return;
-        } else if (index == 0) {
+        } else if (idResultCount(resultMap) == 0) {
+            logger.warn("[UpdateByPrimaryKey] [{}] : No primary key found!", resultMap.getId());
             return;
         }
-		
+
 		StringBuilder sb = new StringBuilder();
         sb.append("update ");
         sb.append(introspectedContext.getTableName());

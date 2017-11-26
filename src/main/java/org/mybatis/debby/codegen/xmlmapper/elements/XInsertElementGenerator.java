@@ -17,19 +17,18 @@ package org.mybatis.debby.codegen.xmlmapper.elements;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
-import org.apache.ibatis.session.XConfiguration;
 import org.mybatis.debby.codegen.XInternalStatements;
+import org.mybatis.debby.codegen.keystrategy.XKeyStrategy;
+import org.mybatis.debby.codegen.keystrategy.identity.XIdentityKeyStrategy;
+import org.mybatis.debby.codegen.keystrategy.normal.XNormalKeyStrategy;
 import org.mybatis.debby.codegen.util.XMyBatis3FormattingUtilities;
 import org.mybatis.generator.api.dom.OutputUtilities;
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
-import org.mybatis.generator.internal.db.DatabaseDialects;
 
 import com.google.common.base.Strings;
 
@@ -48,59 +47,29 @@ public class XInsertElementGenerator extends XAbstractXmlElementGenerator {
         answer.addAttribute(new Attribute("parameterType", resultMap.getType().getName()));
         
         StringBuilder sb = new StringBuilder();
-        
-        // Handle <SelectKey> element.
-        // Composite keys is not supported.
-        int index = 0;
-        for (ResultMapping resultMapping : resultMap.getIdResultMappings()) {
-            if (!Strings.isNullOrEmpty(resultMapping.getColumn()) && !Strings.isNullOrEmpty(resultMapping.getProperty())) {
-                index++;
-            }
-        }
-        
-        if (index > 1) {
-            logger.warn("Coposite keys is not supported. ResultMap[{}]", resultMap.getId());
-            return; 
-        } else if (index == 1) {
+
+        // Handle <SelectKey> element. Composite keys is not supported.
+        if (idResultCount(resultMap) == 1) {
             ResultMapping idMappings = resultMap.getIdResultMappings().get(0);
-            XmlElement selectKeyElement = new XmlElement("selectKey");
-            selectKeyElement.addAttribute(new Attribute("keyProperty", idMappings.getProperty()));
-            selectKeyElement.addAttribute(new Attribute("resultType", idMappings.getJavaType().getName()));
-            selectKeyElement.addAttribute(new Attribute("order", "BEFORE"));
-            
-            DatabaseDialects[] databaseDialects = DatabaseDialects.values();
-            for (int i = 0; i < databaseDialects.length; i++) {
-                DatabaseDialects databaseDialect = databaseDialects[i];
-                
-                sb.setLength(0);
-                sb.append("_databaseId == '" + databaseDialect.name().toLowerCase() + "'");
-                
-                XmlElement ifElement = new XmlElement("if");
-                ifElement.addAttribute(new Attribute("test", sb.toString()));
-                ifElement.addElement(new TextElement(databaseDialect.getIdentityRetrievalStatement()));
-                
-                selectKeyElement.addElement(ifElement);
-            }
-            
-            XConfiguration xConfiguration = introspectedContext.getxConfiguration();
-            Properties additionalDatabaseDialects =  xConfiguration.getAdditionalDatabaseDialects();
-            if (additionalDatabaseDialects != null) {
-                for (Map.Entry<Object, Object> property : additionalDatabaseDialects.entrySet()) {
-                    String db = (String) property.getKey();
-                    String runtimeSqlStatement = (String) property.getValue();
-                    
-                    sb.setLength(0);
-                    sb.append("_databaseId == '" + db.toLowerCase() + "'");
-                    
-                    XmlElement ifElement = new XmlElement("if");
-                    ifElement.addAttribute(new Attribute("test", sb.toString()));
-                    ifElement.addElement(new TextElement(runtimeSqlStatement));
-                    
-                    selectKeyElement.addElement(ifElement);
+
+            XKeyStrategy keyStrategy = introspectedContext.getxConfiguration().getKeyStrategy();
+            if (keyStrategy instanceof XIdentityKeyStrategy) {
+                answer.addAttribute(new Attribute("useGeneratedKeys", "true"));
+                answer.addAttribute(new Attribute("keyProperty", idMappings.getProperty()));
+                answer.addAttribute(new Attribute("keyColumn", idMappings.getColumn()));
+            } else if (keyStrategy instanceof XNormalKeyStrategy) {
+                XNormalKeyStrategy normalKeyStrategy = (XNormalKeyStrategy) keyStrategy;
+                if (!Strings.isNullOrEmpty(normalKeyStrategy.getRuntimeSqlStatement())) {
+                    XmlElement selectKeyElement = new XmlElement("selectKey");
+                    selectKeyElement.addAttribute(new Attribute("keyProperty", idMappings.getProperty()));
+                    selectKeyElement.addAttribute(new Attribute("resultType", idMappings.getJavaType().getName()));
+                    selectKeyElement.addAttribute(new Attribute("order", normalKeyStrategy.isBefore() ? "BEFORE" : "AFTER" ));
+                    selectKeyElement.addElement(new TextElement(normalKeyStrategy.getRuntimeSqlStatement()));
+
+                    answer.addElement(selectKeyElement);
                 }
             }
-            
-            answer.addElement(selectKeyElement);
+
         }
         
         StringBuilder insertClause = new StringBuilder();

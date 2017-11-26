@@ -15,6 +15,9 @@
  */
 package org.mybatis.debby.codegen.xmlmapper.elements;
 
+import com.google.common.base.Strings;
+import org.apache.ibatis.mapping.ResultMap;
+import org.apache.ibatis.mapping.ResultMapping;
 import org.mybatis.debby.codegen.XAbstractGenerator;
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.XmlElement;
@@ -48,6 +51,17 @@ public abstract class XAbstractXmlElementGenerator extends XAbstractGenerator {
         ifElement.addElement(includeElement);
 
         return ifElement;
+    }
+
+    protected int idResultCount(ResultMap resultMap) {
+        int index = 0;
+        for (ResultMapping resultMapping : resultMap.getIdResultMappings()) {
+            if (!Strings.isNullOrEmpty(resultMapping.getColumn()) && !Strings.isNullOrEmpty(resultMapping.getProperty())) {
+                index++;
+            }
+        }
+
+        return index;
     }
 
 }

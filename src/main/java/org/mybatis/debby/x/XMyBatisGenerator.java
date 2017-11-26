@@ -48,7 +48,7 @@ public class XMyBatisGenerator {
 		this.xConfiguration = xConfiguration;
 	}
 
-	public void generate() {
+	public void execute() {
         LOGGER.info("[Start] debby mapper support...");
 
         if (xConfiguration.isDebugEnabled() && Strings.isNullOrEmpty(xConfiguration.getMapperXMLOuputDirectory())) {
@@ -75,7 +75,6 @@ public class XMyBatisGenerator {
 	                    }
 
 	                    context = new XIntrospectedContext();
-						context.setConfiguration(xConfiguration.getConfiguration());
 						context.setResultMap(resultMap);
 						context.setTableName(tableName);
 						context.setxConfiguration(xConfiguration);

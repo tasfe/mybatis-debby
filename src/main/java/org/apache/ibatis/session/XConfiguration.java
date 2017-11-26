@@ -15,7 +15,11 @@
  */
 package org.apache.ibatis.session;
 
-import java.util.Properties;
+import org.mybatis.debby.codegen.keystrategy.XKeyStrategy;
+import org.mybatis.debby.codegen.keystrategy.identity.XIdentityKeyStrategy;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -29,8 +33,9 @@ public class XConfiguration {
     /** when debug mode is enabled, it will write the auto generated mapper xml to this directory */
     private String mapperXMLOuputDirectory;
 	private String tablePrefix = ""; 
-    private Properties additionalDatabaseDialects;
-    private Configuration configuration;
+    private XKeyStrategy keyStrategy;
+
+	private Configuration configuration;
     
     public XConfiguration(Configuration configuration) {
         this.configuration = configuration;
@@ -44,14 +49,6 @@ public class XConfiguration {
         return configuration.loadedResources;
     }
 
-    public Properties getAdditionalDatabaseDialects() {
-        return additionalDatabaseDialects;
-    }
-
-    public void setAdditionalDatabaseDialects(Properties additionalDatabaseDialects) {
-        this.additionalDatabaseDialects = additionalDatabaseDialects;
-    }
-    
 	public boolean isDebugEnabled() {
 		return debugEnabled;
 	}
@@ -76,4 +73,14 @@ public class XConfiguration {
 		this.mapperXMLOuputDirectory = mapperXMLOuputDirectory;
 	}
 
+	public XKeyStrategy getKeyStrategy() {
+    	if (keyStrategy == null) {
+    		return new XIdentityKeyStrategy();
+		}
+		return keyStrategy;
+	}
+
+	public void setKeyStrategy(XKeyStrategy keyStrategy) {
+		this.keyStrategy = keyStrategy;
+	}
 }
