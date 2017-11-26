@@ -18,6 +18,7 @@ package org.mybatis.debby.codegen.xmlmapper.elements;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ibatis.mapping.ResultFlag;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
 import org.mybatis.debby.codegen.XInternalStatements;
@@ -45,32 +46,8 @@ public class XInsertElementGenerator extends XAbstractXmlElementGenerator {
         
         ResultMap resultMap = introspectedContext.getResultMap();
         answer.addAttribute(new Attribute("parameterType", resultMap.getType().getName()));
-        
-        StringBuilder sb = new StringBuilder();
 
-        // Handle <SelectKey> element. Composite keys is not supported.
-        if (idResultCount(resultMap) == 1) {
-            ResultMapping idMappings = resultMap.getIdResultMappings().get(0);
-
-            XKeyStrategy keyStrategy = introspectedContext.getxConfiguration().getKeyStrategy();
-            if (keyStrategy instanceof XIdentityKeyStrategy) {
-                answer.addAttribute(new Attribute("useGeneratedKeys", "true"));
-                answer.addAttribute(new Attribute("keyProperty", idMappings.getProperty()));
-                answer.addAttribute(new Attribute("keyColumn", idMappings.getColumn()));
-            } else if (keyStrategy instanceof XNormalKeyStrategy) {
-                XNormalKeyStrategy normalKeyStrategy = (XNormalKeyStrategy) keyStrategy;
-                if (!Strings.isNullOrEmpty(normalKeyStrategy.getRuntimeSqlStatement())) {
-                    XmlElement selectKeyElement = new XmlElement("selectKey");
-                    selectKeyElement.addAttribute(new Attribute("keyProperty", idMappings.getProperty()));
-                    selectKeyElement.addAttribute(new Attribute("resultType", idMappings.getJavaType().getName()));
-                    selectKeyElement.addAttribute(new Attribute("order", normalKeyStrategy.isBefore() ? "BEFORE" : "AFTER" ));
-                    selectKeyElement.addElement(new TextElement(normalKeyStrategy.getRuntimeSqlStatement()));
-
-                    answer.addElement(selectKeyElement);
-                }
-            }
-
-        }
+        addSelectKey(resultMap, answer);
         
         StringBuilder insertClause = new StringBuilder();
         StringBuilder valuesClause = new StringBuilder();
@@ -89,6 +66,10 @@ public class XInsertElementGenerator extends XAbstractXmlElementGenerator {
         	if (!Strings.isNullOrEmpty(resultMapping.getNestedQueryId()) || !Strings.isNullOrEmpty(resultMapping.getNestedResultMapId())) {
         	    continue;
         	}
+
+            if (resultMapping.getFlags() != null && resultMapping.getFlags().contains(ResultFlag.CONSTRUCTOR)) {
+        	    continue;
+            }
         	
         	insertClause.append(XMyBatis3FormattingUtilities.getEscapedColumnName(resultMapping));
         	valuesClause.append(XMyBatis3FormattingUtilities.getParameterClause(resultMapping));

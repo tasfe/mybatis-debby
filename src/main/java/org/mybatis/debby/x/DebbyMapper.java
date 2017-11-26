@@ -28,28 +28,57 @@ import org.mybatis.debby.criteria.EntityCriteria;
 public interface DebbyMapper<ENTITY, PK extends Serializable> {
     
     /**
-     * Insert an entity object.
-     * After, it has the primary key value assigned and we can get from the entity object we just inserted.
+     * Insert an entity.
+     * After, it has the primary key value assigned and we can get from the entity we just inserted.
      *
      * @param entity
      */
     void insert(ENTITY entity);
 
     /**
-     * Update an entity object by primary key.
+     * Insert an entity selectively.
+     *
+     * Don't like {@link #insert(Object)}}, the method just insert the property which is not null.
+     *
+     * @param entity
+     */
+    void insertSelective(ENTITY entity);
+
+    /**
+     * Update an entity by primary key.
      *
      * @param entity
      */
     void updateByPrimaryKey(ENTITY entity);
 
     /**
-     * A enhanced update method that accept different updated conditions.
+     * Update an entity selectively by primary key.
+     *
+     * Don't like {@link #updateByPrimaryKey(Object)}}, the method just update the property which is not null.
+     *
+     * @param entity
+     */
+    void updateByPrimaryKeySelective(ENTITY entity);
+
+    /**
+     * Update an entity by updated conditions.
      *
      * @param record
      * @param updatedCriteria
      * @return
      */
     int updateByCriteria(@Param("record") ENTITY record, @Param("updatedCriteria") EntityCriteria updatedCriteria);
+
+    /**
+     * Update an entity selective by updated conditions.
+     *
+     * Don't like {@link #updateByCriteria(Object, EntityCriteria)}, the method just update the property which is not null.
+     *
+     * @param record
+     * @param updatedCriteria
+     * @return
+     */
+    int updateByCriteriaSelective(@Param("record") ENTITY record, @Param("updatedCriteria") EntityCriteria updatedCriteria);
 
     /**
      * Select an entity by primary key.

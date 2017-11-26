@@ -35,6 +35,7 @@ public class XSelectByPrimaryKeyElementGenerator extends XAbstractXmlElementGene
     public void addElements(XmlElement parentElement) {
         XmlElement answer = new XmlElement("select");
         answer.addAttribute(new Attribute("id", XInternalStatements.SELECT_BY_PRIMARY_KEY.getId()));
+        answer.addAttribute(new Attribute("resultMap", "baseResultMap"));
 
         ResultMap resultMap = introspectedContext.getResultMap();
         if (idResultCount(resultMap) > 1) {
@@ -62,7 +63,7 @@ public class XSelectByPrimaryKeyElementGenerator extends XAbstractXmlElementGene
         sb.append(" where ");
         sb.append(XMyBatis3FormattingUtilities.getEscapedColumnName(idResultMapping));
         sb.append("=");
-        sb.append(XMyBatis3FormattingUtilities.getParameterClause(idResultMapping, "pk", null));
+        sb.append(XMyBatis3FormattingUtilities.getParameterClause(idResultMapping, null));
         answer.addElement(new TextElement(sb.toString()));
         
         parentElement.addElement(answer);

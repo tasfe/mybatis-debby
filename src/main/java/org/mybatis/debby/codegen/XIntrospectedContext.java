@@ -19,6 +19,9 @@ import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.XConfiguration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author rocky.hu
  * @date Nov 17, 2017 11:48:16 AM
@@ -28,6 +31,7 @@ public class XIntrospectedContext {
     private String tableName;
     private ResultMap resultMap;
     private XConfiguration xConfiguration;
+    private List<XInternalStatements> alreadyOwnedInternalStatements;
 
     public String getTableName() {
         return tableName;
@@ -53,4 +57,14 @@ public class XIntrospectedContext {
         this.xConfiguration = xConfiguration;
     }
 
+    public List<XInternalStatements> getAlreadyOwnedInternalStatements() {
+        if (alreadyOwnedInternalStatements == null) {
+            return new ArrayList<XInternalStatements>();
+        }
+        return alreadyOwnedInternalStatements;
+    }
+
+    public void setAlreadyOwnedInternalStatements(List<XInternalStatements> alreadyOwnedInternalStatements) {
+        this.alreadyOwnedInternalStatements = alreadyOwnedInternalStatements;
+    }
 }

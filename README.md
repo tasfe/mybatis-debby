@@ -3,8 +3,6 @@
 
 MyBatist通用CRUD扩展框架。
 
-A MyBatis extension framework to support common CRUD operation.
-
 ## baseResultMap定义
 
 id为'baseResultMap'的ResultMap提供了表列与实体属性的完整对应关系。此定义是框架使用的最基础配置，若对应的Mapper xml文件中没有此定义则对应的Mapper接口不会拥有通用的CRUD功能。
@@ -89,8 +87,187 @@ NORMAL策略适用于支持IDENTITY主键策略和不支持IDENTITY主键策略�
     xConfiguration.setKeyStrategy(new XMySQLKeyStrategy());
 ```
 
-## 通用功能
+## 通用CRUD
 
+org.mybatis.debby.x.DebbyMapper定义了通用CRUD方法。
 
+继承DebbyMapper则会拥有通用的CRUD功能。
 
- 
+### 通用方法说明
+
+```
+public interface DebbyMapper<ENTITY, PK extends Serializable> {
+    
+    /**
+     * Insert an entity object.
+     * After, it has the primary key value assigned and we can get from the entity object we just inserted.
+     *
+     * @param entity
+     */
+    void insert(ENTITY entity);
+    
+    /**
+     * Insert an entity object selectively.
+     *
+     * Don't like {@link #insert(Object)}}, the method just insert the property which is not null.
+     *
+     * @param entity
+     */
+    void insertSelective(ENTITY entity);
+
+    /**
+     * Update an entity object by primary key.
+     *
+     * @param entity
+     */
+    void updateByPrimaryKey(ENTITY entity);
+    
+    /**
+     * Update an entity selectively by primary key.
+     *
+     * Don't like {@link #updateByPrimaryKey(Object)}}, the method just update the property which is not null.
+     *
+     * @param entity
+     */
+    void updateByPrimaryKeySelective(ENTITY entity);
+
+    /**
+     * A enhanced update method that accept different updated conditions.
+     *
+     * @param record
+     * @param updatedCriteria
+     * @return
+     */
+    int updateByCriteria(@Param("record") ENTITY record, @Param("updatedCriteria") EntityCriteria updatedCriteria);
+
+    /**
+     * Select an entity by primary key.
+     *
+     * @param pk
+     * @return
+     */
+    ENTITY selectByPrimaryKey(PK pk);
+
+    /**
+     * A enhanced select method that accept different selective conditions.
+     *
+     * @param criteria
+     * @return
+     */
+    List<ENTITY> selectByCriteria(EntityCriteria criteria);
+    
+    /**
+     * Count the records by different conditions.
+     *
+     * @param criteria
+     * @return
+     */
+    long selectCountByCriteria(EntityCriteria criteria);
+
+    /**
+     * Delete a entity by primary key.
+     *
+     * @param pk
+     */
+    void deleteByPrimaryKey(PK pk);
+
+    /**
+     * A enhanced select method that accept different deleted conditions.
+     *
+     * @param criteria
+     * @return
+     */
+    int deleteByCriteria(EntityCriteria criteria);
+
+}
+
+```
+
+#### insert
+
+保存记录，配置了主键生成策略，单主键时自动返回主键值。
+
+> 不支持联合主键（baseResultMap中定义了多个id节点）时主键值返回，若有此需求，重新定义insert方法。
+
+#### insertSelective
+
+选择性保存记录。忽略实体空属性。配置了主键生成策略，单主键时自动返回主键值。
+
+> 不支持联合主键（baseResultMap中定义了多个id节点）时主键值返回，若有此需求，重新定义insert方法。
+
+#### updateByPrimaryKey
+
+根据主键更新记录。
+
+> 不支持联合主键。
+
+#### updateByPrimaryKeySelective
+
+根据主键选择性更新记录。忽略实体空属性。
+
+> 不支持联合主键。
+
+#### updateByCriteria
+
+根据条件来更新记录。
+
+#### selectByPrimaryKey
+
+根据主键查询。
+
+> 不支持联合主键。
+
+#### selectByCriteria
+
+根据条件查询。
+
+#### selectCountByCriteria
+
+根据条件查询满足的记录的总数。
+
+#### deleteByPrimaryKey
+
+根据主键删除记录。
+
+> 不支持联合主键。
+
+#### deleteByCriteria
+
+根据条件删除记录。
+
+### 通用方法覆盖
+
+当通用方法不满足需求时，通过重定义可以实现重载效果。
+
+定义同名并且同SqlCommandType类型的statement实现通用方法的覆盖。
+
+同SqlCommandType是指同Statement类型，比如下下面的定义方式则不能实现重载insert方法：
+```
+<select id ="insert" />
+```
+这里虽然id和通用的insert方法名称一致，但是这里的SqlCommandType为SELECT.
+
+#### Annotation方式
+
+```
+@Insert("INSERT into t_blog(id,name,title,member_id) VALUES(#{id}, #{name}, #{title}, #{member.id})")
+void insert(Blog blog);
+```
+
+#### XML文件方式
+
+```
+<insert id="insert" parameterType="org.mybatis.debby.entity.Blog">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+     insert into t_blog (id, title, 
+      content, member_id
+      )
+     values(#{id,typeHandler=org.apache.ibatis.type.IntegerTypeHandler}, #{title,typeHandler=org.apache.ibatis.type.StringTypeHandler}, 
+      #{content,typeHandler=org.apache.ibatis.type.StringTypeHandler}, #{member.id,typeHandler=org.apache.ibatis.type.IntegerTypeHandler}
+      )
+</insert>
+```
+上面两种方式都可以实现覆盖通用insert方法的效果。
+

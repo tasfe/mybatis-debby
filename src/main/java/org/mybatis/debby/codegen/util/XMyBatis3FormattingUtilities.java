@@ -67,7 +67,7 @@ public class XMyBatis3FormattingUtilities {
         
         if (resultMapping.getTypeHandler() != null) {
             sb.append(",typeHandler=");
-            sb.append(resultMapping.getTypeHandler().getClass().getSimpleName());
+            sb.append(resultMapping.getTypeHandler().getClass().getName());
         }
 
         sb.append('}');
@@ -93,7 +93,7 @@ public class XMyBatis3FormattingUtilities {
         
         if (resultMapping.getTypeHandler() != null) {
             sb.append(",typeHandler=");
-            sb.append(resultMapping.getTypeHandler().getClass().getSimpleName());
+            sb.append(resultMapping.getTypeHandler().getClass().getName());
         }
 
         sb.append('}');

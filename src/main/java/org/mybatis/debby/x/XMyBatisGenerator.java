@@ -15,17 +15,21 @@
  */
 package org.mybatis.debby.x;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Table;
 
 import org.apache.ibatis.builder.BuilderException;
+import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.session.XConfiguration;
+import org.mybatis.debby.codegen.XInternalStatements;
 import org.mybatis.debby.codegen.XIntrospectedContext;
+import org.mybatis.debby.codegen.builder.XXMLMapperBuilder;
+import org.mybatis.debby.codegen.util.FileUtils;
 import org.mybatis.debby.codegen.xmlmapper.XXMLMapperGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,29 +78,47 @@ public class XMyBatisGenerator {
 	                        tableName = xConfiguration.getTablePrefix() + CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, type.getSimpleName());
 	                    }
 
-	                    context = new XIntrospectedContext();
-						context.setResultMap(resultMap);
-						context.setTableName(tableName);
-						context.setxConfiguration(xConfiguration);
-
-						XXMLMapperGenerator mapperGenerator = new XXMLMapperGenerator();
-						mapperGenerator.setIntrospectedContext(context);
-
-						String formattedContent = mapperGenerator.getDocument().getFormattedContent();
-						FileWriter writer;
+						// determine if the Mapper interface is a subclass of DebbyMapper
+						Class<?> boundType = null;
 						try {
-							File file = new File(xConfiguration.getMapperXMLOuputDirectory() + namespace.replace(".", "_") + ".xml");
-							if (!file.exists()) {
-								File dir = new File(file.getParent());
-								dir.mkdirs();
-								file.createNewFile();
+							boundType = Resources.classForName(namespace);
+						} catch (ClassNotFoundException e) {
+							continue;
+						}
+
+						if (boundType != null && DebbyMapper.class.isAssignableFrom(boundType)) {
+
+							// if the mapper xml or mapper annotation have the same statements(the name and the SqlCommandType is all same) as the DebbyMapper, that ignore the latter.
+							List<XInternalStatements> alreadyOwnedInternalStatements = new ArrayList<XInternalStatements>();
+
+							XInternalStatements[] xInternalStatements = XInternalStatements.values();
+							for (int i = 0; i<xInternalStatements.length; i++) {
+								if (xConfiguration.getConfiguration().hasStatement(namespace + "." + xInternalStatements[i].getId())) {
+									if(xInternalStatements[i].getSqlCommandType() ==
+											xConfiguration.getConfiguration().getMappedStatement(xInternalStatements[i].getId()).getSqlCommandType()) {
+										alreadyOwnedInternalStatements.add(xInternalStatements[i]);
+									}
+								}
 							}
-							writer = new FileWriter(file);
-							writer.write(formattedContent);
-							writer.flush();
-							writer.close();
-						} catch (IOException e) {
-							e.printStackTrace();
+
+							context = new XIntrospectedContext();
+							context.setResultMap(resultMap);
+							context.setTableName(tableName);
+							context.setAlreadyOwnedInternalStatements(alreadyOwnedInternalStatements);
+							context.setxConfiguration(xConfiguration);
+
+							XXMLMapperGenerator mapperGenerator = new XXMLMapperGenerator();
+							mapperGenerator.setIntrospectedContext(context);
+
+							String formattedContent = mapperGenerator.getDocument().getFormattedContent();
+
+							if (xConfiguration.isDebugEnabled()) {
+								FileUtils.writeFile(xConfiguration.getMapperXMLOuputDirectory() + namespace.replace(".", "_") + ".xml", formattedContent);
+							}
+
+							InputStream inputStream = new ByteArrayInputStream(formattedContent.getBytes("UTF-8"));
+							XXMLMapperBuilder builder = new XXMLMapperBuilder(inputStream, xConfiguration.getConfiguration(), null, xConfiguration.getConfiguration().getSqlFragments(), namespace);
+							builder.parse();
 						}
 
 	                }

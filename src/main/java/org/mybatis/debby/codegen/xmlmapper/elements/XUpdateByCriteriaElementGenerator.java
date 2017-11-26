@@ -47,28 +47,25 @@ public class XUpdateByCriteriaElementGenerator extends XAbstractXmlElementGenera
         answer.addElement(dynamicElement);
         
         List<ResultMapping> resultMappingList = introspectedContext.getResultMap().getPropertyResultMappings();
-        for (ResultMapping resultMapping : resultMappingList) {
-            
+        for (int i=0; i< resultMappingList.size(); i++) {
+
+            ResultMapping resultMapping = resultMappingList.get(i);
+
             if (resultMapping.getFlags() != null && resultMapping.getFlags().size() > 0 || !Strings.isNullOrEmpty(resultMapping.getNestedQueryId()) || 
                     !Strings.isNullOrEmpty(resultMapping.getNestedResultMapId())) {
                 continue;
             }
             
             sb.setLength(0);
-            sb.append("record.");
-            sb.append(resultMapping.getProperty());
-            sb.append(" != null");
-            XmlElement isNotNullElement = new XmlElement("if");
-            isNotNullElement.addAttribute(new Attribute("test", sb.toString()));
-            dynamicElement.addElement(isNotNullElement);
-            
-            sb.setLength(0);
             sb.append(XMyBatis3FormattingUtilities.getEscapedColumnName(resultMapping));
             sb.append(" = "); 
             sb.append(XMyBatis3FormattingUtilities.getParameterClause(resultMapping, "record."));
-            sb.append(',');
-            
-            isNotNullElement.addElement(new TextElement(sb.toString()));
+
+            if (i+1 < resultMappingList.size()) {
+                sb.append(',');
+            }
+
+            answer.addElement(new TextElement(sb.toString()));
         }
         
         answer.addElement(getUpdateByCriteriaIfElement());

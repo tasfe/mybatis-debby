@@ -19,7 +19,11 @@ import com.google.common.base.Strings;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
 import org.mybatis.debby.codegen.XAbstractGenerator;
+import org.mybatis.debby.codegen.keystrategy.XKeyStrategy;
+import org.mybatis.debby.codegen.keystrategy.identity.XIdentityKeyStrategy;
+import org.mybatis.debby.codegen.keystrategy.normal.XNormalKeyStrategy;
 import org.mybatis.generator.api.dom.xml.Attribute;
+import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
 /**
@@ -62,6 +66,31 @@ public abstract class XAbstractXmlElementGenerator extends XAbstractGenerator {
         }
 
         return index;
+    }
+
+    protected void addSelectKey(ResultMap resultMap, XmlElement parentElement) {
+        // Handle <SelectKey> element. Composite keys is not supported.
+        if (idResultCount(resultMap) == 1) {
+            ResultMapping idMappings = resultMap.getIdResultMappings().get(0);
+
+            XKeyStrategy keyStrategy = introspectedContext.getxConfiguration().getKeyStrategy();
+            if (keyStrategy instanceof XIdentityKeyStrategy) {
+                parentElement.addAttribute(new Attribute("useGeneratedKeys", "true"));
+                parentElement.addAttribute(new Attribute("keyProperty", idMappings.getProperty()));
+                parentElement.addAttribute(new Attribute("keyColumn", idMappings.getColumn()));
+            } else if (keyStrategy instanceof XNormalKeyStrategy) {
+                XNormalKeyStrategy normalKeyStrategy = (XNormalKeyStrategy) keyStrategy;
+                if (!Strings.isNullOrEmpty(normalKeyStrategy.getRuntimeSqlStatement())) {
+                    XmlElement selectKeyElement = new XmlElement("selectKey");
+                    selectKeyElement.addAttribute(new Attribute("keyProperty", idMappings.getProperty()));
+                    selectKeyElement.addAttribute(new Attribute("resultType", idMappings.getJavaType().getName()));
+                    selectKeyElement.addAttribute(new Attribute("order", normalKeyStrategy.isBefore() ? "BEFORE" : "AFTER" ));
+                    selectKeyElement.addElement(new TextElement(normalKeyStrategy.getRuntimeSqlStatement()));
+
+                    parentElement.addElement(selectKeyElement);
+                }
+            }
+        }
     }
 
 }

@@ -16,6 +16,7 @@
 package org.mybatis.debby.codegen.xmlmapper.elements;
 
 import org.mybatis.debby.codegen.XInternalStatements;
+import org.mybatis.debby.criteria.EntityCriteria;
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
@@ -30,6 +31,7 @@ public class XDeleteByCriteriaElementGenerator extends XAbstractXmlElementGenera
     public void addElements(XmlElement parentElement) {
         XmlElement answer = new XmlElement("delete");
         answer.addAttribute(new Attribute("id", XInternalStatements.DELETE_BY_CRITERIA.getId()));
+        answer.addAttribute(new Attribute("parameterType", EntityCriteria.class.getName()));
         
         StringBuilder sb = new StringBuilder();
         sb.append(" delete from ");

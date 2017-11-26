@@ -44,6 +44,8 @@ public class XDeleteByPrimaryKeyElementGenerator extends XAbstractXmlElementGene
         }
         
         ResultMapping idResultMapping = resultMap.getIdResultMappings().get(0);
+
+        answer.addAttribute(new Attribute("parameterType", idResultMapping.getJavaType().getName()));
         
         StringBuilder sb = new StringBuilder();
         sb.append(" delete from ");

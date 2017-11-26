@@ -15,24 +15,31 @@
  */
 package org.mybatis.debby.codegen;
 
+import org.apache.ibatis.mapping.SqlCommandType;
+
 /**
  * @author rocky.hu
  * @date Nov 23, 2017 11:12:03 AM
  */
 public enum XInternalStatements {
 
-    INSERT("insert"),
-    UPDATE_BY_PRIMARY_KEY("updateByPrimaryKey"),
-    UPDATE_BY_CRITERIA("updateByCriteria"),
-    SELECT_BY_PRIMARY_KEY("selectByPrimaryKey"),
-    SELECT_BY_CRITERIA("selectByCriteria"),
-    SELECT_COUNT_BY_CRITERIA("selectCountByCriteria"),
-    DELETE_BY_PRIMARY_KEY("deleteByPrimaryKey"),
-    DELETE_BY_CRITERIA("deleteByCriteria");
+    INSERT(SqlCommandType.INSERT, "insert"),
+    INSERT_SELECTIVE(SqlCommandType.INSERT, "insertSelective"),
+    UPDATE_BY_PRIMARY_KEY(SqlCommandType.UPDATE, "updateByPrimaryKey"),
+    UPDATE_BY_PRIMARY_KEY_SELECTIVE(SqlCommandType.UPDATE, "updateByPrimaryKeySelective"),
+    UPDATE_BY_CRITERIA(SqlCommandType.UPDATE, "updateByCriteria"),
+    UPDATE_BY_CRITERIA_SELECTIVE(SqlCommandType.UPDATE, "updateByCriteriaSelective"),
+    SELECT_BY_PRIMARY_KEY(SqlCommandType.SELECT, "selectByPrimaryKey"),
+    SELECT_BY_CRITERIA(SqlCommandType.SELECT, "selectByCriteria"),
+    SELECT_COUNT_BY_CRITERIA(SqlCommandType.SELECT, "selectCountByCriteria"),
+    DELETE_BY_PRIMARY_KEY(SqlCommandType.DELETE, "deleteByPrimaryKey"),
+    DELETE_BY_CRITERIA(SqlCommandType.DELETE, "deleteByCriteria");
     
     private String id;
+    private SqlCommandType sqlCommandType;
 
-    private XInternalStatements(String id) {
+    private XInternalStatements(SqlCommandType sqlCommandType, String id) {
+        this.sqlCommandType = sqlCommandType;
         this.id = id;
     }
 
@@ -43,6 +50,13 @@ public enum XInternalStatements {
     public void setId(String id) {
         this.id = id;
     }
-    
-    
+
+    public SqlCommandType getSqlCommandType() {
+        return sqlCommandType;
+    }
+
+    public void setSqlCommandType(SqlCommandType sqlCommandType) {
+        this.sqlCommandType = sqlCommandType;
+    }
+
 }

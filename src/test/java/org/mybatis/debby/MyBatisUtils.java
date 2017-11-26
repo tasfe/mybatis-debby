@@ -5,6 +5,9 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.XConfiguration;
+import org.mybatis.debby.codegen.keystrategy.normal.XMySQLKeyStrategy;
+import org.mybatis.debby.x.XMyBatisGenerator;
 
 import java.io.InputStream;
 
@@ -23,6 +26,15 @@ public class MyBatisUtils {
 			InputStream configInputStream = Resources.getResourceAsStream(config);
 			sqlSessionFactory = new SqlSessionFactoryBuilder().build(configInputStream);
 			Configuration configuration = sqlSessionFactory.getConfiguration();
+
+			XConfiguration xConfiguration = new XConfiguration(configuration);
+			xConfiguration.setDebugEnabled(true);
+			xConfiguration.setMapperXMLOuputDirectory("/Users/rocky/Work/project/temp/");
+			xConfiguration.setTablePrefix("t_");
+			xConfiguration.setKeyStrategy(new XMySQLKeyStrategy());
+
+			XMyBatisGenerator xMyBatisGenerator = new XMyBatisGenerator(xConfiguration);
+			xMyBatisGenerator.execute();
 
 		} catch (Exception ex) {
 			ex.printStackTrace();

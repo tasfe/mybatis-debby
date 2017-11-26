@@ -16,19 +16,8 @@
 package org.mybatis.debby.codegen.xmlmapper;
 
 import org.mybatis.debby.codegen.XAbstractXmlGenerator;
-import org.mybatis.debby.codegen.xmlmapper.elements.XAbstractXmlElementGenerator;
-import org.mybatis.debby.codegen.xmlmapper.elements.XBaseColumnListElementGenerator;
-import org.mybatis.debby.codegen.xmlmapper.elements.XCriteriaSqlFragmentElementGenerator;
-import org.mybatis.debby.codegen.xmlmapper.elements.XDeleteByCriteriaElementGenerator;
-import org.mybatis.debby.codegen.xmlmapper.elements.XDeleteByPrimaryKeyElementGenerator;
-import org.mybatis.debby.codegen.xmlmapper.elements.XInsertElementGenerator;
-import org.mybatis.debby.codegen.xmlmapper.elements.XSelectByCriteriaElementGenerator;
-import org.mybatis.debby.codegen.xmlmapper.elements.XSelectByPrimaryKeyElementGenerator;
-import org.mybatis.debby.codegen.xmlmapper.elements.XSelectCountByCriteriaElementGenerator;
-import org.mybatis.debby.codegen.xmlmapper.elements.XSelectWhereSqlFragmentElementGenerator;
-import org.mybatis.debby.codegen.xmlmapper.elements.XUpdateByCriteriaElementGenerator;
-import org.mybatis.debby.codegen.xmlmapper.elements.XUpdateByPrimaryKeyElementGenerator;
-import org.mybatis.debby.codegen.xmlmapper.elements.XUpdateWhereSqlFragmentElementGenerator;
+import org.mybatis.debby.codegen.XInternalStatements;
+import org.mybatis.debby.codegen.xmlmapper.elements.*;
 import org.mybatis.generator.api.dom.xml.Document;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.XmlConstants;
@@ -51,8 +40,11 @@ public class XXMLMapperGenerator extends XAbstractXmlGenerator {
         addSelectWhereSqlFragmentElement(answer);
         addUpdateWhereSqlFragmentElement(answer);
         addInsertElement(answer);
+        addInsertSelectiveElement(answer);
         addUpdateByPrimaryKeyElement(answer);
+        addUpdateByPrimaryKeySelectiveElement(answer);
         addUpdateByCriteriaElement(answer);
+        addUpdateByCriteriaSelectiveElement(answer);
         addSelectByPrimaryKeyElement(answer);
         addSelectByCriteriaElement(answer);
         addSelectCountByCriteriaElement(answer);
@@ -82,43 +74,80 @@ public class XXMLMapperGenerator extends XAbstractXmlGenerator {
     }
     
     protected void addInsertElement(XmlElement parentElement) {
-        XAbstractXmlElementGenerator elementGenerator = new XInsertElementGenerator();
-        initializeAndExecuteGenerator(elementGenerator, parentElement);
+        if (!introspectedContext.getAlreadyOwnedInternalStatements().contains(XInternalStatements.INSERT)) {
+            XAbstractXmlElementGenerator elementGenerator = new XInsertElementGenerator();
+            initializeAndExecuteGenerator(elementGenerator, parentElement);
+        }
+    }
+
+    protected void addInsertSelectiveElement(XmlElement parentElement) {
+        if (!introspectedContext.getAlreadyOwnedInternalStatements().contains(XInternalStatements.INSERT_SELECTIVE)) {
+            XAbstractXmlElementGenerator elementGenerator = new XInsertSelectiveElementGenerator();
+            initializeAndExecuteGenerator(elementGenerator, parentElement);
+        }
     }
     
     protected void addUpdateByPrimaryKeyElement(XmlElement parentElement) {
-        XAbstractXmlElementGenerator elementGenerator = new XUpdateByPrimaryKeyElementGenerator();
-        initializeAndExecuteGenerator(elementGenerator, parentElement);
+        if (!introspectedContext.getAlreadyOwnedInternalStatements().contains(XInternalStatements.UPDATE_BY_PRIMARY_KEY)) {
+            XAbstractXmlElementGenerator elementGenerator = new XUpdateByPrimaryKeyElementGenerator();
+            initializeAndExecuteGenerator(elementGenerator, parentElement);
+        }
+    }
+
+    protected void addUpdateByPrimaryKeySelectiveElement(XmlElement parentElement) {
+        if (!introspectedContext.getAlreadyOwnedInternalStatements().contains(XInternalStatements.UPDATE_BY_PRIMARY_KEY_SELECTIVE)) {
+            XAbstractXmlElementGenerator elementGenerator = new XUpdateByPrimaryKeySelectiveElementGenerator();
+            initializeAndExecuteGenerator(elementGenerator, parentElement);
+        }
     }
     
     protected void addUpdateByCriteriaElement(XmlElement parentElement) {
-        XAbstractXmlElementGenerator elementGenerator = new XUpdateByCriteriaElementGenerator();
-        initializeAndExecuteGenerator(elementGenerator, parentElement);
+        if (!introspectedContext.getAlreadyOwnedInternalStatements().contains(XInternalStatements.UPDATE_BY_CRITERIA)) {
+            XAbstractXmlElementGenerator elementGenerator = new XUpdateByCriteriaElementGenerator();
+            initializeAndExecuteGenerator(elementGenerator, parentElement);
+        }
+    }
+
+    protected void addUpdateByCriteriaSelectiveElement(XmlElement parentElement) {
+        if (!introspectedContext.getAlreadyOwnedInternalStatements().contains(XInternalStatements.UPDATE_BY_CRITERIA_SELECTIVE)) {
+            XAbstractXmlElementGenerator elementGenerator = new XUpdateByCriteriaSelectiveElementGenerator();
+            initializeAndExecuteGenerator(elementGenerator, parentElement);
+        }
     }
     
     protected void addSelectByPrimaryKeyElement(XmlElement parentElement) {
-        XAbstractXmlElementGenerator elementGenerator = new XSelectByPrimaryKeyElementGenerator();
-        initializeAndExecuteGenerator(elementGenerator, parentElement);
+        if (!introspectedContext.getAlreadyOwnedInternalStatements().contains(XInternalStatements.SELECT_BY_PRIMARY_KEY)) {
+            XAbstractXmlElementGenerator elementGenerator = new XSelectByPrimaryKeyElementGenerator();
+            initializeAndExecuteGenerator(elementGenerator, parentElement);
+        }
     }
     
     protected void addSelectByCriteriaElement(XmlElement parentElement) {
-        XAbstractXmlElementGenerator elementGenerator = new XSelectByCriteriaElementGenerator();
-        initializeAndExecuteGenerator(elementGenerator, parentElement);
+        if (!introspectedContext.getAlreadyOwnedInternalStatements().contains(XInternalStatements.SELECT_BY_CRITERIA)) {
+            XAbstractXmlElementGenerator elementGenerator = new XSelectByCriteriaElementGenerator();
+            initializeAndExecuteGenerator(elementGenerator, parentElement);
+        }
     }
     
     protected void addSelectCountByCriteriaElement(XmlElement parentElement) {
-        XAbstractXmlElementGenerator elementGenerator = new XSelectCountByCriteriaElementGenerator();
-        initializeAndExecuteGenerator(elementGenerator, parentElement);
+        if (!introspectedContext.getAlreadyOwnedInternalStatements().contains(XInternalStatements.SELECT_COUNT_BY_CRITERIA)) {
+            XAbstractXmlElementGenerator elementGenerator = new XSelectCountByCriteriaElementGenerator();
+            initializeAndExecuteGenerator(elementGenerator, parentElement);
+        }
     }
     
     protected void addDeleteByPrimaryKeyElement(XmlElement parentElement) {
-        XAbstractXmlElementGenerator elementGenerator = new XDeleteByPrimaryKeyElementGenerator();
-        initializeAndExecuteGenerator(elementGenerator, parentElement);
+        if (!introspectedContext.getAlreadyOwnedInternalStatements().contains(XInternalStatements.DELETE_BY_PRIMARY_KEY)) {
+            XAbstractXmlElementGenerator elementGenerator = new XDeleteByPrimaryKeyElementGenerator();
+            initializeAndExecuteGenerator(elementGenerator, parentElement);
+        }
     }
     
     protected void addDeleteByCriteriaElement(XmlElement parentElement) {
-        XAbstractXmlElementGenerator elementGenerator = new XDeleteByCriteriaElementGenerator();
-        initializeAndExecuteGenerator(elementGenerator, parentElement);
+        if (!introspectedContext.getAlreadyOwnedInternalStatements().contains(XInternalStatements.DELETE_BY_CRITERIA)) {
+            XAbstractXmlElementGenerator elementGenerator = new XDeleteByCriteriaElementGenerator();
+            initializeAndExecuteGenerator(elementGenerator, parentElement);
+        }
     }
     
     protected void initializeAndExecuteGenerator(XAbstractXmlElementGenerator elementGenerator, XmlElement parentElement) {
