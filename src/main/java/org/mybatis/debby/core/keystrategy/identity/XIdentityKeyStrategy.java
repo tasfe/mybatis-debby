@@ -13,28 +13,13 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.apache.ibatis.session;
+package org.mybatis.debby.core.keystrategy.identity;
 
-import java.util.Set;
+import org.mybatis.debby.core.keystrategy.XKeyStrategy;
 
 /**
  * @author rocky.hu
- * @date Nov 20, 2017 4:30:52 PM
+ * @date 2017-11-26 2:53 PM
  */
-public class XConfiguration {
-
-	private Configuration configuration;
-
-	public XConfiguration(Configuration configuration) {
-		this.configuration = configuration;
-	}
-
-	public Configuration getConfiguration() {
-		return configuration;
-	}
-
-	public Set<String> getLoadedResources() {
-		return configuration.loadedResources;
-	}
-
+public class XIdentityKeyStrategy implements XKeyStrategy {
 }

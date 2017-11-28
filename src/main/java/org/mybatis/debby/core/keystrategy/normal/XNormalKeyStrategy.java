@@ -13,28 +13,33 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.apache.ibatis.session;
+package org.mybatis.debby.core.keystrategy.normal;
 
-import java.util.Set;
+import org.mybatis.debby.core.keystrategy.XKeyStrategy;
 
 /**
  * @author rocky.hu
- * @date Nov 20, 2017 4:30:52 PM
+ * @date 2017-11-26 2:54 PM
  */
-public class XConfiguration {
+public class XNormalKeyStrategy implements XKeyStrategy{
 
-	private Configuration configuration;
+    private boolean before = false;
+    private String runtimeSqlStatement;
 
-	public XConfiguration(Configuration configuration) {
-		this.configuration = configuration;
-	}
+    public boolean isBefore() {
+        return before;
+    }
 
-	public Configuration getConfiguration() {
-		return configuration;
-	}
+    public void setBefore(boolean before) {
+        this.before = before;
+    }
 
-	public Set<String> getLoadedResources() {
-		return configuration.loadedResources;
-	}
+    public String getRuntimeSqlStatement() {
+        return runtimeSqlStatement;
+    }
+
+    public void setRuntimeSqlStatement(String runtimeSqlStatement) {
+        this.runtimeSqlStatement = runtimeSqlStatement;
+    }
 
 }

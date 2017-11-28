@@ -13,28 +13,31 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.apache.ibatis.session;
+package org.mybatis.debby.core;
 
-import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author rocky.hu
- * @date Nov 20, 2017 4:30:52 PM
+ * @date Nov 17, 2017 11:53:21 AM
  */
-public class XConfiguration {
+public abstract class XAbstractGenerator {
+    
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
+    
+    protected XIntrospectedContext introspectedContext;
+    
+    public XAbstractGenerator() {
+        super();
+    }
 
-	private Configuration configuration;
+    public XIntrospectedContext getIntrospectedContext() {
+        return introspectedContext;
+    }
 
-	public XConfiguration(Configuration configuration) {
-		this.configuration = configuration;
-	}
-
-	public Configuration getConfiguration() {
-		return configuration;
-	}
-
-	public Set<String> getLoadedResources() {
-		return configuration.loadedResources;
-	}
+    public void setIntrospectedContext(XIntrospectedContext introspectedContext) {
+        this.introspectedContext = introspectedContext;
+    }
 
 }

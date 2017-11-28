@@ -13,28 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.apache.ibatis.session;
-
-import java.util.Set;
+package org.mybatis.debby.core.keystrategy.normal;
 
 /**
  * @author rocky.hu
- * @date Nov 20, 2017 4:30:52 PM
+ * @date 2017-11-24 10:23 PM
  */
-public class XConfiguration {
+public class XDerbyKeyStrategy extends XNormalKeyStrategy {
 
-	private Configuration configuration;
-
-	public XConfiguration(Configuration configuration) {
-		this.configuration = configuration;
-	}
-
-	public Configuration getConfiguration() {
-		return configuration;
-	}
-
-	public Set<String> getLoadedResources() {
-		return configuration.loadedResources;
-	}
+    public XDerbyKeyStrategy() {
+        super();
+        this.setRuntimeSqlStatement("VALUES IDENTITY_VAL_LOCAL()");
+    }
 
 }

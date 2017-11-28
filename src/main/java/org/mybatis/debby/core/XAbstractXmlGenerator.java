@@ -13,28 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.apache.ibatis.session;
+package org.mybatis.debby.core;
 
-import java.util.Set;
+import org.mybatis.generator.api.dom.xml.Document;
 
 /**
  * @author rocky.hu
- * @date Nov 20, 2017 4:30:52 PM
+ * @date Nov 17, 2017 11:35:57 AM
  */
-public class XConfiguration {
-
-	private Configuration configuration;
-
-	public XConfiguration(Configuration configuration) {
-		this.configuration = configuration;
-	}
-
-	public Configuration getConfiguration() {
-		return configuration;
-	}
-
-	public Set<String> getLoadedResources() {
-		return configuration.loadedResources;
-	}
+public abstract class XAbstractXmlGenerator extends XAbstractGenerator {
+    
+    public abstract Document getDocument();
 
 }
