@@ -27,8 +27,10 @@ import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
 /**
+ * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 17, 2017 2:20:48 PM
+ * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.AbstractXmlElementGenerator
  */
 public abstract class XAbstractXmlElementGenerator extends XAbstractGenerator {
     

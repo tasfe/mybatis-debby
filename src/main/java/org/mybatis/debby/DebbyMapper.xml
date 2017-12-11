@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapper namespace="mybatis.debby.DebbyMapper">
+
+    <!-- == Base Statements Begin == -->
+    <select id="selectByPrimaryKey" parameterType="[parameterType]" resultMap="baseResultMap">
+        SELECT
+        <include refid="baseColumns"/>
+        FROM
+        [tableName]
+        WHERE [primaryKey] = #{[primaryKeyValue]}
+    </select>
+    <select id="selectByCriteria" parameterType="EntityCriteria" resultMap="baseResultMap">
+        SELECT
+        <if test="distinct">
+            DISTINCT
+        </if>
+        <include refid="baseColumns"/>
+        FROM
+        [tableName]
+        <if test="criteriaList != null">
+            <include refid="selectWhereSqlFragment"/>
+        </if>
+        <if test="orderList != null">
+            ORDER BY
+            <foreach collection="orderList" item="order" separator=",">
+                ${order}
+            </foreach>
+        </if>
+    </select>
+    <select id="selectCountByCriteria" parameterType="EntityCriteria" resultType="long">
+        SELECT
+        count(*)
+        FROM
+        [tableName]
+        <if test="criteriaList != null">
+            <include refid="selectWhereSqlFragment"/>
+        </if>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="[parameterType]">
+        DELETE FROM [tableName] WHERE [primaryKey] = #{primaryKeyValue}
+    </delete>
+    <delete id="deleteByCriteria" parameterType="EntityCriteria">
+        DELETE FROM
+        [tableName]
+        <if test="criteriaList != null">
+            <include refid="selectWhereSqlFragment"/>
+        </if>
+    </delete>
+    <!-- == Base Statements End == -->
+
+    <!-- == Common SQL Statements == -->
+
+    <sql id="baseColumns">
+        column1, column2, column3...
+    </sql>
+
+    <sql id="selectWhereSqlFragment">
+        <where>
+            <foreach collection="criteriaList" item="criteria" separator="or">
+                <include refid="criteriaSqlFragment"/>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="updateWhereSqlFragment">
+        <where>
+            <foreach collection="updatedCriteria.criteriaList" item="criteria" separator="or">
+                <include refid="criteriaSqlFragment"/>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="criteriaSqlFragment">
+        <if test="criteria.valid">
+            <trim prefix="(" prefixOverrides="AND" suffix=")">
+                <foreach collection="criteria.criterions" item="criterion">
+                    <choose>
+                        <when test="criterion.noValue">
+                            and ${criterion.condition}
+                        </when>
+                        <when test="criterion.singleValue">
+                            and ${criterion.condition}
+                            <choose>
+                                <when test="criterion.typeHandler == null">
+                                    #{criterion.value}
+                                </when>
+                                <otherwise>
+                                    #{criterion.value, typeHandler = criterion.typeHandler}
+                                </otherwise>
+                            </choose>
+                        </when>
+                        <when test="criterion.betweenValue">
+                            and ${criterion.condition}
+                            <choose>
+                                <when test="criterion.typeHandler == null">
+                                    #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <otherwise>
+                                    #{criterion.value, typeHandler = criterion.typeHandler} and #{criterion.secondValue, typeHandler = criterion.typeHandler}
+                                </otherwise>
+                            </choose>
+                        </when>
+                        <when test="criterion.listValue">
+                            and ${criterion.condition}
+                            <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                                <choose>
+                                    <when test="criterion.typeHandler == null">
+                                        #{listItem}
+                                    </when>
+                                    <otherwise>
+                                        #{listItem, typeHandler = criterion.typeHandler}
+                                    </otherwise>
+                                </choose>
+                            </foreach>
+                        </when>
+                    </choose>
+                </foreach>
+            </trim>
+        </if>
+    </sql>
+
+</mapper>

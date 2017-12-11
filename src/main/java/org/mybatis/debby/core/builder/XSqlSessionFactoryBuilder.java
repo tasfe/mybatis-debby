@@ -19,7 +19,7 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.session.XConfiguration;
-import org.mybatis.debby.x.DebbyConfiguration;
+import org.mybatis.debby.DebbyConfiguration;
 import org.mybatis.debby.core.XMyBatisComplementor;
 
 import java.io.InputStream;

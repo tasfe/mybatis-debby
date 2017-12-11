@@ -13,33 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.mybatis.debby.core;
+package org.mybatis.debby.criteria;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mybatis.debby.sql.SqlLogicalOperator;
 
 /**
- * @author Jeff Butler
  * @author rocky.hu
- * @date Nov 17, 2017 11:53:21 AM
- * @see org.mybatis.generator.codegen.AbstractGenerator
+ * @date 2017-12-09 10:11 PM
  */
-public abstract class XAbstractGenerator {
-    
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
-    
-    protected XIntrospectedContext introspectedContext;
-    
-    public XAbstractGenerator() {
-        super();
-    }
+public class NullCriterion extends Criterion {
 
-    public XIntrospectedContext getIntrospectedContext() {
-        return introspectedContext;
-    }
-
-    public void setIntrospectedContext(XIntrospectedContext introspectedContext) {
-        this.introspectedContext = introspectedContext;
+    protected NullCriterion(String propertyName) {
+        super(propertyName + "&" + SqlLogicalOperator.IS_NULL);
     }
 
 }

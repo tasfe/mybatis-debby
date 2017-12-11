@@ -31,7 +31,7 @@ public class XUpdateWhereSqlFragmentElementGenerator extends XAbstractXmlElement
         
         XmlElement whereElement = new XmlElement("where");
         XmlElement forEachElement = new XmlElement("foreach");
-        forEachElement.addAttribute(new Attribute("collection", "updatedCriteria.oredCriteriaList"));
+        forEachElement.addAttribute(new Attribute("collection", "updatedCriteria.criteriaList"));
         forEachElement.addAttribute(new Attribute("item", "criteria"));
         forEachElement.addAttribute(new Attribute("separator", "or"));
         XmlElement includeElement = new XmlElement("include");

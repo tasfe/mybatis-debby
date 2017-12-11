@@ -23,8 +23,10 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.XmlConstants;
 
 /**
+ * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 17, 2017 11:40:50 AM
+ * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator
  */
 public class XXMLMapperGenerator extends XAbstractXmlGenerator {
 

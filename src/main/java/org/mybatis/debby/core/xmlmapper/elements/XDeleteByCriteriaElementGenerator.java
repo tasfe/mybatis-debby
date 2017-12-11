@@ -22,8 +22,10 @@ import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
 /**
+ * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 23, 2017 4:56:12 PM
+ * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.DeleteByExampleElementGenerator
  */
 public class XDeleteByCriteriaElementGenerator extends XAbstractXmlElementGenerator {
 
@@ -39,7 +41,7 @@ public class XDeleteByCriteriaElementGenerator extends XAbstractXmlElementGenera
         answer.addElement(new TextElement(sb.toString()));
         
         XmlElement ifElement = new XmlElement("if");
-        ifElement.addAttribute(new Attribute("test", "oredCriteriaList != null"));
+        ifElement.addAttribute(new Attribute("test", "criteriaList != null"));
         XmlElement includeElement = new XmlElement("include");
         includeElement.addAttribute(new Attribute("refid", "selectWhereSqlFragment"));
         ifElement.addElement(includeElement);

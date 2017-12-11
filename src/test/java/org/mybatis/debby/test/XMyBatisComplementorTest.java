@@ -5,7 +5,7 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.debby.core.builder.XSqlSessionFactoryBuilder;
 import org.mybatis.debby.core.keystrategy.normal.XMySQLKeyStrategy;
-import org.mybatis.debby.x.DebbyConfiguration;
+import org.mybatis.debby.DebbyConfiguration;
 
 import java.io.InputStream;
 

@@ -29,8 +29,10 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 import com.google.common.base.Strings;
 
 /**
+ * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 21, 2017 5:01:12 PM
+ * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.UpdateByExampleWithoutBLOBsElementGenerator
  */
 public class XUpdateByCriteriaElementGenerator extends XAbstractXmlElementGenerator {
     

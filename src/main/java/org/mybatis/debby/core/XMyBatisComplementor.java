@@ -26,11 +26,13 @@ import org.apache.ibatis.builder.BuilderException;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.session.XConfiguration;
+import org.mybatis.debby.DebbyException;
 import org.mybatis.debby.core.builder.XXMLMapperBuilder;
 import org.mybatis.debby.core.util.FileUtils;
 import org.mybatis.debby.core.xmlmapper.XXMLMapperGenerator;
-import org.mybatis.debby.x.DebbyConfiguration;
-import org.mybatis.debby.x.DebbyMapper;
+import org.mybatis.debby.DebbyConfiguration;
+import org.mybatis.debby.DebbyMapper;
+import org.mybatis.debby.criteria.EntityCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,6 +64,9 @@ public class XMyBatisComplementor {
 		}
 
         try {
+
+			xConfiguration.getConfiguration().getTypeAliasRegistry().registerAlias("EntityCriteria", EntityCriteria.class);
+
 			XIntrospectedContext context = null;
 			Set<String> loadedResources = xConfiguration.getLoadedResources();
 	        for (String resource : loadedResources) {
@@ -83,6 +88,8 @@ public class XMyBatisComplementor {
 							}
 	                        tableName = tablePrefix + CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, type.getSimpleName());
 	                    }
+
+						XResultMapRegistry.putResultMap(type.getName(), resultMap);
 
 						// determine if the Mapper interface is a subclass of DebbyMapper
 						Class<?> boundType = null;

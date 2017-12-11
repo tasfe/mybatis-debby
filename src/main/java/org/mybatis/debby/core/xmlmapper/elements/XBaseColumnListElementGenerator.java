@@ -25,8 +25,10 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 import com.google.common.base.Strings;
 
 /**
+ * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 17, 2017 2:33:02 PM
+ * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.BaseColumnListElementGenerator
  */
 public class XBaseColumnListElementGenerator extends XAbstractXmlElementGenerator {
     
@@ -57,8 +59,9 @@ public class XBaseColumnListElementGenerator extends XAbstractXmlElementGenerato
         
         if (sb.length() > 0) {
             answer.addElement(new TextElement(sb.toString()));
-            parentElement.addElement(answer);
         }
+
+        parentElement.addElement(answer);
        
     }
 

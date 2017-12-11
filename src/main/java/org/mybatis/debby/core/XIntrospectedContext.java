@@ -17,7 +17,7 @@ package org.mybatis.debby.core;
 
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.session.XConfiguration;
-import org.mybatis.debby.x.DebbyConfiguration;
+import org.mybatis.debby.DebbyConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;

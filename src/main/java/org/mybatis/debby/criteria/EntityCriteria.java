@@ -15,56 +15,85 @@
  */
 package org.mybatis.debby.criteria;
 
+import org.apache.ibatis.mapping.ResultMapping;
+import org.mybatis.debby.core.XResultMapRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author rocky.hu
- * @date Aug 23, 2016, 11:18:24 PM
+ * @date 2017-12-09 3:40 PM
  */
-public interface EntityCriteria {
+public class EntityCriteria {
 
-	/**
-	 * Create Criteria that use for warping Criterion.
-	 *
-	 * @return Criteria
-	 */
-	Criteria createCriteria();
+    private final String entityOrClassName;
 
-	/**
-	 * Add another Criteria for OR function.
-	 *
-	 * @return Criteria
-	 */
-	Criteria or();
+    private Integer maxResults;
+    private Integer firstResult;
+    private Boolean distinct;
 
-	/**
-	 * Set a limit upon the number of objects to be retrieved.
-	 *
-	 * @param maxResults
-	 *            the maximum number of results
-	 */
-	void setMaxResults(Integer maxResults);
+    private List<Criteria> criteriaList = new ArrayList<Criteria>();
+    private List<Order> orderList = new ArrayList<Order>();
 
-	/**
-	 * Set the first result to be retrieved.
-	 *
-	 * @param firstResult
-	 *            the first result to retrieve, numbered from <tt>0</tt>
-	 */
-	void setFirstResult(Integer firstResult);
+    public EntityCriteria(String entityOrClassName) {
+        this.entityOrClassName = entityOrClassName;
+    }
 
-	/**
-	 * Set distinct for select records.
-	 *
-	 * @param distinct
-	 */
-	void setDistinct(Boolean distinct);
+    public EntityCriteria(Class<?> clazz) {
+        this.entityOrClassName = clazz.getName();
+    }
 
-	/**
-	 * Add an {@link EntityOrder ordering} to the result set.
-	 *
-	 * @param entityOrder
-	 *            The {@link EntityOrder entityOrder} object representing an
-	 *            ordering to be applied to the results.
-	 */
-	void addEntityOrder(EntityOrder entityOrder);
+    public Criteria createCriteria() {
+        Criteria criteria = createCriteriaInternal();
+        if (criteriaList.size() == 0) {
+            criteriaList.add(criteria);
+        }
+        return criteria;
+    }
+
+    public Criteria or() {
+        Criteria criteria = createCriteriaInternal();
+        criteriaList.add(criteria);
+        return criteria;
+    }
+
+    private Criteria createCriteriaInternal() {
+        Criteria criteria = new Criteria(entityOrClassName);
+        return criteria;
+    }
+
+    public EntityCriteria addOrder(Order ordering) {
+        String propertyName = ordering.getPropertyName();
+        ResultMapping resultMapping = XResultMapRegistry.getResultMapping(entityOrClassName, propertyName);
+        String column = resultMapping.getColumn();
+        ordering.setPropertyName(column);
+        orderList.add(ordering);
+        return this;
+    }
+
+    public Integer getMaxResults() {
+        return maxResults;
+    }
+
+    public void setMaxResults(Integer maxResults) {
+        this.maxResults = maxResults;
+    }
+
+    public Integer getFirstResult() {
+        return firstResult;
+    }
+
+    public void setFirstResult(Integer firstResult) {
+        this.firstResult = firstResult;
+    }
+
+    public Boolean getDistinct() {
+        return distinct;
+    }
+
+    public void setDistinct(Boolean distinct) {
+        this.distinct = distinct;
+    }
 
 }

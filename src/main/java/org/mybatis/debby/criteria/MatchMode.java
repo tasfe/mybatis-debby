@@ -16,35 +16,59 @@
 package org.mybatis.debby.criteria;
 
 /**
- * Represents an strategy for matching strings using "like".
- *
  * @author rocky.hu
- * @date Aug 24, 2016, 08:30:06 PM
+ * @date 2017-12-11 11:13 PM
+ * @see "org.hibernate.criterion.MatchMode"
  */
 public enum MatchMode {
-    
-    EXACT("EXACT"), START("START"), END("END"), ANYWHERE("ANYWHERE");
 
-    private String notation;
+    /**
+     * Match the entire string to the pattern
+     */
+    EXACT {
+        @Override
+        public String toMatchString(String pattern) {
+            return pattern;
+        }
+    },
 
-    private MatchMode(String notation)
-    {
-        this.notation = notation;
-    }
+    /**
+     * Match the start of the string to the pattern
+     */
+    START {
+        @Override
+        public String toMatchString(String pattern) {
+            return pattern + '%';
+        }
+    },
 
-    public String getNotation()
-    {
-        return notation;
-    }
+    /**
+     * Match the end of the string to the pattern
+     */
+    END {
+        @Override
+        public String toMatchString(String pattern) {
+            return '%' + pattern;
+        }
+    },
 
-    public void setNotation(String notation)
-    {
-        this.notation = notation;
-    }
+    /**
+     * Match the pattern anywhere in the string
+     */
+    ANYWHERE {
+        @Override
+        public String toMatchString(String pattern) {
+            return '%' + pattern + '%';
+        }
+    };
 
-    @Override
-    public String toString()
-    {
-        return this.getNotation();
-    }
+    /**
+     * Convert the pattern, by appending/prepending "%"
+     *
+     * @param pattern The pattern for convert according to the mode
+     *
+     * @return The converted pattern
+     */
+    public abstract String toMatchString(String pattern);
+
 }

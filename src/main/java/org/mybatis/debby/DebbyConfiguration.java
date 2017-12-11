@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.mybatis.debby.x;
+package org.mybatis.debby;
 
 import org.mybatis.debby.core.keystrategy.XKeyStrategy;
 import org.mybatis.debby.core.keystrategy.identity.XIdentityKeyStrategy;

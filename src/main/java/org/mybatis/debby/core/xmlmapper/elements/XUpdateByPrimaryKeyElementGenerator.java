@@ -30,8 +30,10 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 import com.google.common.base.Strings;
 
 /**
+ * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 23, 2017 9:04:54 PM
+ * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.UpdateByPrimaryKeyWithoutBLOBsElementGenerator
  */
 public class XUpdateByPrimaryKeyElementGenerator extends XAbstractXmlElementGenerator {
 

@@ -15,153 +15,93 @@
  */
 package org.mybatis.debby.criteria;
 
+import java.io.Serializable;
 import java.util.List;
-
-import org.mybatis.debby.helper.EntityHelper;
-import org.mybatis.debby.sql.SqlOperators;
+import java.util.Set;
 
 /**
  * @author rocky.hu
- * @date Aug 6, 2016 10:07:28 PM
+ * @date 2017-12-08 10:10 PM
  */
-public class Criterion {
-    
-    private SqlOperators sqlOperators;
-    private String propertyName;
+public abstract class Criterion implements Serializable {
+
+    /** the content is column && sql operator */
+    private String condition;
     private Object value;
     private Object secondValue;
-    private List<?> listValue;
-    private MatchMode matchMode;// only for SqlLogicalOperators.LIKE
+    private String typeHandler;
+    private boolean noValue;
+    private boolean singleValue;
+    private boolean betweenValue;
+    private boolean listValue;
 
-    /**
-     * @param propertyName
-     * @param sqlOperators
-     * @param value
-     * @param secondValue
-     * @param listValue
-     */
-    public Criterion(String propertyName, SqlOperators sqlOperators, Object value, Object secondValue, List<?>
-            listValue)
-    {
-        if (propertyName == null || "".equals(propertyName.trim())) {
-            throw new IllegalArgumentException("PropertyName for Criterion cannot be null");
+    protected Criterion(String condition) {
+        super();
+        this.condition = condition;
+        this.typeHandler = null;
+        this.noValue = true;
+    }
+
+    protected Criterion(String condition, Object value) {
+        this(condition, value, null);
+    }
+
+    protected Criterion(String condition, Object value, String typeHandler) {
+        super();
+        this.condition = condition;
+        this.value = value;
+        this.typeHandler = typeHandler;
+        if (value instanceof List<?> || value instanceof Set<?>) {
+            this.listValue = true;
         }
-
-        if (sqlOperators == null) {
-            throw new IllegalArgumentException("Sql Operators for Criterion cannot be null");
+        else {
+            this.singleValue = true;
         }
+    }
 
-        this.propertyName = EntityHelper.camelToUnderscore(propertyName);
-        this.sqlOperators = sqlOperators;
+    protected Criterion(String condition, Object value, Object secondValue) {
+        this(condition, value, secondValue, null);
+    }
+
+    protected Criterion(String condition, Object value, Object secondValue, String typeHandler) {
+        super();
+        this.condition = condition;
         this.value = value;
         this.secondValue = secondValue;
-        this.listValue = listValue;
+        this.typeHandler = typeHandler;
+        this.betweenValue = true;
     }
 
-    /**
-     * This constructor is only for SqlLogicalOperators.LIKE
-     *
-     * @param propertyName
-     * @param sqlOperators
-     * @param value
-     * @param secondValue
-     * @param listValue
-     * @param matchMode
-     */
-    public Criterion(String propertyName, SqlOperators sqlOperators, Object value, Object secondValue, List<?>
-            listValue, MatchMode matchMode)
-    {
-        if (propertyName == null || "".equals(propertyName.trim())) {
-            throw new IllegalArgumentException("PropertyName for Criterion cannot be null");
-        }
-
-        if (sqlOperators == null) {
-            throw new IllegalArgumentException("Sql Operators for Criterion cannot be null");
-        }
-
-        if (value == null) {
-            throw new IllegalArgumentException("Value for Criterion cannot be null");
-        }
-
-        if (matchMode == null) {
-            throw new IllegalArgumentException("MatchMode for Criterion cannot be null");
-        }
-
-        this.propertyName = EntityHelper.camelToUnderscore(propertyName);
-        this.sqlOperators = sqlOperators;
-        this.value = value;
-        this.secondValue = null;
-        this.listValue = null;
-        this.matchMode = matchMode;
+    public String getCondition() {
+        return condition;
     }
 
-    public SqlOperators getSqlOperators()
-    {
-        return sqlOperators;
+    public void setCondition(String condition) {
+        this.condition = condition;
     }
 
-    public List<?> getListValue()
-    {
-        return listValue;
-    }
-
-    public void setSqlOperators(SqlOperators sqlOperators)
-    {
-        this.sqlOperators = sqlOperators;
-    }
-
-    public void setPropertyName(String propertyName)
-    {
-        this.propertyName = propertyName;
-    }
-
-    public void setValue(Object value)
-    {
-        this.value = value;
-    }
-
-    public void setSecondValue(Object secondValue)
-    {
-        this.secondValue = secondValue;
-    }
-
-    public void setListValue(List<?> listValue)
-    {
-        this.listValue = listValue;
-    }
-
-    public void setMatchMode(MatchMode matchMode)
-    {
-        this.matchMode = matchMode;
-    }
-
-    public String getPropertyName()
-    {
-        return propertyName;
-    }
-
-    public Object getValue()
-    {
+    public Object getValue() {
         return value;
     }
 
-    public Object getSecondValue()
-    {
+    public void setValue(Object value) {
+        this.value = value;
+    }
+
+    public Object getSecondValue() {
         return secondValue;
     }
 
-    public MatchMode getMatchMode()
-    {
-        return matchMode;
+    public void setSecondValue(Object secondValue) {
+        this.secondValue = secondValue;
     }
 
-    /**
-     * If we don't need to map the camel case to underscore for the propertyName, we should call this method.
-     */
-    public Criterion unMapCamelCaseToUnderscore()
-    {
-        this.setPropertyName(EntityHelper.underscoreToCamel(this.propertyName));
-        return this;
+    public String getTypeHandler() {
+        return typeHandler;
+    }
+
+    public void setTypeHandler(String typeHandler) {
+        this.typeHandler = typeHandler;
     }
 
 }

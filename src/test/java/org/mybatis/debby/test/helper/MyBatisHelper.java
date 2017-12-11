@@ -1,18 +1,18 @@
-package org.mybatis.debby.test.util;
+package org.mybatis.debby.test.helper;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import org.mybatis.debby.core.builder.XSqlSessionFactoryBuilder;
-import org.mybatis.debby.core.keystrategy.normal.XMySQLKeyStrategy;
-import org.mybatis.debby.x.DebbyConfiguration;
+import org.mybatis.debby.core.keystrategy.normal.XH2KeyStrategy;
+import org.mybatis.debby.DebbyConfiguration;
 
 import java.io.InputStream;
 
 /**
  * Created by rocky on 3/15/16.
  */
-public class MyBatisUtils {
+public class MyBatisHelper {
 
     private static SqlSessionFactory sqlSessionFactory = buildSqlSessionFactory();
 
@@ -26,7 +26,7 @@ public class MyBatisUtils {
 			debbyConfiguration.setDebugEnabled(true);
 			debbyConfiguration.setMapperXMLOutputDirectory("/Users/rocky/Work/project/temp/");
 			debbyConfiguration.setTablePrefix("t_");
-			debbyConfiguration.setKeyStrategy(new XMySQLKeyStrategy());
+			debbyConfiguration.setKeyStrategy(new XH2KeyStrategy());
 
 			sqlSessionFactory = new XSqlSessionFactoryBuilder(debbyConfiguration).build(configInputStream);
 

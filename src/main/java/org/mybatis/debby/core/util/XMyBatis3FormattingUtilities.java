@@ -20,6 +20,11 @@ import org.mybatis.generator.internal.util.StringUtility;
 
 import com.google.common.base.Strings;
 
+import javax.xml.transform.Result;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * @author rocky.hu
  * @date Nov 20, 2017 10:42:07 PM
@@ -44,6 +49,41 @@ public class XMyBatis3FormattingUtilities {
 		
 		return sb.toString();
 	}
+
+    public static List<String> getEscapedPropertyList(ResultMapping resultMapping) {
+	    List<String> propertyList = new ArrayList<String>();
+	    String property = resultMapping.getProperty();
+	    String[] segments = property.split("\\.");
+        StringBuilder sb = new StringBuilder();
+        int index = 0;
+        while (index < segments.length) {
+            sb.setLength(0);
+            for (int i=0; i<=index; i++) {
+                sb.append(segments[i]);
+                if (i<index) {
+                    sb.append(".");
+                }
+            }
+
+            propertyList.add(sb.toString());
+            index++;
+        }
+        return propertyList;
+    }
+
+    public static String getPropertyClause(ResultMapping resultMapping) {
+        StringBuilder propertySb = new StringBuilder();
+        List<String> properties = getEscapedPropertyList(resultMapping);
+        Iterator<String> propertyIter = properties.iterator();
+        while (propertyIter.hasNext()) {
+            propertySb.append(propertyIter.next());
+            propertySb.append(" != null");
+            if (propertyIter.hasNext()) {
+                propertySb.append(" and ");
+            }
+        }
+        return propertySb.toString();
+    }
 	
 	public static String getParameterClause(ResultMapping resultMapping) {
         return getParameterClause(resultMapping, null);

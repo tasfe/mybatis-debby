@@ -19,8 +19,10 @@ import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
 /**
+ * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 23, 2017 2:57:56 PM
+ * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.ExampleWhereClauseElementGenerator
  */
 public class XSelectWhereSqlFragmentElementGenerator extends XAbstractXmlElementGenerator {
 
@@ -31,7 +33,7 @@ public class XSelectWhereSqlFragmentElementGenerator extends XAbstractXmlElement
         
         XmlElement whereElement = new XmlElement("where");
         XmlElement forEachElement = new XmlElement("foreach");
-        forEachElement.addAttribute(new Attribute("collection", "oredCriteriaList"));
+        forEachElement.addAttribute(new Attribute("collection", "criteriaList"));
         forEachElement.addAttribute(new Attribute("item", "criteria"));
         forEachElement.addAttribute(new Attribute("separator", "or"));
         XmlElement includeElement = new XmlElement("include");

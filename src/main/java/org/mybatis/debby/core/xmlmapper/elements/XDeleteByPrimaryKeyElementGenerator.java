@@ -24,8 +24,10 @@ import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
 /**
+ * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 23, 2017 4:46:06 PM
+ * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.DeleteByPrimaryKeyElementGenerator
  */
 public class XDeleteByPrimaryKeyElementGenerator extends XAbstractXmlElementGenerator {
 

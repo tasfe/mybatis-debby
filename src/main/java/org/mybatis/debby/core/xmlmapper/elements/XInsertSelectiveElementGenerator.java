@@ -26,11 +26,12 @@ import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
 import java.util.Iterator;
-import java.util.List;
 
 /**
+ * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 20, 2017 10:14:03 AM
+ * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.InsertSelectiveElementGenerator
  */
 public class XInsertSelectiveElementGenerator extends XAbstractXmlElementGenerator {
     
@@ -87,10 +88,7 @@ public class XInsertSelectiveElementGenerator extends XAbstractXmlElementGenerat
             }
 
             XmlElement insertNotNullElement = new XmlElement("if");
-            sb.setLength(0);
-            sb.append(resultMapping.getProperty());
-            sb.append(" != null");
-            insertNotNullElement.addAttribute(new Attribute("test", sb.toString()));
+            insertNotNullElement.addAttribute(new Attribute("test", XMyBatis3FormattingUtilities.getPropertyClause(resultMapping)));
 
             sb.setLength(0);
             sb.append(XMyBatis3FormattingUtilities.getEscapedColumnName(resultMapping));
@@ -99,10 +97,7 @@ public class XInsertSelectiveElementGenerator extends XAbstractXmlElementGenerat
             insertTrimElement.addElement(insertNotNullElement);
 
             XmlElement valuesNotNullElement = new XmlElement("if");
-            sb.setLength(0);
-            sb.append(resultMapping.getProperty());
-            sb.append(" != null");
-            valuesNotNullElement.addAttribute(new Attribute("test", sb.toString()));
+            valuesNotNullElement.addAttribute(new Attribute("test", XMyBatis3FormattingUtilities.getPropertyClause(resultMapping)));
 
             sb.setLength(0);
             sb.append(XMyBatis3FormattingUtilities.getParameterClause(resultMapping));

@@ -15,38 +15,73 @@
  */
 package org.mybatis.debby.criteria;
 
+import com.google.common.base.Strings;
+import org.apache.ibatis.mapping.ResultMapping;
+import org.mybatis.debby.core.XResultMapRegistry;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author rocky.hu
- * @date Aug 20, 2016, 11:45:47 PM
+ * @date 2017-12-09 10:47 PM
  */
 public class Criteria {
-    
-    public List<Criterion> criterions;
 
-    public Criteria()
-    {
-        criterions = new ArrayList<Criterion>();
+    private final String entityOrClassName;
+    private List<Criterion> criterions = new ArrayList<Criterion>();
+
+    Criteria(String entityOrClassName) {
+        this.entityOrClassName = entityOrClassName;
     }
 
-    public boolean isValid()
-    {
-        return criterions.size() > 0;
+    public Criteria addCriterion(Criterion criterion) {
+        if (criterion == null) {
+            throw new IllegalArgumentException("Criterion cannot be null.");
+        }
+
+        // convert the property name to column name
+        String condition = criterion.getCondition();
+        if (Strings.isNullOrEmpty(condition)) {
+            throw new IllegalArgumentException("condition is required for " + criterion.getClass().getName());
+        }
+        String[] segment = condition.split("&");
+        if (segment == null || segment.length != 2) {
+            throw new IllegalArgumentException("Illegal format for " + criterion.getClass().getName());
+        }
+        if (Strings.isNullOrEmpty(segment[0])) {
+            throw new IllegalArgumentException("Property name is required for " + criterion.getClass().getName());
+        }
+        if (Strings.isNullOrEmpty(segment[1])) {
+            throw new IllegalArgumentException("Sql operator is required for " + condition.getClass().getName());
+        }
+
+        String propertyName = segment[0];
+        String sqlOperator = segment[1];
+
+        ResultMapping resultMapping = XResultMapRegistry.getResultMapping(entityOrClassName, propertyName);
+        String column = resultMapping.getColumn();
+        String typeHandler = resultMapping.getTypeHandler().getClass().getName();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(column);
+        sb.append(" ");
+        sb.append(sqlOperator);
+        criterion.setCondition(sb.toString());
+
+        criterion.setTypeHandler(typeHandler);
+
+        criterions.add(criterion);
+
+        return this;
     }
 
-    public List<Criterion> getCriteria()
-    {
+    public List<Criterion> getCriterions() {
         return criterions;
     }
 
-    public void addCriterion(Criterion criterion)
-    {
-        if (criterion == null) {
-            throw new IllegalArgumentException("Criterion cannot be null");
-        }
-        criterions.add(criterion);
+    public boolean isValid() {
+        return criterions.size() > 0;
     }
 
 }

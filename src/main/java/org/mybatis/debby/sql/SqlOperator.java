@@ -13,18 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.mybatis.debby.core;
-
-import org.mybatis.generator.api.dom.xml.Document;
+package org.mybatis.debby.sql;
 
 /**
- * @author Jeff Butler
+ * Operators are used to specify conditions in an SQL statement and to serve as conjunctions for
+ * multiple conditions in a statement.
+ *
  * @author rocky.hu
- * @date Nov 17, 2017 11:35:57 AM
- * @see org.mybatis.generator.codegen.AbstractXmlGenerator
+ * @date Sep 08, 2016, 09:53:18 PM
  */
-public abstract class XAbstractXmlGenerator extends XAbstractGenerator {
-    
-    public abstract Document getDocument();
-
+public interface SqlOperator {
 }

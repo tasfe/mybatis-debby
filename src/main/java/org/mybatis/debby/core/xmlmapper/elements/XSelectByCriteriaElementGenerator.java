@@ -22,8 +22,10 @@ import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
 /**
+ * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 23, 2017 2:10:36 PM
+ * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.SelectByExampleWithoutBLOBsElementGenerator
  */
 public class XSelectByCriteriaElementGenerator extends XAbstractXmlElementGenerator {
 
@@ -49,23 +51,23 @@ public class XSelectByCriteriaElementGenerator extends XAbstractXmlElementGenera
         answer.addElement(new TextElement(sb.toString()));
         
         XmlElement oredCriteriaListIfElement= new XmlElement("if");
-        oredCriteriaListIfElement.addAttribute(new Attribute("test", "oredCriteriaList != null"));
+        oredCriteriaListIfElement.addAttribute(new Attribute("test", "criteriaList != null"));
         XmlElement includeElement = new XmlElement("include");
         includeElement.addAttribute(new Attribute("refid", "selectWhereSqlFragment"));
         oredCriteriaListIfElement.addElement(includeElement);
         answer.addElement(oredCriteriaListIfElement);
         
         XmlElement entityOrderListIfElement = new XmlElement("if");
-        entityOrderListIfElement.addAttribute(new Attribute("test", "entityOrderList != null"));
+        entityOrderListIfElement.addAttribute(new Attribute("test", "orderList != null"));
         sb.setLength(0);
         sb.append(" ORDER BY ");
         entityOrderListIfElement.addElement(new TextElement(sb.toString()));
         
         XmlElement forEachElement = new XmlElement("foreach");
-        forEachElement.addAttribute(new Attribute("collection", "entityOrderList"));
-        forEachElement.addAttribute(new Attribute("item", "entityOrder"));
+        forEachElement.addAttribute(new Attribute("collection", "orderList"));
+        forEachElement.addAttribute(new Attribute("item", "order"));
         forEachElement.addAttribute(new Attribute("separator", ","));
-        forEachElement.addElement(new TextElement("${entityOrder}"));
+        forEachElement.addElement(new TextElement("${order}"));
         entityOrderListIfElement.addElement(forEachElement);
         
         answer.addElement(entityOrderListIfElement);

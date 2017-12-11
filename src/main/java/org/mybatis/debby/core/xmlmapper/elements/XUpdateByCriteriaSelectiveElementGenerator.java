@@ -27,8 +27,10 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 21, 2017 5:01:12 PM
+ * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.UpdateByExampleSelectiveElementGenerator
  */
 public class XUpdateByCriteriaSelectiveElementGenerator extends XAbstractXmlElementGenerator {
     
@@ -56,12 +58,8 @@ public class XUpdateByCriteriaSelectiveElementGenerator extends XAbstractXmlElem
                 continue;
             }
             
-            sb.setLength(0);
-            sb.append("record.");
-            sb.append(resultMapping.getProperty());
-            sb.append(" != null");
             XmlElement isNotNullElement = new XmlElement("if");
-            isNotNullElement.addAttribute(new Attribute("test", sb.toString()));
+            isNotNullElement.addAttribute(new Attribute("test", XMyBatis3FormattingUtilities.getPropertyClause(resultMapping)));
             dynamicElement.addElement(isNotNullElement);
             
             sb.setLength(0);
