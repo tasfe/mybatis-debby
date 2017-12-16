@@ -13,9 +13,9 @@
     </settings>  
 
 	<typeAliases>
-		<typeAlias type="org.mybatis.debby.test.entity.Product" alias="Product" />
-		<typeAlias type="org.mybatis.debby.test.entity.Member" alias="Member" />
-		<typeAlias type="org.mybatis.debby.test.entity.ProductCategory" alias="ProductCategory" />
+		<typeAlias type="com.debby.mybatis.entity.Product" alias="Product" />
+		<typeAlias type="com.debby.mybatis.entity.Member" alias="Member" />
+		<typeAlias type="com.debby.mybatis.entity.ProductCategory" alias="ProductCategory" />
 		<typeAlias type="org.apache.ibatis.type.EnumOrdinalTypeHandler" alias="EnumOrdinalTypeHandler" />
 	</typeAliases>
 
