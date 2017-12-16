@@ -39,13 +39,12 @@ public class XDeleteByCriteriaElementGenerator extends XAbstractXmlElementGenera
         sb.append(" delete from ");
         sb.append(introspectedContext.getTableName());
         answer.addElement(new TextElement(sb.toString()));
-        
+
         XmlElement ifElement = new XmlElement("if");
-        ifElement.addAttribute(new Attribute("test", "criteriaList != null"));
+        ifElement.addAttribute(new Attribute("test", "_parameter != null and _parameter.criteriaList != null"));
         XmlElement includeElement = new XmlElement("include");
         includeElement.addAttribute(new Attribute("refid", "selectWhereSqlFragment"));
         ifElement.addElement(includeElement);
-        
         answer.addElement(ifElement);
         
         parentElement.addElement(answer);

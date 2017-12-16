@@ -20,6 +20,4 @@ package org.mybatis.debby.core.keystrategy;
  * @date 2017-11-26 2:53 PM
  */
 public interface XKeyStrategy {
-
-
 }

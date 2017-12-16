@@ -3,7 +3,7 @@ package org.mybatis.debby.test.helper;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import org.mybatis.debby.core.builder.XSqlSessionFactoryBuilder;
+import org.mybatis.debby.DebbySqlSessionFactoryBuilder;
 import org.mybatis.debby.core.keystrategy.normal.XH2KeyStrategy;
 import org.mybatis.debby.DebbyConfiguration;
 
@@ -28,7 +28,7 @@ public class MyBatisHelper {
 			debbyConfiguration.setTablePrefix("t_");
 			debbyConfiguration.setKeyStrategy(new XH2KeyStrategy());
 
-			sqlSessionFactory = new XSqlSessionFactoryBuilder(debbyConfiguration).build(configInputStream);
+			sqlSessionFactory = new DebbySqlSessionFactoryBuilder(debbyConfiguration).build(configInputStream);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();

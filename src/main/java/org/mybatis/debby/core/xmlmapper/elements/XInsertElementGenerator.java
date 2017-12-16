@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.ibatis.mapping.ResultFlag;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
 import org.mybatis.debby.core.XInternalStatements;
@@ -59,17 +58,9 @@ public class XInsertElementGenerator extends XAbstractXmlElementGenerator {
         valuesClause.append(" values(");
         
         List<String> valuesClauses = new ArrayList<String>();
-        Iterator<ResultMapping> iter = resultMap.getPropertyResultMappings().iterator();
+        Iterator<ResultMapping> iter = getPropertyResultMappings(resultMap).iterator();
         while (iter.hasNext()) {
         	ResultMapping resultMapping = iter.next();
-        	if (!Strings.isNullOrEmpty(resultMapping.getNestedQueryId()) || !Strings.isNullOrEmpty(resultMapping.getNestedResultMapId())) {
-        	    continue;
-        	}
-
-            if (resultMapping.getFlags() != null && resultMapping.getFlags().contains(ResultFlag.CONSTRUCTOR)) {
-        	    continue;
-            }
-        	
         	insertClause.append(XMyBatis3FormattingUtilities.getEscapedColumnName(resultMapping));
         	valuesClause.append(XMyBatis3FormattingUtilities.getParameterClause(resultMapping));
         	

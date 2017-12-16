@@ -18,7 +18,7 @@ import java.util.Date;
  * @author rocky.hu
  * @date 2017-11-29 9:41 PM
  */
-public class ProductMapperTest {
+public class ProductMapperTest implements DebbyMapperTest {
 
     private SqlSession sqlSession;
     private DBUnitHelper dbUnitHelper = new DBUnitHelper();
@@ -34,9 +34,8 @@ public class ProductMapperTest {
         sqlSession.close();
     }
 
-    @Test
-    public void test_insert() {
-
+    @Override
+    public void testInsert() {
         ProductCategory productCategory = new ProductCategory();
         productCategory.setId(1);
 
@@ -57,9 +56,8 @@ public class ProductMapperTest {
         Assert.assertEquals(product.getId().intValue(), 1);
     }
 
-    @Test
-    public void test_insertSelective() {
-
+    @Override
+    public void testInsertSelective() {
         ProductCategory productCategory = new ProductCategory();
         productCategory.setId(1);
 
@@ -84,8 +82,8 @@ public class ProductMapperTest {
         Assert.assertEquals(product.getTitle(), "test1");
     }
 
-    @Test
-    public void test_updateByPrimaryKey() {
+    @Override
+    public void testUpdateByPrimaryKey() {
         dbUnitHelper.executeDatasetAsRefresh("/data/db.xml");
 
         Product product = new Product();
@@ -99,8 +97,8 @@ public class ProductMapperTest {
         Assert.assertNull(product.getCreateTime());
     }
 
-    @Test
-    public void test_updateByPrimaryKeySelective() {
+    @Override
+    public void testUpdateByPrimaryKeySelective() {
         dbUnitHelper.executeDatasetAsRefresh("/data/db.xml");
 
         Product product = new Product();
@@ -114,14 +112,49 @@ public class ProductMapperTest {
         Assert.assertNotNull(product.getCreateTime());
     }
 
-    @Test
-    public void test_updateByCriteria() {
+    @Override
+    public void testUpdateByCriteria() {
         dbUnitHelper.executeDatasetAsRefresh("/data/db.xml");
 
         Product product = new Product();
         product.setQuantity(101);;
 
         EntityCriteria entityCriteria = new EntityCriteria(Product.class);
+    }
+
+    @Override
+    public void testUpdateByCriteriaSelective() {
+
+    }
+
+    @Test
+    @Override
+    public void testSelectByPrimaryKey() {
+        dbUnitHelper.executeDatasetAsRefresh("/data/db.xml");
+
+        ProductMapper productMapper = sqlSession.getMapper(ProductMapper.class);
+        Product product = productMapper.selectByPrimaryKey(1);
+        Assert.assertEquals(product.getTitle(), "p1");
+    }
+
+    @Override
+    public void testSelectByCriteria() {
+
+    }
+
+    @Override
+    public void testSelectCountByCriteria() {
+
+    }
+
+    @Override
+    public void testDeleteByPrimaryKey() {
+
+    }
+
+    @Override
+    public void testDeleteByCriteria() {
+
     }
 
 }

@@ -16,9 +16,7 @@
 package org.mybatis.debby.core.xmlmapper.elements;
 
 import org.apache.ibatis.mapping.ResultMap;
-import org.apache.ibatis.mapping.ResultMapping;
 import org.mybatis.debby.core.XInternalStatements;
-import org.mybatis.debby.core.util.XMyBatis3FormattingUtilities;
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
@@ -38,16 +36,11 @@ public class XSelectByPrimaryKeyElementGenerator extends XAbstractXmlElementGene
         answer.addAttribute(new Attribute("resultMap", "baseResultMap"));
 
         ResultMap resultMap = introspectedContext.getResultMap();
-        if (idResultCount(resultMap) > 1) {
-            logger.warn("[SelectByPrimaryKey] [{}] : Composite keys is not supported by Mybatis-Debby!", resultMap.getId());
-            return;
-        } else if (idResultCount(resultMap) == 0) {
-            logger.warn("[SelectByPrimaryKey] [{}] : No primary key found!", resultMap.getId());
-            return;
+        if (getIdResultMappingsCount(resultMap) == 0) {
+            logger.warn("[SelectByPrimaryKey] : No primary key found and we don't generate 'selectByPrimaryKey' statement for [{}]!",
+                    resultMap.getId().replace(".baseResultMap", ""));
+            return;// no id defined, we do nothing.
         }
-        
-        ResultMapping idResultMapping = resultMap.getIdResultMappings().get(0);
-        answer.addAttribute(new Attribute("parameterType", idResultMapping.getJavaType().getName()));
         
         StringBuilder sb = new StringBuilder();
         sb.append("select ");
@@ -61,9 +54,8 @@ public class XSelectByPrimaryKeyElementGenerator extends XAbstractXmlElementGene
         
         sb.setLength(0);
         sb.append(" where ");
-        sb.append(XMyBatis3FormattingUtilities.getEscapedColumnName(idResultMapping));
-        sb.append("=");
-        sb.append(XMyBatis3FormattingUtilities.getParameterClause(idResultMapping, null));
+        sb.append(getPrimaryKeyParameterClause(resultMap));
+
         answer.addElement(new TextElement(sb.toString()));
         
         parentElement.addElement(answer);

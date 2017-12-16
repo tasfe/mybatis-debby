@@ -26,12 +26,11 @@ import org.apache.ibatis.builder.BuilderException;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.session.XConfiguration;
-import org.mybatis.debby.DebbyException;
+import org.mybatis.debby.DebbyConfiguration;
+import org.mybatis.debby.DebbyMapper;
 import org.mybatis.debby.core.builder.XXMLMapperBuilder;
 import org.mybatis.debby.core.util.FileUtils;
 import org.mybatis.debby.core.xmlmapper.XXMLMapperGenerator;
-import org.mybatis.debby.DebbyConfiguration;
-import org.mybatis.debby.DebbyMapper;
 import org.mybatis.debby.criteria.EntityCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,14 +42,14 @@ import com.google.common.base.Strings;
  * @author rocky.hu
  * @date Nov 22, 2017 11:23:58 AM
  */
-public class XMyBatisComplementor {
+public class XMyBatisGenerator {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(XMyBatisComplementor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(XMyBatisGenerator.class);
 
     private DebbyConfiguration debbyConfiguration;
     private XConfiguration xConfiguration;
     
-    public XMyBatisComplementor(DebbyConfiguration debbyConfiguration, XConfiguration xConfiguration) {
+    public XMyBatisGenerator(DebbyConfiguration debbyConfiguration, XConfiguration xConfiguration) {
 		super();
 		this.debbyConfiguration = debbyConfiguration;
 		this.xConfiguration = xConfiguration;

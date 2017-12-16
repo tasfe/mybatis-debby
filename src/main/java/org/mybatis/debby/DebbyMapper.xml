@@ -2,12 +2,12 @@
 <mapper namespace="mybatis.debby.DebbyMapper">
 
     <!-- == Base Statements Begin == -->
-    <select id="selectByPrimaryKey" parameterType="[parameterType]" resultMap="baseResultMap">
+    <select id="selectByPrimaryKey" resultMap="baseResultMap">
         SELECT
         <include refid="baseColumns"/>
         FROM
         [tableName]
-        WHERE [primaryKey] = #{[primaryKeyValue]}
+        WHERE [key1] = #{array[0]} and [key2] = #{array[1]}...
     </select>
     <select id="selectByCriteria" parameterType="EntityCriteria" resultMap="baseResultMap">
         SELECT
@@ -17,10 +17,10 @@
         <include refid="baseColumns"/>
         FROM
         [tableName]
-        <if test="criteriaList != null">
+        <if test="_parameter != null and _parameter.criteriaList != null">
             <include refid="selectWhereSqlFragment"/>
         </if>
-        <if test="orderList != null">
+        <if test="_parameter != null and _parameter.orderList != null">
             ORDER BY
             <foreach collection="orderList" item="order" separator=",">
                 ${order}
@@ -32,17 +32,17 @@
         count(*)
         FROM
         [tableName]
-        <if test="criteriaList != null">
+        <if test="_parameter != null and _parameter.criteriaList != null">
             <include refid="selectWhereSqlFragment"/>
         </if>
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="[parameterType]">
-        DELETE FROM [tableName] WHERE [primaryKey] = #{primaryKeyValue}
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM [tableName] WHERE [key1] = #{array[0]} and [key2] = #{array[1]}...
     </delete>
     <delete id="deleteByCriteria" parameterType="EntityCriteria">
         DELETE FROM
         [tableName]
-        <if test="criteriaList != null">
+        <if test="_parameter != null and _parameter.criteriaList != null">
             <include refid="selectWhereSqlFragment"/>
         </if>
     </delete>

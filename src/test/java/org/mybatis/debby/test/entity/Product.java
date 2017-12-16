@@ -24,6 +24,13 @@ public class Product {
 
     private ProductCategory productCategory;
 
+    public Product() {
+    }
+
+    public Product(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }

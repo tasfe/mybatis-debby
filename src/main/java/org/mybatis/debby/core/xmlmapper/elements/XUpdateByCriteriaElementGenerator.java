@@ -16,7 +16,6 @@
 package org.mybatis.debby.core.xmlmapper.elements;
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.apache.ibatis.mapping.ResultMapping;
 import org.mybatis.debby.core.XInternalStatements;
@@ -25,8 +24,6 @@ import org.mybatis.generator.api.dom.OutputUtilities;
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
-
-import com.google.common.base.Strings;
 
 /**
  * @author Jeff Butler
@@ -50,13 +47,12 @@ public class XUpdateByCriteriaElementGenerator extends XAbstractXmlElementGenera
         sb.setLength(0);
         sb.append("set ");
 
-        Iterator<ResultMapping> iter = introspectedContext.getResultMap().getPropertyResultMappings().iterator();
+        Iterator<ResultMapping> iter = getPropertyResultMappings(introspectedContext.getResultMap()).iterator();
         while (iter.hasNext()) {
 
             ResultMapping resultMapping = iter.next();
 
-            if (resultMapping.getFlags() != null && resultMapping.getFlags().size() > 0 || !Strings.isNullOrEmpty(resultMapping.getNestedQueryId()) || 
-                    !Strings.isNullOrEmpty(resultMapping.getNestedResultMapId())) {
+            if (isIdResultMapping(resultMapping)) {
                 continue;
             }
 

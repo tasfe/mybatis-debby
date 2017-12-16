@@ -13,14 +13,13 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.mybatis.debby.core.builder;
+package org.mybatis.debby;
 
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.session.XConfiguration;
-import org.mybatis.debby.DebbyConfiguration;
-import org.mybatis.debby.core.XMyBatisComplementor;
+import org.mybatis.debby.core.XMyBatisGenerator;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -30,15 +29,15 @@ import java.util.Properties;
  * @author rocky.hu
  * @date 2017-11-27 9:39 PM
  */
-public class XSqlSessionFactoryBuilder extends SqlSessionFactoryBuilder {
+public class DebbySqlSessionFactoryBuilder extends SqlSessionFactoryBuilder {
 
     private DebbyConfiguration debbyConfiguration;
 
-    public XSqlSessionFactoryBuilder() {
+    public DebbySqlSessionFactoryBuilder() {
         debbyConfiguration = new DebbyConfiguration();
     }
 
-    public XSqlSessionFactoryBuilder(DebbyConfiguration debbyConfiguration) {
+    public DebbySqlSessionFactoryBuilder(DebbyConfiguration debbyConfiguration) {
         this.debbyConfiguration = debbyConfiguration;
     }
 
@@ -58,7 +57,7 @@ public class XSqlSessionFactoryBuilder extends SqlSessionFactoryBuilder {
 
     private void boost(Configuration configuration) {
         XConfiguration xConfiguration = new XConfiguration(configuration);
-        XMyBatisComplementor xMyBatisGenerator = new XMyBatisComplementor(debbyConfiguration, xConfiguration);
+        XMyBatisGenerator xMyBatisGenerator = new XMyBatisGenerator(debbyConfiguration, xConfiguration);
         xMyBatisGenerator.execute();
     }
 

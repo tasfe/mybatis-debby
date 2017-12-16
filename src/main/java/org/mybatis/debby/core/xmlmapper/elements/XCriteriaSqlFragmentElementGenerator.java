@@ -51,37 +51,37 @@ public class XCriteriaSqlFragmentElementGenerator extends XAbstractXmlElementGen
 
         XmlElement middleForEachElement = new XmlElement("foreach");
         middleForEachElement.addAttribute(new Attribute("collection", "criteria.criterions"));
-        middleForEachElement.addAttribute(new Attribute("item", "criteria"));
+        middleForEachElement.addAttribute(new Attribute("item", "criterion"));
 
         XmlElement chooseElement = new XmlElement("choose");
         middleForEachElement.addElement(chooseElement);
 
         XmlElement when = new XmlElement("when");
-        when.addAttribute(new Attribute("test", "criteria.noValue"));
-        when.addElement(new TextElement("and ${criteria.condition}"));
+        when.addAttribute(new Attribute("test", "criterion.noValue"));
+        when.addElement(new TextElement("and ${criterion.condition}"));
         chooseElement.addElement(when);
 
         when = new XmlElement("when");
-        when.addAttribute(new Attribute("test", "criteria.singleValue"));
+        when.addAttribute(new Attribute("test", "criterion.singleValue"));
         sb.setLength(0);
-        sb.append("and ${criteria.condition} ");
+        sb.append("and ${criterion.condition} ");
         when.addElement(new TextElement(sb.toString()));
         when.addElement(getParameterClauseElement(ValueMode.SINGLE));
         chooseElement.addElement(when);
 
         when = new XmlElement("when");
-        when.addAttribute(new Attribute("test", "criteria.betweenValue"));
+        when.addAttribute(new Attribute("test", "criterion.betweenValue"));
         sb.setLength(0);
-        sb.append("and ${criteria.condition} ");
+        sb.append("and ${criterion.condition} ");
         when.addElement(new TextElement(sb.toString()));
         when.addElement(getParameterClauseElement(ValueMode.TWO));
         chooseElement.addElement(when);
 
         when = new XmlElement("when");
-        when.addAttribute(new Attribute("test", "criteria.listValue"));
-        when.addElement(new TextElement("and ${criteria.condition}"));
+        when.addAttribute(new Attribute("test", "criterion.listValue"));
+        when.addElement(new TextElement("and ${criterion.condition}"));
         XmlElement innerForEach = new XmlElement("foreach");
-        innerForEach.addAttribute(new Attribute("collection", "criteria.value"));
+        innerForEach.addAttribute(new Attribute("collection", "criterion.value"));
         innerForEach.addAttribute(new Attribute("item", "listItem"));
         innerForEach.addAttribute(new Attribute("open", "("));
         innerForEach.addAttribute(new Attribute("close", ")"));
@@ -98,11 +98,11 @@ public class XCriteriaSqlFragmentElementGenerator extends XAbstractXmlElementGen
         XmlElement chooseElement = new XmlElement("choose");
 
         XmlElement when = new XmlElement("when");
-        when.addAttribute(new Attribute("test", "criteria.typeHandler == null"));
+        when.addAttribute(new Attribute("test", "criterion.typeHandler == null"));
         if (valueMode == ValueMode.SINGLE) {
-            sb.append("#{criteria.value}");
+            sb.append("#{criterion.value}");
         } else if (valueMode == ValueMode.TWO) {
-            sb.append("#{criteria.value} and #{criteria.secondValue}");
+            sb.append("#{criterion.value} and #{criterion.secondValue}");
         } else if (valueMode == ValueMode.LIST) {
             sb.append("#{listItem}");
         }
@@ -112,11 +112,11 @@ public class XCriteriaSqlFragmentElementGenerator extends XAbstractXmlElementGen
         XmlElement otherwise = new XmlElement("otherwise");
         sb.setLength(0);
         if (valueMode == ValueMode.SINGLE) {
-            sb.append("#{criteria.value, typeHandler = criteria.typeHandler}");
+            sb.append("#{criterion.value, typeHandler = criterion.typeHandler}");
         } else if (valueMode == ValueMode.TWO) {
-            sb.append("#{criteria.value, typeHandler = criteria.typeHandler} and #{criteria.secondValue, typeHandler = criteria.typeHandler}");
+            sb.append("#{criterion.value, typeHandler = criterion.typeHandler} and #{criterion.secondValue, typeHandler = criterion.typeHandler}");
         } else if (valueMode == ValueMode.LIST) {
-            sb.append("#{listItem, typeHandler = criteria.typeHandler}");
+            sb.append("#{listItem, typeHandler = criterion.typeHandler}");
         }
         otherwise.addElement(new TextElement(sb.toString()));
         chooseElement.addElement(otherwise);

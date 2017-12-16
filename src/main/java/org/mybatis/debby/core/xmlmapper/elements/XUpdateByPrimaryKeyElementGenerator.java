@@ -16,7 +16,6 @@
 package org.mybatis.debby.core.xmlmapper.elements;
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
@@ -45,11 +44,9 @@ public class XUpdateByPrimaryKeyElementGenerator extends XAbstractXmlElementGene
 		answer.addAttribute(new Attribute("parameterType", introspectedContext.getResultMap().getType().getName()));
 
         ResultMap resultMap = introspectedContext.getResultMap();
-        if (idResultCount(resultMap) > 1) {
-            logger.warn("[UpdateByPrimaryKey] [{}] : Composite keys is not supported by Mybatis-Debby!", resultMap.getId());
-            return;
-        } else if (idResultCount(resultMap) == 0) {
-            logger.warn("[UpdateByPrimaryKey] [{}] : No primary key found!", resultMap.getId());
+        if (getIdResultMappingsCount(resultMap) == 0) {
+            logger.warn("[UpdateByPrimaryKey] : No primary key found and we don't generate 'updateByPrimaryKey' statement for [{}]!",
+                    resultMap.getId().replace(".baseResultMap", ""));
             return;
         }
 
@@ -61,13 +58,12 @@ public class XUpdateByPrimaryKeyElementGenerator extends XAbstractXmlElementGene
         sb.setLength(0);
         sb.append("set ");
 
-        Iterator<ResultMapping> iter = introspectedContext.getResultMap().getPropertyResultMappings().iterator();
+        Iterator<ResultMapping> iter = getPropertyResultMappings(resultMap).iterator();
         while (iter.hasNext()) {
 
             ResultMapping resultMapping = iter.next();
 
-            if (resultMapping.getFlags() != null && resultMapping.getFlags().size() > 0 || !Strings.isNullOrEmpty(resultMapping.getNestedQueryId()) || 
-                    !Strings.isNullOrEmpty(resultMapping.getNestedResultMapId())) {
+            if (isIdResultMapping(resultMapping)) {
                 continue;
             }
 
@@ -86,16 +82,12 @@ public class XUpdateByPrimaryKeyElementGenerator extends XAbstractXmlElementGene
                 OutputUtilities.xmlIndent(sb, 1);
             }
         }
-        
-        ResultMapping idResultMapping = introspectedContext.getResultMap().getIdResultMappings().get(0);
 
         sb.setLength(0);
         sb.append(" where ");
-        sb.append(XMyBatis3FormattingUtilities.getEscapedColumnName(idResultMapping));
-        sb.append("=");
-        sb.append(XMyBatis3FormattingUtilities.getParameterClause(idResultMapping, null));
+        sb.append(getPrimaryKeyParameterClauseForUpdate(resultMap));
         answer.addElement(new TextElement(sb.toString()));
-        
+
         parentElement.addElement(answer);
 	}
 

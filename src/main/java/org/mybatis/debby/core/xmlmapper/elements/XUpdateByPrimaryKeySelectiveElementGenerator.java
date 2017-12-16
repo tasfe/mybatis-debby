@@ -25,7 +25,6 @@ import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * @author Jeff Butler
@@ -43,11 +42,9 @@ public class XUpdateByPrimaryKeySelectiveElementGenerator extends XAbstractXmlEl
 		answer.addAttribute(new Attribute("parameterType", introspectedContext.getResultMap().getType().getName()));
 
         ResultMap resultMap = introspectedContext.getResultMap();
-        if (idResultCount(resultMap) > 1) {
-            logger.warn("[UpdateByPrimaryKeySelective] [{}] : Composite keys is not supported by Mybatis-Debby!", resultMap.getId());
-            return;
-        } else if (idResultCount(resultMap) == 0) {
-            logger.warn("[UpdateByPrimaryKeySelective] [{}] : No primary key found!", resultMap.getId());
+        if (getIdResultMappingsCount(resultMap) == 0) {
+            logger.warn("[UpdateByPrimaryKeySelective] : No primary key found and we don't generate 'updateByPrimaryKeySelective' statement for [{}]!",
+                    resultMap.getId().replace(".baseResultMap", ""));
             return;
         }
 
@@ -59,7 +56,7 @@ public class XUpdateByPrimaryKeySelectiveElementGenerator extends XAbstractXmlEl
         XmlElement dynamicElement = new XmlElement("set");
         answer.addElement(dynamicElement);
         
-        Iterator<ResultMapping> iter = introspectedContext.getResultMap().getPropertyResultMappings().iterator();
+        Iterator<ResultMapping> iter = getPropertyResultMappings(resultMap).iterator();
         while (iter.hasNext()) {
 
             ResultMapping resultMapping = iter.next();
@@ -81,14 +78,10 @@ public class XUpdateByPrimaryKeySelectiveElementGenerator extends XAbstractXmlEl
             
             isNotNullElement.addElement(new TextElement(sb.toString()));
         }
-        
-        ResultMapping idResultMapping = introspectedContext.getResultMap().getIdResultMappings().get(0);
 
         sb.setLength(0);
         sb.append(" where ");
-        sb.append(XMyBatis3FormattingUtilities.getEscapedColumnName(idResultMapping));
-        sb.append("=");
-        sb.append(XMyBatis3FormattingUtilities.getParameterClause(idResultMapping, null));
+        sb.append(getPrimaryKeyParameterClauseForUpdate(resultMap));
         answer.addElement(new TextElement(sb.toString()));
         
         parentElement.addElement(answer);

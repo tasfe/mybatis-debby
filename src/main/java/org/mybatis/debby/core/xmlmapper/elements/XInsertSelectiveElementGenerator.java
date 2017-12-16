@@ -15,8 +15,6 @@
  */
 package org.mybatis.debby.core.xmlmapper.elements;
 
-import com.google.common.base.Strings;
-import org.apache.ibatis.mapping.ResultFlag;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
 import org.mybatis.debby.core.XInternalStatements;
@@ -62,18 +60,10 @@ public class XInsertSelectiveElementGenerator extends XAbstractXmlElementGenerat
         valuesTrimElement.addAttribute(new Attribute("suffixOverrides", ","));
         answer.addElement(valuesTrimElement);
 
-        Iterator<ResultMapping> iter = resultMap.getPropertyResultMappings().iterator();
+        Iterator<ResultMapping> iter = getPropertyResultMappings(resultMap).iterator();
         while (iter.hasNext()) {
         	ResultMapping resultMapping = iter.next();
-        	if (!Strings.isNullOrEmpty(resultMapping.getNestedQueryId()) || !Strings.isNullOrEmpty(resultMapping.getNestedResultMapId())) {
-        	    continue;
-        	}
-
-            if (resultMapping.getFlags() != null && resultMapping.getFlags().contains(ResultFlag.CONSTRUCTOR)) {
-        	    continue;
-            }
-
-            if (resultMapping.getFlags() != null && resultMapping.getFlags().size() == 1 && resultMapping.getFlags().contains(ResultFlag.ID)) {
+            if (isIdResultMapping(resultMapping)) {
                 sb.setLength(0);
                 sb.append(XMyBatis3FormattingUtilities.getEscapedColumnName(resultMapping));
                 sb.append(',');

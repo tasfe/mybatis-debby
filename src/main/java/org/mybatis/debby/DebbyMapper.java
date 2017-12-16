@@ -29,7 +29,6 @@ public interface DebbyMapper<ENTITY, PK extends Serializable> {
     
     /**
      * Insert an entity.
-     * After, it has the primary key value assigned and we can get from the entity we just inserted.
      *
      * @param entity
      */
@@ -105,7 +104,7 @@ public interface DebbyMapper<ENTITY, PK extends Serializable> {
     long selectCountByCriteria(EntityCriteria criteria);
 
     /**
-     * Delete a entity by primary key.
+     * Delete an entity by primary key.
      *
      * @param pk
      */

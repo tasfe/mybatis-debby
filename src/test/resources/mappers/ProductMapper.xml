@@ -5,7 +5,10 @@
 <mapper namespace="org.mybatis.debby.test.mapper.ProductMapper">
 
 	<resultMap id="baseResultMap" type="Product">
-		<id column="id" property="id" />
+		<!--<id column="id" property="id" />-->
+		<constructor>
+			<idArg column="id" />
+		</constructor>
 		<result column="create_time" property="createTime" />
 		<result column="title" property="title" />
 		<result column="quantity" property="quantity" />
@@ -15,5 +18,9 @@
 		<result column="pm" property="pm" typeHandler="EnumOrdinalTypeHandler"/>
 		<result column="product_category_id" property="productCategory.id" />
 	</resultMap>
+	
+	<select id="testVarargs" resultMap="baseResultMap">
+		select * from t_product where id = #{array[0]} and product_category_id=#{array[1]} and title = #{array[2]}
+	</select>
 
 </mapper>

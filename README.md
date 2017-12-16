@@ -271,3 +271,14 @@ void insert(Blog blog);
 ```
 上面两种方式都可以实现覆盖通用insert方法的效果。
 
+## 问题
+
+1. 主键
+
+a. 单主键
+自增(identity,sequence),代码主动生成(例如uuid)
+b. 联合主键
+自增 + 代码主动生成
+自增 + 自增 (不考虑https://dba.stackexchange.com/questions/35449/how-to-use-2-auto-increment-columns-in-mysql-phpmyadmin)
+代码主动生成+代码主动生成
+

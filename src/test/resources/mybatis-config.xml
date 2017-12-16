@@ -14,8 +14,8 @@
 
 	<typeAliases>
 		<typeAlias type="org.mybatis.debby.test.entity.Product" alias="Product" />
+		<typeAlias type="org.mybatis.debby.test.entity.Member" alias="Member" />
 		<typeAlias type="org.mybatis.debby.test.entity.ProductCategory" alias="ProductCategory" />
-		<typeAlias type="org.mybatis.debby.criteria.EntityCriteria1" alias="EntityCriteria" />
 		<typeAlias type="org.apache.ibatis.type.EnumOrdinalTypeHandler" alias="EnumOrdinalTypeHandler" />
 	</typeAliases>
 
@@ -41,6 +41,7 @@
 
 	<mappers>
 		<mapper resource="mappers/ProductMapper.xml" />
-	</mappers>
+		<mapper resource="mappers/MemberMapper.xml" />
+ 	</mappers>
 
 </configuration>

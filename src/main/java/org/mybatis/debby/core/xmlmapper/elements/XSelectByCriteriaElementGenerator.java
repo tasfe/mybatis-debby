@@ -50,15 +50,15 @@ public class XSelectByCriteriaElementGenerator extends XAbstractXmlElementGenera
         sb.append(introspectedContext.getTableName());
         answer.addElement(new TextElement(sb.toString()));
         
-        XmlElement oredCriteriaListIfElement= new XmlElement("if");
-        oredCriteriaListIfElement.addAttribute(new Attribute("test", "criteriaList != null"));
+        XmlElement criteriaListIfElement= new XmlElement("if");
+        criteriaListIfElement.addAttribute(new Attribute("test", "_parameter != null and _parameter.criteriaList != null"));
         XmlElement includeElement = new XmlElement("include");
         includeElement.addAttribute(new Attribute("refid", "selectWhereSqlFragment"));
-        oredCriteriaListIfElement.addElement(includeElement);
-        answer.addElement(oredCriteriaListIfElement);
+        criteriaListIfElement.addElement(includeElement);
+        answer.addElement(criteriaListIfElement);
         
         XmlElement entityOrderListIfElement = new XmlElement("if");
-        entityOrderListIfElement.addAttribute(new Attribute("test", "orderList != null"));
+        entityOrderListIfElement.addAttribute(new Attribute("test", "_parameter != null and _parameter.orderList != null"));
         sb.setLength(0);
         sb.append(" ORDER BY ");
         entityOrderListIfElement.addElement(new TextElement(sb.toString()));
@@ -69,7 +69,6 @@ public class XSelectByCriteriaElementGenerator extends XAbstractXmlElementGenera
         forEachElement.addAttribute(new Attribute("separator", ","));
         forEachElement.addElement(new TextElement("${order}"));
         entityOrderListIfElement.addElement(forEachElement);
-        
         answer.addElement(entityOrderListIfElement);
         
         parentElement.addElement(answer);

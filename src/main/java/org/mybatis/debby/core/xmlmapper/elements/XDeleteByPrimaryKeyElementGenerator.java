@@ -16,9 +16,7 @@
 package org.mybatis.debby.core.xmlmapper.elements;
 
 import org.apache.ibatis.mapping.ResultMap;
-import org.apache.ibatis.mapping.ResultMapping;
 import org.mybatis.debby.core.XInternalStatements;
-import org.mybatis.debby.core.util.XMyBatis3FormattingUtilities;
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
@@ -37,25 +35,18 @@ public class XDeleteByPrimaryKeyElementGenerator extends XAbstractXmlElementGene
         answer.addAttribute(new Attribute("id", XInternalStatements.DELETE_BY_PRIMARY_KEY.getId()));
 
         ResultMap resultMap = introspectedContext.getResultMap();
-        if (idResultCount(resultMap) > 1) {
-            logger.warn("[DeleteByPrimaryKey] [{}] : Composite keys is not supported by Mybatis-Debby!", resultMap.getId());
-            return;
-        } else if (idResultCount(resultMap) == 0) {
-            logger.warn("[DeleteByPrimaryKey] [{}] : No primary key found!", resultMap.getId());
+        if (getIdResultMappingsCount(resultMap) == 0) {
+            logger.warn("[DeleteByPrimaryKey] : No primary key found and we don't generate 'deleteByPrimaryKey' statement for [{}]!",
+                    resultMap.getId().replace(".baseResultMap", ""));
             return;
         }
-        
-        ResultMapping idResultMapping = resultMap.getIdResultMappings().get(0);
-
-        answer.addAttribute(new Attribute("parameterType", idResultMapping.getJavaType().getName()));
         
         StringBuilder sb = new StringBuilder();
         sb.append(" delete from ");
         sb.append(introspectedContext.getTableName());
         sb.append(" where ");
-        sb.append(XMyBatis3FormattingUtilities.getEscapedColumnName(idResultMapping));
-        sb.append("=");
-        sb.append(XMyBatis3FormattingUtilities.getParameterClause(idResultMapping, "pk", null));
+        sb.append(getPrimaryKeyParameterClause(resultMap));
+
         answer.addElement(new TextElement(sb.toString()));
         
         parentElement.addElement(answer);
