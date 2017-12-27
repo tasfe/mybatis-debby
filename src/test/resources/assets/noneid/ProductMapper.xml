@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.debby.mybatis.noneid.ProductMapper">
+
+	<resultMap id="baseResultMap" type="Product">
+		<!--<id column="id" property="id" />-->
+		<result column="create_time" property="createTime" />
+		<result column="title" property="title" />
+		<result column="quantity" property="quantity" />
+		<result column="price" property="price" />
+		<result column="sold_out" property="soldOut" />
+		<result column="weight" property="weight" />
+		<result column="pm" property="pm" typeHandler="EnumOrdinalTypeHandler"/>
+		<result column="product_category_id" property="productCategory.id" />
+	</resultMap>
+	
+	<select id="testVarargs" resultMap="baseResultMap">
+		select * from t_product where id = #{array[0]} and product_category_id=#{array[1]} and title = #{array[2]}
+	</select>
+
+</mapper>

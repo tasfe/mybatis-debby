@@ -18,7 +18,7 @@ package com.debby.mybatis.core;
 import com.google.common.base.Strings;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
-import com.debby.mybatis.DebbyException;
+import com.debby.mybatis.exception.DebbyException;
 
 import java.util.*;
 

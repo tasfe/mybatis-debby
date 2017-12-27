@@ -29,7 +29,7 @@ import org.apache.ibatis.session.XConfiguration;
 import com.debby.mybatis.DebbyConfiguration;
 import com.debby.mybatis.DebbyMapper;
 import com.debby.mybatis.core.builder.XXMLMapperBuilder;
-import com.debby.mybatis.core.util.FileUtils;
+import com.debby.mybatis.util.FileUtils;
 import com.debby.mybatis.core.xmlmapper.XXMLMapperGenerator;
 import com.debby.mybatis.criteria.EntityCriteria;
 import org.slf4j.Logger;
@@ -124,7 +124,7 @@ public class XMyBatisGenerator {
 							String formattedContent = mapperGenerator.getDocument().getFormattedContent();
 
 							if (debbyConfiguration.isDebugEnabled()) {
-								FileUtils.writeFile(debbyConfiguration.getMapperXMLOutputDirectory() + namespace.replace(".", "_") + ".xml", formattedContent);
+								FileUtils.writeFile(debbyConfiguration.getMapperXMLOutputDirectory() + namespace.replace(".", "_") + ".xml", formattedContent, "UTF-8");
 							}
 
 							InputStream inputStream = new ByteArrayInputStream(formattedContent.getBytes("UTF-8"));

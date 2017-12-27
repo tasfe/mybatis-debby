@@ -15,6 +15,9 @@
  */
 package com.debby.mybatis.core.xmlmapper.elements;
 
+import com.debby.mybatis.util.BeanUtils;
+import com.debby.mybatis.util.ReflectUtils;
+import com.debby.mybatis.exception.MappingException;
 import com.google.common.base.Strings;
 import org.apache.ibatis.mapping.ResultFlag;
 import org.apache.ibatis.mapping.ResultMap;
@@ -28,6 +31,11 @@ import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -192,8 +200,36 @@ public abstract class XAbstractXmlElementGenerator extends XAbstractGenerator {
      * @param parentElement
      */
     protected void addSelectKey(ResultMap resultMap, XmlElement parentElement) {
-        // Handle <SelectKey> element. Composite keys is not supported.
-        if (getIdResultMappingsCount(resultMap) == 1) {
+        if (getIdResultMappingsCount(resultMap) > 0) {
+
+            Class<?> entityType = resultMap.getType();
+
+            List<ResultMapping> idResultMappingList = getIdResultMappings(resultMap);
+            if (idResultMappingList.size() == 1) {
+                String idProperty = idResultMappingList.get(0).getProperty();
+                Field field = ReflectUtils.findField(entityType, idProperty);
+                if (field == null) {
+                    throw new MappingException("No mapping property '" + idProperty + "' in " + entityType);
+                }
+
+                Id id = field.getAnnotation(Id.class);
+                GeneratedValue generatedValue = field.getAnnotation(GeneratedValue.class);
+                if (id != null && generatedValue != null) {
+                    GenerationType generationType = generatedValue.strategy();
+                } else {
+                    Method readMethod = BeanUtils.findReadMethod(entityType, idProperty);
+                    id = readMethod.getAnnotation(Id.class);
+                    generatedValue = readMethod.getAnnotation(GeneratedValue.class);
+                    if (id != null && generatedValue != null) {
+
+                    }
+                }
+
+            } else {
+
+            }
+
+            
             ResultMapping idMappings = getIdResultMappings(resultMap).get(0);
 
             XKeyStrategy keyStrategy = introspectedContext.getDebbyConfiguration().getKeyStrategy();
