@@ -15,7 +15,7 @@
  */
 package com.debby.mybatis.core.dialect.identity;
 
-import com.debby.mybatis.exception.DialectSupportException;
+import com.debby.mybatis.exception.MappingException;
 
 /**
  * @author rocky.hu
@@ -29,8 +29,8 @@ public class IdentityColumnStrategyImpl implements IdentityColumnStrategy {
     }
 
     @Override
-    public String getIdentitySelectString(String table, String column, int type) throws DialectSupportException {
-        throw new DialectSupportException( getClass().getName() + " does not support identity key generation" );
+    public String getIdentitySelectString(String table, String column, int type) throws MappingException {
+        throw new MappingException( getClass().getName() + " does not support identity key generation" );
     }
 
 }

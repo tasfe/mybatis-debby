@@ -17,7 +17,7 @@ package com.debby.mybatis.core.dialect;
 
 import com.debby.mybatis.core.dialect.identity.DB2IdentityColumnStrategy;
 import com.debby.mybatis.core.dialect.identity.IdentityColumnStrategy;
-import com.debby.mybatis.exception.DialectSupportException;
+import com.debby.mybatis.exception.MappingException;
 
 /**
  * @author rocky.hu
@@ -36,7 +36,7 @@ public class DB2Dialect extends Dialect {
     }
 
     @Override
-    public String getSequenceNextValString(String sequenceName) throws DialectSupportException {
+    public String getSequenceNextValString(String sequenceName) throws MappingException {
         return "values nextval for " + sequenceName;
     }
 }

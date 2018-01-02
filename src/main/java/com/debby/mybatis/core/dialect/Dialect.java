@@ -17,7 +17,7 @@ package com.debby.mybatis.core.dialect;
 
 import com.debby.mybatis.core.dialect.identity.IdentityColumnStrategy;
 import com.debby.mybatis.core.dialect.identity.IdentityColumnStrategyImpl;
-import com.debby.mybatis.exception.DialectSupportException;
+import com.debby.mybatis.exception.MappingException;
 
 /**
  * @author rocky.hu
@@ -33,8 +33,8 @@ public abstract class Dialect {
         return false;
     }
 
-    public String getSequenceNextValString(String sequenceName) throws DialectSupportException {
-        throw new DialectSupportException( getClass().getName() + " does not support sequences" );
+    public String getSequenceNextValString(String sequenceName) throws MappingException {
+        throw new MappingException( getClass().getName() + " does not support sequences" );
     }
 
 }

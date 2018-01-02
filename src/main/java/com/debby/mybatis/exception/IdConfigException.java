@@ -13,23 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.debby.mybatis.core.dialect.identity;
-
-import com.debby.mybatis.exception.MappingException;
+package com.debby.mybatis.exception;
 
 /**
  * @author rocky.hu
- * @date 2017-12-16 8:21 PM
+ * @date 2018-01-02 8:13 PM
  */
-public class H2IdentityColumnStrategy extends IdentityColumnStrategyImpl {
+public class IdConfigException extends DebbyException {
 
-    @Override
-    public boolean supportsIdentityColumns() {
-        return true;
+    public IdConfigException() {
+        super();
     }
 
-    @Override
-    public String getIdentitySelectString(String table, String column, int type) throws MappingException {
-        return "call identity()";
+    public IdConfigException(String message) {
+        super(message);
     }
+
+    public IdConfigException(Throwable cause) {
+        super(cause);
+    }
+
+    public IdConfigException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
 }

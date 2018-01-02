@@ -15,7 +15,7 @@
  */
 package com.debby.mybatis.core.dialect.identity;
 
-import com.debby.mybatis.exception.DialectSupportException;
+import com.debby.mybatis.exception.MappingException;
 
 /**
  * @author rocky.hu
@@ -25,6 +25,6 @@ public interface IdentityColumnStrategy {
 
     boolean supportsIdentityColumns();
 
-    String getIdentitySelectString(String table, String column, int type) throws DialectSupportException;
+    String getIdentitySelectString(String table, String column, int type) throws MappingException;
 
 }

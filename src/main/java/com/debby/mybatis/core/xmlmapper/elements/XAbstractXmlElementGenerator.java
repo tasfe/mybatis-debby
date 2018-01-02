@@ -15,6 +15,8 @@
  */
 package com.debby.mybatis.core.xmlmapper.elements;
 
+import com.debby.mybatis.exception.DebbyException;
+import com.debby.mybatis.exception.IdConfigException;
 import com.debby.mybatis.util.BeanUtils;
 import com.debby.mybatis.util.ReflectUtils;
 import com.debby.mybatis.exception.MappingException;
@@ -205,6 +207,49 @@ public abstract class XAbstractXmlElementGenerator extends XAbstractGenerator {
             Class<?> entityType = resultMap.getType();
 
             List<ResultMapping> idResultMappingList = getIdResultMappings(resultMap);
+
+            Field idField = null;
+            String idProperty = null;
+            for (ResultMapping resultMapping : idResultMappingList) {
+                idProperty = resultMapping.getProperty();
+                Field field = ReflectUtils.findField(entityType, idProperty);
+                if (field == null) {
+                    throw new MappingException("No mapping property '" + idProperty + "' in " + entityType);
+                }
+
+                Id id = field.getAnnotation(Id.class);
+                if (id != null) {
+                    idField = field;
+                    break;
+                }
+
+            }
+
+            if (idField == null) {
+                throw new IdConfigException("No @Id configuration for " + entityType);
+            }
+
+            GeneratedValue generatedValue = idField.getAnnotation(GeneratedValue.class);
+            if (generatedValue == null) {
+                throw new IdConfigException("No @GeneratedValue configuration for id property '" + idProperty + "'");
+            }
+
+            GenerationType generationType = generatedValue.strategy();
+            if (generationType == null) {
+                generationType = GenerationType.IDENTITY;
+            }
+
+            if (generationType != GenerationType.IDENTITY && generationType != GenerationType.SEQUENCE) {
+                throw new IdConfigException("Only supports IDENTITY or SEQUENCE strategy for id generation!");
+            }
+
+            if (generationType == GenerationType.IDENTITY) {
+
+            } else if (generationType == GenerationType.SEQUENCE){
+
+            }
+
+
             if (idResultMappingList.size() == 1) {
                 String idProperty = idResultMappingList.get(0).getProperty();
                 Field field = ReflectUtils.findField(entityType, idProperty);
@@ -212,18 +257,42 @@ public abstract class XAbstractXmlElementGenerator extends XAbstractGenerator {
                     throw new MappingException("No mapping property '" + idProperty + "' in " + entityType);
                 }
 
+                GeneratedValue generatedValue = null;
                 Id id = field.getAnnotation(Id.class);
-                GeneratedValue generatedValue = field.getAnnotation(GeneratedValue.class);
-                if (id != null && generatedValue != null) {
-                    GenerationType generationType = generatedValue.strategy();
+                if (id == null) {
+                    Method readMethod = BeanUtils.findReadMethod(entityType, idProperty);
+                    id = readMethod.getAnnotation(Id.class);
+                    if (id == null) {
+                        throw new IdConfigException("No @Id configuration for " + entityType);
+                    }
+
+
+
+                } else {
+                    GeneratedValue generatedValue = field.getAnnotation(GeneratedValue.class);
+                }
+
+
+
+
+
+                GenerationType generationType = null;
+                if (generatedValue != null) {
+                    generationType = generatedValue.strategy();
                 } else {
                     Method readMethod = BeanUtils.findReadMethod(entityType, idProperty);
                     id = readMethod.getAnnotation(Id.class);
                     generatedValue = readMethod.getAnnotation(GeneratedValue.class);
                     if (id != null && generatedValue != null) {
-
+                        generationType = generatedValue.strategy();
                     }
                 }
+
+                if (generationType == null) {
+                    throw new DebbyException("The primary key generation strategy");
+                }
+
+
 
             } else {
 

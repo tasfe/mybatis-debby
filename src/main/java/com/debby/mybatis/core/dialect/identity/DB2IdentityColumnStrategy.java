@@ -15,7 +15,7 @@
  */
 package com.debby.mybatis.core.dialect.identity;
 
-import com.debby.mybatis.exception.DialectSupportException;
+import com.debby.mybatis.exception.MappingException;
 
 /**
  * @author rocky.hu
@@ -29,7 +29,7 @@ public class DB2IdentityColumnStrategy extends IdentityColumnStrategyImpl {
     }
 
     @Override
-    public String getIdentitySelectString(String table, String column, int type) throws DialectSupportException {
+    public String getIdentitySelectString(String table, String column, int type) throws MappingException {
         return "values identity_val_local()";
     }
 }

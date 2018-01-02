@@ -15,7 +15,7 @@
  */
 package com.debby.mybatis.core.dialect;
 
-import com.debby.mybatis.exception.DialectSupportException;
+import com.debby.mybatis.exception.MappingException;
 
 /**
  * @author rocky.hu
@@ -29,7 +29,7 @@ public class OracleDialect extends Dialect {
     }
 
     @Override
-    public String getSequenceNextValString(String sequenceName) throws DialectSupportException {
+    public String getSequenceNextValString(String sequenceName) throws MappingException {
         return "select " + sequenceName + ".nextval" + " from dual";
     }
 }
