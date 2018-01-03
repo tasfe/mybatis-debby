@@ -15,16 +15,17 @@
  */
 package com.debby.mybatis.core.xmlmapper.elements;
 
-import com.google.common.base.Strings;
+import java.util.Iterator;
+
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
-import com.debby.mybatis.core.XInternalStatements;
-import com.debby.mybatis.core.util.XMyBatis3FormattingUtilities;
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
-import java.util.Iterator;
+import com.debby.mybatis.core.XInternalStatements;
+import com.debby.mybatis.core.util.XMyBatis3FormattingUtilities;
+import com.google.common.base.Strings;
 
 /**
  * @author Jeff Butler
@@ -43,8 +44,7 @@ public class XUpdateByPrimaryKeySelectiveElementGenerator extends XAbstractXmlEl
 
         ResultMap resultMap = introspectedContext.getResultMap();
         if (getIdResultMappingsCount(resultMap) == 0) {
-            logger.warn("[UpdateByPrimaryKeySelective] : No primary key found and we don't generate 'updateByPrimaryKeySelective' statement for [{}]!",
-                    resultMap.getId().replace(".baseResultMap", ""));
+        	logger.info("Debby-Info : No primary key found, [updateByPrimaryKeySelective] statement will not be generated for [{}]", getMapperInterfaceName(resultMap));
             return;
         }
 

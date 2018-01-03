@@ -24,11 +24,6 @@ import com.debby.mybatis.exception.MappingException;
 public class OracleDialect extends Dialect {
 
     @Override
-    public boolean supportsSequences() {
-        return true;
-    }
-
-    @Override
     public String getSequenceNextValString(String sequenceName) throws MappingException {
         return "select " + sequenceName + ".nextval" + " from dual";
     }

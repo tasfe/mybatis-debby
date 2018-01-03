@@ -1,8 +1,9 @@
 package com.debby.mybatis.compositekey;
 
-import com.debby.mybatis.helper.DBUnitHelper;
-import com.debby.mybatis.helper.MyBatisHelper;
+import com.debby.mybatis.DBUnitHelper;
 import com.debby.mybatis.DebbyMapperTest;
+import com.debby.mybatis.MyBatisHelper;
+
 import org.apache.ibatis.session.SqlSession;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;

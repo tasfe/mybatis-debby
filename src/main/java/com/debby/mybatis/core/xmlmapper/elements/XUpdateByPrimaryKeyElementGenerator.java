@@ -19,12 +19,13 @@ import java.util.Iterator;
 
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
-import com.debby.mybatis.core.XInternalStatements;
-import com.debby.mybatis.core.util.XMyBatis3FormattingUtilities;
 import org.mybatis.generator.api.dom.OutputUtilities;
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
+
+import com.debby.mybatis.core.XInternalStatements;
+import com.debby.mybatis.core.util.XMyBatis3FormattingUtilities;
 
 /**
  * @author Jeff Butler
@@ -43,8 +44,7 @@ public class XUpdateByPrimaryKeyElementGenerator extends XAbstractXmlElementGene
 
         ResultMap resultMap = introspectedContext.getResultMap();
         if (getIdResultMappingsCount(resultMap) == 0) {
-            logger.warn("[UpdateByPrimaryKey] : No primary key found and we don't generate 'updateByPrimaryKey' statement for [{}]!",
-                    resultMap.getId().replace(".baseResultMap", ""));
+        	logger.info("Debby-Info : No primary key found, [updateByPrimaryKey] statement will not be generated for [{}]", getMapperInterfaceName(resultMap));
             return;
         }
 

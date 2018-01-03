@@ -15,10 +15,6 @@
  */
 package com.debby.mybatis.keygenerator;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 /**
  * @author rocky.hu
  * @date 2017-12-16 11:45 PM

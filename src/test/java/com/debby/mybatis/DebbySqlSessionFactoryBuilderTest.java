@@ -1,11 +1,12 @@
 package com.debby.mybatis;
 
-import com.debby.mybatis.core.keystrategy.normal.XMySQLKeyStrategy;
+import java.io.InputStream;
+
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import java.io.InputStream;
+import com.debby.mybatis.core.dialect.H2Dialect;
 
 /**
  * @author rocky.hu
@@ -22,7 +23,7 @@ public class DebbySqlSessionFactoryBuilderTest {
         debbyConfiguration.setDebugEnabled(true);
         debbyConfiguration.setMapperXMLOutputDirectory("/Users/rocky/Work/project/temp/");
         debbyConfiguration.setTablePrefix("t_");
-        debbyConfiguration.setKeyStrategy(new XMySQLKeyStrategy());
+        debbyConfiguration.setDialect(new H2Dialect());
 
         SqlSessionFactory sqlSessionFactory = new DebbySqlSessionFactoryBuilder(debbyConfiguration).build(configInputStream);
         Configuration configuration = sqlSessionFactory.getConfiguration();

@@ -24,12 +24,7 @@ import com.debby.mybatis.exception.MappingException;
 public class MySQLIdentityColumnStrategy extends IdentityColumnStrategyImpl {
 
     @Override
-    public boolean supportsIdentityColumns() {
-        return true;
-    }
-
-    @Override
-    public String getIdentitySelectString(String table, String column, int type) throws MappingException {
+    public String getIdentitySelectString() throws MappingException {
         return "select last_insert_id()";
     }
 }

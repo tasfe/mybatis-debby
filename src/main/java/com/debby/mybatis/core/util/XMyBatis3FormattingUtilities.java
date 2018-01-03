@@ -15,15 +15,14 @@
  */
 package com.debby.mybatis.core.util;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.ibatis.mapping.ResultMapping;
 import org.mybatis.generator.internal.util.StringUtility;
 
 import com.google.common.base.Strings;
-
-import javax.xml.transform.Result;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * @author Jeff Butler

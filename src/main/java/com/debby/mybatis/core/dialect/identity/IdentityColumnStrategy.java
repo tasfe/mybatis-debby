@@ -23,8 +23,6 @@ import com.debby.mybatis.exception.MappingException;
  */
 public interface IdentityColumnStrategy {
 
-    boolean supportsIdentityColumns();
-
-    String getIdentitySelectString(String table, String column, int type) throws MappingException;
+    String getIdentitySelectString() throws MappingException;
 
 }

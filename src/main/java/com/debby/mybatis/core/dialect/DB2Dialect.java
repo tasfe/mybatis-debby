@@ -31,11 +31,6 @@ public class DB2Dialect extends Dialect {
     }
 
     @Override
-    public boolean supportsSequences() {
-        return true;
-    }
-
-    @Override
     public String getSequenceNextValString(String sequenceName) throws MappingException {
         return "values nextval for " + sequenceName;
     }

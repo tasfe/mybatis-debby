@@ -29,10 +29,6 @@ public abstract class Dialect {
         return new IdentityColumnStrategyImpl();
     }
 
-    public boolean supportsSequences() {
-        return false;
-    }
-
     public String getSequenceNextValString(String sequenceName) throws MappingException {
         throw new MappingException( getClass().getName() + " does not support sequences" );
     }

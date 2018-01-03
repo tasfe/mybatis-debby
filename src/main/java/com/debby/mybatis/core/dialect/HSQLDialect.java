@@ -31,11 +31,6 @@ public class HSQLDialect extends Dialect {
     }
 
     @Override
-    public boolean supportsSequences() {
-        return true;
-    }
-
-    @Override
     public String getSequenceNextValString(String sequenceName) throws MappingException {
         return "call next value for " + sequenceName;
     }

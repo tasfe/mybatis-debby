@@ -1,11 +1,14 @@
 package com.debby.mybatis.compositekey;
 
+import javax.persistence.EmbeddedId;
+
 /**
  * @author rocky.hu
  * @date 2017-12-16 11:25 AM
  */
 public class Member {
 
+    @EmbeddedId
     private MemberPK memberPK;
     private int age;
 

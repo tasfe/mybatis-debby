@@ -15,8 +15,7 @@
  */
 package com.debby.mybatis;
 
-import com.debby.mybatis.core.keystrategy.XKeyStrategy;
-import com.debby.mybatis.core.keystrategy.identity.XIdentityKeyStrategy;
+import com.debby.mybatis.core.dialect.Dialect;
 
 /**
  * @author rocky.hu
@@ -27,7 +26,7 @@ public class DebbyConfiguration {
     private boolean debugEnabled;
     private String mapperXMLOutputDirectory;
     private String tablePrefix;
-    private XKeyStrategy keyStrategy = new XIdentityKeyStrategy();
+    private Dialect dialect;
 
     public boolean isDebugEnabled() {
         return debugEnabled;
@@ -53,12 +52,14 @@ public class DebbyConfiguration {
         this.tablePrefix = tablePrefix;
     }
 
-    public XKeyStrategy getKeyStrategy() {
-        return keyStrategy;
-    }
+	public Dialect getDialect()
+	{
+		return dialect;
+	}
 
-    public void setKeyStrategy(XKeyStrategy keyStrategy) {
-        this.keyStrategy = keyStrategy;
-    }
+	public void setDialect(Dialect dialect)
+	{
+		this.dialect = dialect;
+	}
 
 }

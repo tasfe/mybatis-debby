@@ -16,10 +16,11 @@
 package com.debby.mybatis.core.xmlmapper.elements;
 
 import org.apache.ibatis.mapping.ResultMap;
-import com.debby.mybatis.core.XInternalStatements;
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
+
+import com.debby.mybatis.core.XInternalStatements;
 
 /**
  * @author Jeff Butler
@@ -36,8 +37,7 @@ public class XDeleteByPrimaryKeyElementGenerator extends XAbstractXmlElementGene
 
         ResultMap resultMap = introspectedContext.getResultMap();
         if (getIdResultMappingsCount(resultMap) == 0) {
-            logger.warn("[DeleteByPrimaryKey] : No primary key found and we don't generate 'deleteByPrimaryKey' statement for [{}]!",
-                    resultMap.getId().replace(".baseResultMap", ""));
+        	logger.info("Debby-Info : No primary key found, [deleteByPrimaryKey] statement will not be generated for [{}]", getMapperInterfaceName(resultMap));
             return;
         }
         

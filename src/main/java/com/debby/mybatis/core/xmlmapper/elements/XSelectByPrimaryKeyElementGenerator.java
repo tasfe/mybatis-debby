@@ -16,10 +16,11 @@
 package com.debby.mybatis.core.xmlmapper.elements;
 
 import org.apache.ibatis.mapping.ResultMap;
-import com.debby.mybatis.core.XInternalStatements;
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
+
+import com.debby.mybatis.core.XInternalStatements;
 
 /**
  * @author Jeff Butler
@@ -37,9 +38,8 @@ public class XSelectByPrimaryKeyElementGenerator extends XAbstractXmlElementGene
 
         ResultMap resultMap = introspectedContext.getResultMap();
         if (getIdResultMappingsCount(resultMap) == 0) {
-            logger.warn("[SelectByPrimaryKey] : No primary key found and we don't generate 'selectByPrimaryKey' statement for [{}]!",
-                    resultMap.getId().replace(".baseResultMap", ""));
-            return;// no id defined, we do nothing.
+        	logger.info("Debby-Info : No primary key found, [selectByPrimaryKey] statement will not be generated for [{}]", getMapperInterfaceName(resultMap));
+            return;
         }
         
         StringBuilder sb = new StringBuilder();

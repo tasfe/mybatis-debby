@@ -24,12 +24,7 @@ import com.debby.mybatis.exception.MappingException;
 public class DB2IdentityColumnStrategy extends IdentityColumnStrategyImpl {
 
     @Override
-    public boolean supportsIdentityColumns() {
-        return true;
-    }
-
-    @Override
-    public String getIdentitySelectString(String table, String column, int type) throws MappingException {
+    public String getIdentitySelectString() throws MappingException {
         return "values identity_val_local()";
     }
 }

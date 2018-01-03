@@ -29,12 +29,7 @@ public class H2Dialect extends Dialect {
     public IdentityColumnStrategy getIdentityColumnStrategy() {
         return new H2IdentityColumnStrategy();
     }
-
-    @Override
-    public boolean supportsSequences() {
-        return true;
-    }
-
+    
     @Override
     public String getSequenceNextValString(String sequenceName) throws MappingException {
         return "call next value for " + sequenceName;

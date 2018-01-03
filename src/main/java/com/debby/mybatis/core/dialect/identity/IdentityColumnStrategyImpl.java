@@ -24,12 +24,7 @@ import com.debby.mybatis.exception.MappingException;
 public class IdentityColumnStrategyImpl implements IdentityColumnStrategy {
 
     @Override
-    public boolean supportsIdentityColumns() {
-        return false;
-    }
-
-    @Override
-    public String getIdentitySelectString(String table, String column, int type) throws MappingException {
+    public String getIdentitySelectString() throws MappingException {
         throw new MappingException( getClass().getName() + " does not support identity key generation" );
     }
 
