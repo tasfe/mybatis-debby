@@ -34,4 +34,5 @@ public class H2Dialect extends Dialect {
     public String getSequenceNextValString(String sequenceName) throws MappingException {
         return "call next value for " + sequenceName;
     }
+    
 }

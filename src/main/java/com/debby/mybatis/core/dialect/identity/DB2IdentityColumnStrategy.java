@@ -27,4 +27,5 @@ public class DB2IdentityColumnStrategy extends IdentityColumnStrategyImpl {
     public String getIdentitySelectString() throws MappingException {
         return "values identity_val_local()";
     }
+    
 }

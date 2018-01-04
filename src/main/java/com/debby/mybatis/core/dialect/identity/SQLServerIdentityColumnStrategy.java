@@ -27,4 +27,5 @@ public class SQLServerIdentityColumnStrategy extends IdentityColumnStrategyImpl 
     public String getIdentitySelectString() throws MappingException {
         return "select @@identity";
     }
+    
 }

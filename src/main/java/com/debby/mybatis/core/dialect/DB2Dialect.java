@@ -34,4 +34,5 @@ public class DB2Dialect extends Dialect {
     public String getSequenceNextValString(String sequenceName) throws MappingException {
         return "values nextval for " + sequenceName;
     }
+    
 }

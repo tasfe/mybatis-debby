@@ -27,4 +27,5 @@ public class H2IdentityColumnStrategy extends IdentityColumnStrategyImpl {
     public String getIdentitySelectString() throws MappingException {
         return "call identity()";
     }
+    
 }

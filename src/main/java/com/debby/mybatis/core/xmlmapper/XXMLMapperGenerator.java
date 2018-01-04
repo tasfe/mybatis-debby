@@ -15,12 +15,27 @@
  */
 package com.debby.mybatis.core.xmlmapper;
 
-import com.debby.mybatis.core.xmlmapper.elements.*;
 import com.debby.mybatis.core.XAbstractXmlGenerator;
 import com.debby.mybatis.core.XInternalStatements;
-import org.mybatis.generator.api.dom.xml.Document;
-import org.mybatis.generator.api.dom.xml.XmlElement;
-import org.mybatis.generator.codegen.XmlConstants;
+import com.debby.mybatis.core.dom.XmlConstants;
+import com.debby.mybatis.core.dom.xml.Document;
+import com.debby.mybatis.core.dom.xml.XmlElement;
+import com.debby.mybatis.core.xmlmapper.elements.XAbstractXmlElementGenerator;
+import com.debby.mybatis.core.xmlmapper.elements.XBaseColumnListElementGenerator;
+import com.debby.mybatis.core.xmlmapper.elements.XCriteriaSqlFragmentElementGenerator;
+import com.debby.mybatis.core.xmlmapper.elements.XDeleteByCriteriaElementGenerator;
+import com.debby.mybatis.core.xmlmapper.elements.XDeleteByPrimaryKeyElementGenerator;
+import com.debby.mybatis.core.xmlmapper.elements.XInsertElementGenerator;
+import com.debby.mybatis.core.xmlmapper.elements.XInsertSelectiveElementGenerator;
+import com.debby.mybatis.core.xmlmapper.elements.XSelectByCriteriaElementGenerator;
+import com.debby.mybatis.core.xmlmapper.elements.XSelectByPrimaryKeyElementGenerator;
+import com.debby.mybatis.core.xmlmapper.elements.XSelectCountByCriteriaElementGenerator;
+import com.debby.mybatis.core.xmlmapper.elements.XSelectWhereSqlFragmentElementGenerator;
+import com.debby.mybatis.core.xmlmapper.elements.XUpdateByCriteriaElementGenerator;
+import com.debby.mybatis.core.xmlmapper.elements.XUpdateByCriteriaSelectiveElementGenerator;
+import com.debby.mybatis.core.xmlmapper.elements.XUpdateByPrimaryKeyElementGenerator;
+import com.debby.mybatis.core.xmlmapper.elements.XUpdateByPrimaryKeySelectiveElementGenerator;
+import com.debby.mybatis.core.xmlmapper.elements.XUpdateWhereSqlFragmentElementGenerator;
 
 /**
  * @author Jeff Butler

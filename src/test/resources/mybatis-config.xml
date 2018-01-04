@@ -13,9 +13,6 @@
     </settings>  
 
 	<typeAliases>
-		<typeAlias type="com.debby.mybatis.compositekey.Member" alias="Member" />
-		<typeAlias type="com.debby.mybatis.noneid.Product" alias="Product" />
-		<typeAlias type="com.debby.mybatis.noneid.ProductCategory" alias="ProductCategory" />
 		<typeAlias type="org.apache.ibatis.type.EnumOrdinalTypeHandler" alias="EnumOrdinalTypeHandler" />
 	</typeAliases>
 
@@ -40,8 +37,9 @@
 	</databaseIdProvider>
 
 	<mappers>
-		<mapper resource="assets/noneid/ProductMapper.xml" />
-		<mapper resource="assets/compositekey/MemberMapper.xml" />
+		<mapper resource="com/debby/mybatis/normal/ProductMapper.xml" /> 
+		<mapper resource="com/debby/mybatis/key/composite/MemberMapper.xml" />
+		<mapper resource="com/debby/mybatis/key/strategy/sequence/AuthorMapper.xml" />
  	</mappers>
 
 </configuration>

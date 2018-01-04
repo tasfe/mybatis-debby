@@ -2,10 +2,10 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.debby.mybatis.noneid.ProductMapper">
+<mapper namespace="com.debby.mybatis.normal.ProductMapper">
 
-	<resultMap id="baseResultMap" type="Product">
-		<!--<id column="id" property="id" />-->
+	<resultMap id="baseResultMap" type="com.debby.mybatis.normal.Product">
+		<id column="id" property="id" />
 		<result column="create_time" property="createTime" />
 		<result column="title" property="title" />
 		<result column="quantity" property="quantity" />

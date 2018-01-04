@@ -15,7 +15,8 @@
  */
 package com.debby.mybatis.core;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -26,17 +27,16 @@ import org.apache.ibatis.builder.BuilderException;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.session.XConfiguration;
-import com.debby.mybatis.DebbyConfiguration;
-import com.debby.mybatis.DebbyMapper;
-import com.debby.mybatis.core.builder.XXMLMapperBuilder;
-import com.debby.mybatis.util.FileUtils;
-import com.debby.mybatis.core.xmlmapper.XXMLMapperGenerator;
-import com.debby.mybatis.criteria.EntityCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.CaseFormat;
-import com.google.common.base.Strings;
+import com.debby.mybatis.DebbyConfiguration;
+import com.debby.mybatis.DebbyMapper;
+import com.debby.mybatis.core.builder.XXMLMapperBuilder;
+import com.debby.mybatis.core.xmlmapper.XXMLMapperGenerator;
+import com.debby.mybatis.criteria.EntityCriteria;
+import com.debby.mybatis.util.FileUtils;
+import com.debby.mybatis.util.StringUtils;
 
 /**
  * @author rocky.hu
@@ -56,9 +56,9 @@ public class XMyBatisGenerator {
 	}
 
 	public void execute() {
-        LOGGER.info("[Start] debby mapper support...");
+        LOGGER.info("Debby-Info ： [Start] debby mapper support...");
 
-        if (debbyConfiguration.isDebugEnabled() && Strings.isNullOrEmpty(debbyConfiguration.getMapperXMLOutputDirectory())) {
+        if (debbyConfiguration.isDebugEnabled() && StringUtils.isNullOrEmpty(debbyConfiguration.getMapperXMLOutputDirectory())) {
 			throw new BuilderException("[Exception] 'mapperXMLOuputDirectory' must be set on debug mode.");
 		}
 
@@ -82,10 +82,10 @@ public class XMyBatisGenerator {
 	                    if (table != null) {
 	                        tableName = table.name();
 	                    } else {
-	                    	if (!Strings.isNullOrEmpty(debbyConfiguration.getTablePrefix())) {
+	                    	if (!StringUtils.isNullOrEmpty(debbyConfiguration.getTablePrefix())) {
 								tablePrefix = debbyConfiguration.getTablePrefix();
 							}
-	                        tableName = tablePrefix + CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, type.getSimpleName());
+	                        tableName = tablePrefix + StringUtils.camelToUnderscore(type.getSimpleName(), false);
 	                    }
 
 						XResultMapRegistry.putResultMap(type.getName(), resultMap);
@@ -137,10 +137,10 @@ public class XMyBatisGenerator {
 	        }
 			
 		} catch (Exception e) {
-            LOGGER.error("[Exception]: debby mapper support...", e);
+            LOGGER.error("Debby-Error ： debby mapper support...", e);
             throw new BuilderException("[Exception] debby mapper support.");
 		}
-        LOGGER.info("[End] debby mapper support...");
+        LOGGER.info("Debby-Info ： [END] debby mapper support...");
     }
 
 }

@@ -15,15 +15,16 @@
  */
 package com.debby.mybatis.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author rocky.hu
@@ -46,6 +47,19 @@ public class BeanUtils {
         }
 
         return null;
+    }
+    
+    public static <A extends Annotation> Field findField(Class<?> clazz, Class<A> annotationType) {
+    	PropertyDescriptor[] propertyDescriptors = getPropertyDescriptors(clazz);
+    	for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
+    		String propertyName = propertyDescriptor.getName();
+    		Field field = ReflectUtils.findField(clazz, propertyName);
+    		A annotation = field.getAnnotation(annotationType);
+    		if (annotation != null) {
+    			return field;
+    		}
+    	}
+    	return null;
     }
 
     public static Method findReadMethod(Class<?> clazz, String propertyName) {

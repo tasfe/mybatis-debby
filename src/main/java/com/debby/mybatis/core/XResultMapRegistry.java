@@ -15,12 +15,15 @@
  */
 package com.debby.mybatis.core;
 
-import com.google.common.base.Strings;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
-import com.debby.mybatis.exception.DebbyException;
 
-import java.util.*;
+import com.debby.mybatis.exception.DebbyException;
+import com.debby.mybatis.util.StringUtils;
 
 /**
  * @author rocky.hu
@@ -48,7 +51,7 @@ public class XResultMapRegistry {
         Iterator<ResultMapping> iter = resultMap.getPropertyResultMappings().iterator();
         while (iter.hasNext()) {
             ResultMapping rm = iter.next();
-            if (!Strings.isNullOrEmpty(rm.getNestedQueryId()) || !Strings.isNullOrEmpty(rm.getNestedResultMapId())) {
+            if (!StringUtils.isNullOrEmpty(rm.getNestedQueryId()) || !StringUtils.isNullOrEmpty(rm.getNestedResultMapId())) {
                 continue;
             }
 

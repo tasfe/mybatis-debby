@@ -20,9 +20,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.ibatis.mapping.ResultMapping;
-import org.mybatis.generator.internal.util.StringUtility;
 
-import com.google.common.base.Strings;
+import com.debby.mybatis.util.StringUtils;
 
 /**
  * @author Jeff Butler
@@ -43,7 +42,7 @@ public class XMyBatis3FormattingUtilities {
 		StringBuilder sb = new StringBuilder();
 		sb.append(escapeStringForMyBatis3(column));
 		
-		if (StringUtility.stringContainsSpace(column)) {
+		if (XStringUtility.stringContainsSpace(column)) {
 			sb.insert(0, beginningDelimiter);
             sb.append(endingDelimiter);
 		}
@@ -94,7 +93,7 @@ public class XMyBatis3FormattingUtilities {
         StringBuilder sb = new StringBuilder();
 
         sb.append("#{");
-        if (Strings.isNullOrEmpty(prefix)) {
+        if (StringUtils.isNullOrEmpty(prefix)) {
             sb.append(resultMapping.getProperty());
         } else {
             sb.append(prefix);
@@ -120,7 +119,7 @@ public class XMyBatis3FormattingUtilities {
         StringBuilder sb = new StringBuilder();
 
         sb.append("#{");
-        if (Strings.isNullOrEmpty(prefix)) {
+        if (StringUtils.isNullOrEmpty(prefix)) {
             sb.append(property);
         } else {
             sb.append(prefix);

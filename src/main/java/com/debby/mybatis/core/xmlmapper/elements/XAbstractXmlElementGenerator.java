@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,17 +30,17 @@ import javax.persistence.SequenceGenerator;
 import org.apache.ibatis.mapping.ResultFlag;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
-import org.mybatis.generator.api.dom.xml.Attribute;
-import org.mybatis.generator.api.dom.xml.TextElement;
-import org.mybatis.generator.api.dom.xml.XmlElement;
 
 import com.debby.mybatis.core.XAbstractGenerator;
 import com.debby.mybatis.core.dialect.Dialect;
+import com.debby.mybatis.core.dom.xml.Attribute;
+import com.debby.mybatis.core.dom.xml.TextElement;
+import com.debby.mybatis.core.dom.xml.XmlElement;
 import com.debby.mybatis.core.util.XMyBatis3FormattingUtilities;
 import com.debby.mybatis.exception.IdConfigException;
-import com.debby.mybatis.exception.MappingException;
+import com.debby.mybatis.util.BeanUtils;
 import com.debby.mybatis.util.ReflectUtils;
-import com.google.common.base.Strings;
+import com.debby.mybatis.util.StringUtils;
 
 /**
  * @author Jeff Butler
@@ -135,7 +137,7 @@ public abstract class XAbstractXmlElementGenerator extends XAbstractGenerator {
             Iterator<ResultMapping> iter = resultMap.getPropertyResultMappings().iterator();
             while (iter.hasNext()) {
                 ResultMapping propertyResultMapping = iter.next();
-                if (!Strings.isNullOrEmpty(propertyResultMapping.getNestedQueryId()) || !Strings.isNullOrEmpty(propertyResultMapping.getNestedResultMapId())) {
+                if (!StringUtils.isNullOrEmpty(propertyResultMapping.getNestedQueryId()) || !StringUtils.isNullOrEmpty(propertyResultMapping.getNestedResultMapId())) {
                     continue;
                 }
                 propertyResultMappings.add(propertyResultMapping);
@@ -210,61 +212,68 @@ public abstract class XAbstractXmlElementGenerator extends XAbstractGenerator {
 
             List<ResultMapping> idResultMappingList = getIdResultMappings(resultMap);
             
-            ResultMapping idResultMapping = null;
-            GeneratedValue generatedValue = null;
-            GenerationType generationType = null;
+            String idProperty = null;
+            
             Field idField = null;
             if (idResultMappingList.size() == 1) {
-            	idResultMapping = idResultMappingList.get(0);
-            	String idProperty = idResultMapping.getProperty();
+            	ResultMapping idResultMapping = idResultMappingList.get(0);
+            	idProperty = idResultMapping.getProperty();
             	idField = ReflectUtils.findField(entityType, idProperty);
-                if (idField == null) {
-                    throw new MappingException("No mapping property '" + idProperty + "' in " + entityType);
-                }
-                Id id = idField.getAnnotation(Id.class);
-                if (id == null) {
-                	logger.warn("No @Id configuration for id property '" + idProperty + "' in " + entityType);
-                	return;
-                }
-                generatedValue = idField.getAnnotation(GeneratedValue.class);
-                if (generatedValue == null) {
-                	logger.warn("No @GeneratedValue configuration for id property '" + idProperty + "' in " + entityType);
-                    return;
-                }
-
-                generationType = generatedValue.strategy();
-                if (generationType == null) {
-                    generationType = GenerationType.IDENTITY;
-                }
-                if (generationType != GenerationType.IDENTITY && generationType != GenerationType.SEQUENCE) {
-                    throw new IdConfigException("Only supports IDENTITY or SEQUENCE strategy for id generation!");
-                }
-            } else if (idResultMappingList.size() > 1) {// composite keys
-            	
+            	Id id = idField.getAnnotation(Id.class);
+            	if (id == null) {
+            		return;
+            	}
+            } else if (idResultMappingList.size() > 1) {// composite key
+            	Field embeddedIdField = BeanUtils.findField(entityType, EmbeddedId.class);
+            	if (embeddedIdField == null) {
+            		return;
+            	}
+        		Class<?> idType = embeddedIdField.getType();
+        		Embeddable embeddable = idType.getAnnotation(Embeddable.class);
+        		if (embeddable == null) {
+                    throw new IdConfigException("The [" + idType + "] must be annotated with @Embeddable!");
+        		}
+        		idField = BeanUtils.findField(idType, GeneratedValue.class);
+        		if (idField == null) {
+        			return;
+        		}
+        		
+        		idProperty = embeddedIdField.getName() + "." + idField.getName();
             }
             
-            if (idResultMapping != null && generatedValue != null && generationType != null) {
-            	Dialect dialect = introspectedContext.getDebbyConfiguration().getDialect();
-                
-                XmlElement selectKeyElement = new XmlElement("selectKey");
-                selectKeyElement.addAttribute(new Attribute("keyProperty", idResultMapping.getProperty()));
-                selectKeyElement.addAttribute(new Attribute("resultType", idResultMapping.getJavaType().getName()));
-                if (generationType == GenerationType.IDENTITY) {
-                    selectKeyElement.addAttribute(new Attribute("order", "AFTER" ));
-                    selectKeyElement.addElement(new TextElement(dialect.getIdentityColumnStrategy().getIdentitySelectString()));
-                } else if (generationType == GenerationType.SEQUENCE){
-                	String generator = generatedValue.generator();
-                	SequenceGenerator sequenceGenerator = idField.getAnnotation(SequenceGenerator.class);
-                	if (Strings.isNullOrEmpty(generator) || sequenceGenerator == null || !generator.equals(sequenceGenerator.name())) {
-                		throw new IdConfigException("No sequence generator is configed for '" + idResultMapping.getProperty() + "'");
-                	}
-                	String sequenceName = sequenceGenerator.sequenceName();
-                    selectKeyElement.addAttribute(new Attribute("order", "BEFORE" ));
-                    selectKeyElement.addElement(new TextElement(dialect.getSequenceNextValString(sequenceName)));
-                }
-                
-                parentElement.addElement(selectKeyElement);
+            GeneratedValue generatedValue = idField.getAnnotation(GeneratedValue.class);
+            if (generatedValue == null) {
+            	return;
             }
+            
+            GenerationType generationType = generatedValue.strategy();
+            if (generationType == null) {
+            	generationType = GenerationType.IDENTITY;
+            }
+            if (generationType != GenerationType.IDENTITY && generationType != GenerationType.SEQUENCE) {
+            	throw new IdConfigException("Only supports IDENTITY or SEQUENCE strategy for id generation!");
+            }
+            
+        	Dialect dialect = introspectedContext.getDebbyConfiguration().getDialect();
+            
+            XmlElement selectKeyElement = new XmlElement("selectKey");
+            selectKeyElement.addAttribute(new Attribute("keyProperty", idProperty));
+            selectKeyElement.addAttribute(new Attribute("resultType", idField.getType().getName()));
+            if (generationType == GenerationType.IDENTITY) {
+                selectKeyElement.addAttribute(new Attribute("order", "AFTER" ));
+                selectKeyElement.addElement(new TextElement(dialect.getIdentityColumnStrategy().getIdentitySelectString()));
+            } else if (generationType == GenerationType.SEQUENCE){
+            	String generator = generatedValue.generator();
+            	SequenceGenerator sequenceGenerator = idField.getAnnotation(SequenceGenerator.class);
+            	if (StringUtils.isNullOrEmpty(generator) || sequenceGenerator == null || !generator.equals(sequenceGenerator.name())) {
+            		throw new IdConfigException("No sequence generator is configed for '" + idProperty + "'");
+            	}
+            	String sequenceName = sequenceGenerator.sequenceName();
+                selectKeyElement.addAttribute(new Attribute("order", "BEFORE" ));
+                selectKeyElement.addElement(new TextElement(dialect.getSequenceNextValString(sequenceName)));
+            }
+            
+            parentElement.addElement(selectKeyElement);
             
         }
     }

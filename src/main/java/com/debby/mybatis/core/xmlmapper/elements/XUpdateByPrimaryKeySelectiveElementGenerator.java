@@ -19,13 +19,13 @@ import java.util.Iterator;
 
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
-import org.mybatis.generator.api.dom.xml.Attribute;
-import org.mybatis.generator.api.dom.xml.TextElement;
-import org.mybatis.generator.api.dom.xml.XmlElement;
 
 import com.debby.mybatis.core.XInternalStatements;
+import com.debby.mybatis.core.dom.xml.Attribute;
+import com.debby.mybatis.core.dom.xml.TextElement;
+import com.debby.mybatis.core.dom.xml.XmlElement;
 import com.debby.mybatis.core.util.XMyBatis3FormattingUtilities;
-import com.google.common.base.Strings;
+import com.debby.mybatis.util.StringUtils;
 
 /**
  * @author Jeff Butler
@@ -61,8 +61,8 @@ public class XUpdateByPrimaryKeySelectiveElementGenerator extends XAbstractXmlEl
 
             ResultMapping resultMapping = iter.next();
 
-            if (resultMapping.getFlags() != null && resultMapping.getFlags().size() > 0 || !Strings.isNullOrEmpty(resultMapping.getNestedQueryId()) || 
-                    !Strings.isNullOrEmpty(resultMapping.getNestedResultMapId())) {
+            if (resultMapping.getFlags() != null && resultMapping.getFlags().size() > 0 || !StringUtils.isNullOrEmpty(resultMapping.getNestedQueryId()) || 
+                    !StringUtils.isNullOrEmpty(resultMapping.getNestedResultMapId())) {
                 continue;
             }
 

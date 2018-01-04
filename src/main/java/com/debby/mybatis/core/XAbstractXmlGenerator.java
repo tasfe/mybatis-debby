@@ -15,7 +15,7 @@
  */
 package com.debby.mybatis.core;
 
-import org.mybatis.generator.api.dom.xml.Document;
+import com.debby.mybatis.core.dom.xml.Document;
 
 /**
  * @author Jeff Butler

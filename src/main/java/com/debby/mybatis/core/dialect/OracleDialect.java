@@ -27,4 +27,5 @@ public class OracleDialect extends Dialect {
     public String getSequenceNextValString(String sequenceName) throws MappingException {
         return "select " + sequenceName + ".nextval" + " from dual";
     }
+    
 }

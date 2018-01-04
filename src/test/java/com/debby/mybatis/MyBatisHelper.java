@@ -1,5 +1,6 @@
 package com.debby.mybatis;
 
+import java.io.File;
 import java.io.InputStream;
 
 import org.apache.ibatis.io.Resources;
@@ -10,7 +11,8 @@ import com.debby.mybatis.DebbySqlSessionFactoryBuilder;
 import com.debby.mybatis.core.dialect.H2Dialect;
 
 /**
- * Created by rocky on 3/15/16.
+ * @author rocky.hu
+ * @date Jan 4, 2018 11:48:26 AM
  */
 public class MyBatisHelper {
 
@@ -24,7 +26,7 @@ public class MyBatisHelper {
 			InputStream configInputStream = Resources.getResourceAsStream(config);
 			DebbyConfiguration debbyConfiguration = new DebbyConfiguration();
 			debbyConfiguration.setDebugEnabled(true);
-			debbyConfiguration.setMapperXMLOutputDirectory("F://debby//temp//");
+			debbyConfiguration.setMapperXMLOutputDirectory(System.getProperty("user.home") + File.separator + ".debby" + File.separator);
 			debbyConfiguration.setTablePrefix("t_");
 			debbyConfiguration.setDialect(new H2Dialect());
 

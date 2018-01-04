@@ -15,14 +15,15 @@
  */
 package com.debby.mybatis.core.xmlmapper.elements;
 
-import org.apache.ibatis.mapping.ResultMapping;
-import com.debby.mybatis.core.XInternalStatements;
-import com.debby.mybatis.core.util.XMyBatis3FormattingUtilities;
-import org.mybatis.generator.api.dom.xml.Attribute;
-import org.mybatis.generator.api.dom.xml.TextElement;
-import org.mybatis.generator.api.dom.xml.XmlElement;
-
 import java.util.Iterator;
+
+import org.apache.ibatis.mapping.ResultMapping;
+
+import com.debby.mybatis.core.XInternalStatements;
+import com.debby.mybatis.core.dom.xml.Attribute;
+import com.debby.mybatis.core.dom.xml.TextElement;
+import com.debby.mybatis.core.dom.xml.XmlElement;
+import com.debby.mybatis.core.util.XMyBatis3FormattingUtilities;
 
 /**
  * @author Jeff Butler

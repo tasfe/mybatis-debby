@@ -15,12 +15,13 @@
  */
 package com.debby.mybatis.criteria;
 
-import com.google.common.base.Strings;
-import org.apache.ibatis.mapping.ResultMapping;
-import com.debby.mybatis.core.XResultMapRegistry;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.ibatis.mapping.ResultMapping;
+
+import com.debby.mybatis.core.XResultMapRegistry;
+import com.debby.mybatis.util.StringUtils;
 
 /**
  * @author rocky.hu
@@ -42,17 +43,17 @@ public class Criteria {
 
         // convert the property name to column name
         String condition = criterion.getCondition();
-        if (Strings.isNullOrEmpty(condition)) {
+        if (StringUtils.isNullOrEmpty(condition)) {
             throw new IllegalArgumentException("condition is required for " + criterion.getClass().getName());
         }
         String[] segment = condition.split("&");
         if (segment == null || segment.length != 2) {
             throw new IllegalArgumentException("Illegal format for " + criterion.getClass().getName());
         }
-        if (Strings.isNullOrEmpty(segment[0])) {
+        if (StringUtils.isNullOrEmpty(segment[0])) {
             throw new IllegalArgumentException("Property name is required for " + criterion.getClass().getName());
         }
-        if (Strings.isNullOrEmpty(segment[1])) {
+        if (StringUtils.isNullOrEmpty(segment[1])) {
             throw new IllegalArgumentException("Sql operator is required for " + condition.getClass().getName());
         }
 

@@ -285,3 +285,9 @@ b. 联合主键
 自增 + 自增 (不考虑https://dba.stackexchange.com/questions/35449/how-to-use-2-auto-increment-columns-in-mysql-phpmyadmin)
 代码主动生成+代码主动生成
 
+通过JPA注解配合来实现主键生成策略的配置
+作为嵌入式主键类，要满足以下几点要求。
+1. 必须实现 Serializable 接口、必须有默认的 public 无参数的构造方法、必须覆盖 equals 和 hashCode 方法，这些要求与使用复合主键的要求相同。
+2. 将嵌入式主键类使用 @Embeddable 标注，表示这个是一个嵌入式类。
+3. 通过 @EmbeddedId 注释标注实体中的嵌入式主键
+

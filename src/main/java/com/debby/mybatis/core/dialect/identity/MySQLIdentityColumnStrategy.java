@@ -27,4 +27,5 @@ public class MySQLIdentityColumnStrategy extends IdentityColumnStrategyImpl {
     public String getIdentitySelectString() throws MappingException {
         return "select last_insert_id()";
     }
+    
 }

@@ -1,4 +1,4 @@
-package com.debby.mybatis.compositekey;
+package com.debby.mybatis.key.composite;
 
 import javax.persistence.EmbeddedId;
 
