@@ -21,7 +21,7 @@ public class MemberMapperTest implements DebbyMapperTest {
 
     @BeforeMethod
     public void setUp() {
-        dbUnitHelper.createTableFromFile("/com/debby/mybatis/key/composite/member.ddl");
+        dbUnitHelper.createTableFromFile("/assets/key/composite/member.ddl");
         sqlSession = MyBatisHelper.getSqlSessionFactory().openSession(true);
     }
 
@@ -75,7 +75,7 @@ public class MemberMapperTest implements DebbyMapperTest {
     @Test
     @Override
     public void testSelectByPrimaryKey() {
-        dbUnitHelper.executeDatasetAsRefresh("/com/debby/mybatis/key/composite/member.xml");
+        dbUnitHelper.executeDatasetAsRefresh("/assets/key/composite/member.xml");
         MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
 
         MemberPK memberPK = new MemberPK();

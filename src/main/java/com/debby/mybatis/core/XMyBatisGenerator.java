@@ -56,7 +56,7 @@ public class XMyBatisGenerator {
 	}
 
 	public void execute() {
-        LOGGER.info("Debby-Info ： [Start] debby mapper support...");
+        LOGGER.info("Debby-Info ：[Start] debby mapper support...");
 
         if (debbyConfiguration.isDebugEnabled() && StringUtils.isNullOrEmpty(debbyConfiguration.getMapperXMLOutputDirectory())) {
 			throw new BuilderException("[Exception] 'mapperXMLOuputDirectory' must be set on debug mode.");
@@ -137,10 +137,10 @@ public class XMyBatisGenerator {
 	        }
 			
 		} catch (Exception e) {
-            LOGGER.error("Debby-Error ： debby mapper support...", e);
+            LOGGER.error("Debby-Error ：debby mapper support...", e);
             throw new BuilderException("[Exception] debby mapper support.");
 		}
-        LOGGER.info("Debby-Info ： [END] debby mapper support...");
+        LOGGER.info("Debby-Info ：[END] debby mapper support...");
     }
 
 }

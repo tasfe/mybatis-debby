@@ -21,7 +21,7 @@ public class AuthorMapperTest implements DebbyMapperTest {
 
     @BeforeMethod
     public void setUp() {
-        dbUnitHelper.createTableFromFile("/com/debby/mybatis/key/strategy/sequence/author.ddl");
+        dbUnitHelper.createTableFromFile("/assets/key/strategy/sequence/author.ddl");
         sqlSession = MyBatisHelper.getSqlSessionFactory().openSession(true);
     }
 
@@ -73,7 +73,7 @@ public class AuthorMapperTest implements DebbyMapperTest {
     @Test
     @Override
     public void testSelectByPrimaryKey() {
-        dbUnitHelper.executeDatasetAsRefresh("/com/debby/mybatis/key/strategy/sequence/author.xml");
+        dbUnitHelper.executeDatasetAsRefresh("/assets/key/strategy/sequence/author.xml");
         AuthorMapper authorMapper = sqlSession.getMapper(AuthorMapper.class);
         Author author = authorMapper.selectByPrimaryKey(1l);
         Assert.assertEquals(author.getName(), "m1");

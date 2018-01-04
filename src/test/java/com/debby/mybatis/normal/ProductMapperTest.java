@@ -25,7 +25,7 @@ public class ProductMapperTest implements DebbyMapperTest {
 
     @BeforeMethod
     public void setUp() {
-        dbUnitHelper.createTableFromFile("/com/debby/mybatis/normal/product.ddl");
+        dbUnitHelper.createTableFromFile("/assets/normal/product.ddl");
         sqlSession = MyBatisHelper.getSqlSessionFactory().openSession(true);
     }
 
@@ -84,7 +84,7 @@ public class ProductMapperTest implements DebbyMapperTest {
 
     @Override
     public void testUpdateByPrimaryKey() {
-        dbUnitHelper.executeDatasetAsRefresh("/com/debby/mybatis/normal/product.xml");
+        dbUnitHelper.executeDatasetAsRefresh("/assets/normal/product.xml");
 
         Product product = new Product();
         product.setId(1);
@@ -99,7 +99,7 @@ public class ProductMapperTest implements DebbyMapperTest {
 
     @Override
     public void testUpdateByPrimaryKeySelective() {
-        dbUnitHelper.executeDatasetAsRefresh("/com/debby/mybatis/normal/product.xml");
+        dbUnitHelper.executeDatasetAsRefresh("/assets/normal/product.xml");
 
         Product product = new Product();
         product.setId(1);
@@ -114,7 +114,7 @@ public class ProductMapperTest implements DebbyMapperTest {
 
     @Override
     public void testUpdateByCriteria() {
-        dbUnitHelper.executeDatasetAsRefresh("/com/debby/mybatis/normal/product.xml");
+        dbUnitHelper.executeDatasetAsRefresh("/assets/normal/product.xml");
 
         Product product = new Product();
         product.setQuantity(101);;
@@ -130,7 +130,7 @@ public class ProductMapperTest implements DebbyMapperTest {
     @Test
     @Override
     public void testSelectByPrimaryKey() {
-        dbUnitHelper.executeDatasetAsRefresh("/com/debby/mybatis/normal/product.xml");
+        dbUnitHelper.executeDatasetAsRefresh("/assets/normal/product.xml");
 
         ProductMapper productMapper = sqlSession.getMapper(ProductMapper.class);
         Product product = productMapper.selectByPrimaryKey(1);

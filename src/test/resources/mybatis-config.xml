@@ -37,9 +37,9 @@
 	</databaseIdProvider>
 
 	<mappers>
-		<mapper resource="com/debby/mybatis/normal/ProductMapper.xml" /> 
-		<mapper resource="com/debby/mybatis/key/composite/MemberMapper.xml" />
-		<mapper resource="com/debby/mybatis/key/strategy/sequence/AuthorMapper.xml" />
+		<mapper resource="assets/key/composite/MemberMapper.xml" />
+		<mapper resource="assets/key/strategy/sequence/AuthorMapper.xml" />
+		<mapper resource="assets/normal/ProductMapper.xml" />
  	</mappers>
 
 </configuration>
