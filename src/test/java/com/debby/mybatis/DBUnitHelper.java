@@ -1,5 +1,15 @@
 package com.debby.mybatis;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import javax.sql.DataSource;
+
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -11,17 +21,6 @@ import org.dbunit.util.fileloader.DataFileLoader;
 import org.dbunit.util.fileloader.FlatXmlDataFileLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.sql.DataSource;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author rocky.hu
@@ -35,7 +34,6 @@ public class DBUnitHelper {
     private String connectionString;
     private String username;
     private String password;
-    private Map<String, String> hasRun = new HashMap<String, String>();
 
     public DBUnitHelper() {
         this.connectionString = "jdbc:h2:mem:db1;MODE=MySQL;IGNORECASE=TRUE;DB_CLOSE_DELAY=-1";
@@ -64,28 +62,17 @@ public class DBUnitHelper {
         }
     }
 
-    private boolean checkRunList(String name) {
-        if (!hasRun.containsKey(name)) {
-            hasRun.put(name, "nothing yet");
-            return false;
-        }
-
-        return true;
-    }
-
     public void createTables(String sql) {
         executeSql(sql, getConnection());
     }
 
     public void createTableFromFile(String filePath) {
-        if (!checkRunList(filePath)) {
-            try {
-                String sql = readFile(DBUnitHelper.class.getResourceAsStream(filePath));
-                executeSql(sql, getConnection());
-            }
-            catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            String sql = readFile(DBUnitHelper.class.getResourceAsStream(filePath));
+            executeSql(sql, getConnection());
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -150,27 +137,25 @@ public class DBUnitHelper {
     }
 
     private void executeDataset(String testDataFile, DatabaseOperation operation, IColumnFilter columnFilter, String schema)  {
-        if (!checkRunList(testDataFile)) {
-            Connection con = null;
-            try {
-                con = getConnection();
-                IDatabaseConnection connection = new DatabaseConnection(con, schema);
-                connection.getConfig().setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
-                connection.getConfig().setProperty(DatabaseConfig.FEATURE_QUALIFIED_TABLE_NAMES,isFullyQualifiedTableName());
-                if (columnFilter != null) {
-                    connection.getConfig().setProperty(DatabaseConfig.PROPERTY_PRIMARY_KEY_FILTER, columnFilter);
-                }
+        Connection con = null;
+        try {
+            con = getConnection();
+            IDatabaseConnection connection = new DatabaseConnection(con, schema);
+            connection.getConfig().setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
+            connection.getConfig().setProperty(DatabaseConfig.FEATURE_QUALIFIED_TABLE_NAMES,isFullyQualifiedTableName());
+            if (columnFilter != null) {
+                connection.getConfig().setProperty(DatabaseConfig.PROPERTY_PRIMARY_KEY_FILTER, columnFilter);
+            }
 
-                DataFileLoader loader = new FlatXmlDataFileLoader();
-                IDataSet dataSet = loader.load(testDataFile);
-                operation.execute(connection, dataSet);
-            }
-            catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-            finally {
-                attemptClose(con);
-            }
+            DataFileLoader loader = new FlatXmlDataFileLoader();
+            IDataSet dataSet = loader.load(testDataFile);
+            operation.execute(connection, dataSet);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            attemptClose(con);
         }
     }
 

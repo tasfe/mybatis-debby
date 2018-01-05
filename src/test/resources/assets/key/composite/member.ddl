@@ -1,8 +1,10 @@
-create table if not EXISTS t_member (
-  id int IDENTITY NOT NULL,
+DROP TABLE IF EXISTS t_member;
+
+CREATE TABLE t_member (
+  id INT IDENTITY NOT NULL,
   name VARCHAR(32) NOT NULL,
-  age INT
+  age INT,
 );
 
-alter table t_member drop primary key;
-alter table t_member add primary key (id, name);
+ALTER TABLE t_member DROP PRIMARY KEY;
+ALTER TABLE t_member ADD PRIMARY KEY (id, name);

@@ -19,6 +19,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+
+import com.debby.mybatis.bean.QueryResult;
 import com.debby.mybatis.criteria.EntityCriteria;
 
 /**
@@ -94,6 +96,14 @@ public interface DebbyMapper<ENTITY, PK extends Serializable> {
      * @return
      */
     List<ENTITY> selectByCriteria(EntityCriteria criteria);
+    
+    /**
+     * Paged Query.
+     * 
+     * @param criteria
+     * @return
+     */
+    QueryResult<ENTITY> selectPaginationByCriteria(EntityCriteria criteria);
     
     /**
      * Count the records by different conditions.

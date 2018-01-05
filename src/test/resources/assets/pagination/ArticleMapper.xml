@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.debby.mybatis.pagination.ArticleMapper">
+
+	<resultMap id="baseResultMap" type="com.debby.mybatis.pagination.Article">
+		<id column="id" property="id" />
+		<result column="create_time" property="createTime" />
+		<result column="title" property="title" />
+	</resultMap>
+	
+	<resultMap id="paginationResultMap" type="com.debby.mybatis.bean.QueryResult">
+		<collection property="results" ofType="com.debby.mybatis.pagination.Article"  javaType="ArrayList" resultMap="baseResultMap" />
+	</resultMap>
+	
+	<select id="selectPaginationByCriteria" parameterType="com.debby.mybatis.criteria.EntityCriteria" resultMap="paginationResultMap">
+		select id, create_time, title
+		from t_article
+	</select> 
+
+</mapper>

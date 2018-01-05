@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS t_article;
+
+CREATE TABLE t_article (
+  id INT IDENTITY NOT NULL,
+  create_time TIMESTAMP,
+  title VARCHAR(32),
+  CONSTRAINT PK PRIMARY KEY (id)
+);

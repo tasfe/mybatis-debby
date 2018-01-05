@@ -1,39 +1,27 @@
 package com.debby.mybatis.normal;
 
-import com.debby.mybatis.criteria.EntityCriteria;
-import com.debby.mybatis.DBUnitHelper;
-import com.debby.mybatis.DebbyMapperTest;
-import com.debby.mybatis.MyBatisHelper;
-
-import org.apache.ibatis.session.SqlSession;
-import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
 import java.math.BigDecimal;
 import java.util.Date;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import com.debby.mybatis.DebbyMapperTest;
+import com.debby.mybatis.criteria.EntityCriteria;
 
 /**
  * @author rocky.hu
  * @date 2017-11-29 9:41 PM
  */
-public class ProductMapperTest implements DebbyMapperTest {
-
-    private SqlSession sqlSession;
-    private DBUnitHelper dbUnitHelper = new DBUnitHelper();
-
-    @BeforeMethod
-    public void setUp() {
-        dbUnitHelper.createTableFromFile("/assets/normal/product.ddl");
-        sqlSession = MyBatisHelper.getSqlSessionFactory().openSession(true);
-    }
-
-    @AfterMethod
-    public void tearDown() {
-        sqlSession.close();
-    }
-
+public class ProductMapperTest extends DebbyMapperTest<ProductMapper> {
+	
+	public ProductMapperTest() {
+		super();
+		this.setDdlPath("/assets/normal/product.ddl");
+		this.setDataXmlPath("/assets/normal/product.xml");
+	}
+	
+	@Test
     @Override
     public void testInsert() {
         ProductCategory productCategory = new ProductCategory();
@@ -44,18 +32,18 @@ public class ProductMapperTest implements DebbyMapperTest {
         product.setPrice(new BigDecimal("100.00"));
         product.setQuantity(100);
         product.setSoldOut(false);
-        product.setTitle("p1");
+        product.setTitle("p4");
         product.setWeight(10.0);
         product.setPm(Product.PM.BIG);
         product.setProductCategory(productCategory);
 
-        ProductMapper productMapper = sqlSession.getMapper(ProductMapper.class);
-        productMapper.insert(product);
+        mapper.insert(product);
 
         Assert.assertNotNull(product.getId());
-        Assert.assertEquals(product.getId().intValue(), 1);
+        Assert.assertEquals(product.getId().intValue(), 4);
     }
 
+	@Test
     @Override
     public void testInsertSelective() {
         ProductCategory productCategory = new ProductCategory();
@@ -70,91 +58,60 @@ public class ProductMapperTest implements DebbyMapperTest {
         product.setPm(Product.PM.BIG);
         product.setProductCategory(productCategory);
 
-        ProductMapper productMapper = sqlSession.getMapper(ProductMapper.class);
-        productMapper.insertSelective(product);
+        mapper.insertSelective(product);
 
         Assert.assertNotNull(product.getId());
-        Assert.assertEquals(product.getId().intValue(), 1);
+        Assert.assertEquals(product.getId().intValue(), 4);
 
         // use the default value for 'title'
-        product = productMapper.selectByPrimaryKey(1);
+        product = mapper.selectByPrimaryKey(4);
         Assert.assertNotNull(product);
-        Assert.assertEquals(product.getTitle(), "test1");
+        Assert.assertEquals(product.getTitle(), "test");
     }
 
+    @Test
     @Override
     public void testUpdateByPrimaryKey() {
-        dbUnitHelper.executeDatasetAsRefresh("/assets/normal/product.xml");
-
+    	
         Product product = new Product();
         product.setId(1);
         product.setTitle("p1-1");
 
-        ProductMapper productMapper = sqlSession.getMapper(ProductMapper.class);
-        productMapper.updateByPrimaryKey(product);
+        mapper.updateByPrimaryKey(product);
 
-        product = productMapper.selectByPrimaryKey(1);
+        product = mapper.selectByPrimaryKey(1);
         Assert.assertNull(product.getCreateTime());
     }
 
+    @Test
     @Override
     public void testUpdateByPrimaryKeySelective() {
-        dbUnitHelper.executeDatasetAsRefresh("/assets/normal/product.xml");
-
+    	
         Product product = new Product();
         product.setId(1);
         product.setTitle("p1-1");
 
-        ProductMapper productMapper = sqlSession.getMapper(ProductMapper.class);
-        productMapper.updateByPrimaryKeySelective(product);
+        mapper.updateByPrimaryKeySelective(product);
 
-        product = productMapper.selectByPrimaryKey(1);
+        product = mapper.selectByPrimaryKey(1);
         Assert.assertNotNull(product.getCreateTime());
     }
 
+    @Test
     @Override
     public void testUpdateByCriteria() {
-        dbUnitHelper.executeDatasetAsRefresh("/assets/normal/product.xml");
-
+        
         Product product = new Product();
         product.setQuantity(101);;
 
         EntityCriteria entityCriteria = new EntityCriteria(Product.class);
     }
 
-    @Override
-    public void testUpdateByCriteriaSelective() {
-
-    }
-
     @Test
     @Override
     public void testSelectByPrimaryKey() {
-        dbUnitHelper.executeDatasetAsRefresh("/assets/normal/product.xml");
-
-        ProductMapper productMapper = sqlSession.getMapper(ProductMapper.class);
-        Product product = productMapper.selectByPrimaryKey(1);
+        Product product = mapper.selectByPrimaryKey(1);
         Assert.assertEquals(product.getTitle(), "p1");
-    }
-
-    @Override
-    public void testSelectByCriteria() {
-
-    }
-
-    @Override
-    public void testSelectCountByCriteria() {
-
-    }
-
-    @Override
-    public void testDeleteByPrimaryKey() {
-
-    }
-
-    @Override
-    public void testDeleteByCriteria() {
-
     }
 
 }
