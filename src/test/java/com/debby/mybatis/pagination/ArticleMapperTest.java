@@ -1,5 +1,6 @@
 package com.debby.mybatis.pagination;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.debby.mybatis.DebbyMapperTest;
@@ -22,7 +23,8 @@ public class ArticleMapperTest extends DebbyMapperTest<ArticleMapper> {
 	@Override
 	public void testSelectPaginationByCriteria() {
 		QueryResult<Article> queryResult = mapper.selectPaginationByCriteria(new EntityCriteria(Article.class));
-		System.out.println(queryResult);
+		Assert.assertEquals(queryResult.getTotalCount(), 50l);
+		Assert.assertEquals(queryResult.getResults().size(), 50);
 	}
     
 }

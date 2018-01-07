@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 17, 2017 11:53:21 AM
- * @see org.mybatis.generator.codegen.AbstractGenerator
+ * @see 'org.mybatis.generator.codegen.AbstractGenerator'
  */
 public abstract class XAbstractGenerator {
     

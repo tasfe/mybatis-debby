@@ -10,13 +10,12 @@
 		<result column="title" property="title" />
 	</resultMap>
 	
-	<resultMap id="paginationResultMap" type="com.debby.mybatis.bean.QueryResult">
-		<collection property="results" ofType="com.debby.mybatis.pagination.Article"  javaType="ArrayList" resultMap="baseResultMap" />
-	</resultMap>
-	
-	<select id="selectPaginationByCriteria" parameterType="com.debby.mybatis.criteria.EntityCriteria" resultMap="paginationResultMap">
-		select id, create_time, title
-		from t_article
-	</select> 
+	<!--<select id="_selectPaginationByCriteria" parameterType="com.debby.mybatis.criteria.EntityCriteria" resultMap="baseResultMap">-->
+		<!--select id, create_time, title-->
+		<!--from t_article-->
+	<!--</select>-->
+
+	<!--<select id="selectPaginationByCriteria" parameterType="com.debby.mybatis.criteria.EntityCriteria" resultType="com.debby.mybatis.bean.QueryResult">-->
+	<!--</select>-->
 
 </mapper>

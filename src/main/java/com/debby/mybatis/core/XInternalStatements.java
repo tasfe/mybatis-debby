@@ -31,9 +31,12 @@ public enum XInternalStatements {
     UPDATE_BY_CRITERIA_SELECTIVE(SqlCommandType.UPDATE, "updateByCriteriaSelective"),
     SELECT_BY_PRIMARY_KEY(SqlCommandType.SELECT, "selectByPrimaryKey"),
     SELECT_BY_CRITERIA(SqlCommandType.SELECT, "selectByCriteria"),
+    SELECT_PAGINATION_BY_CRITERIA(SqlCommandType.SELECT, "selectPaginationByCriteria"),
     SELECT_COUNT_BY_CRITERIA(SqlCommandType.SELECT, "selectCountByCriteria"),
     DELETE_BY_PRIMARY_KEY(SqlCommandType.DELETE, "deleteByPrimaryKey"),
-    DELETE_BY_CRITERIA(SqlCommandType.DELETE, "deleteByCriteria");
+    DELETE_BY_CRITERIA(SqlCommandType.DELETE, "deleteByCriteria"),
+
+    INTERNAL_SELECT_PAGINATION_BY_CRITERIA(SqlCommandType.SELECT, "_selectPaginationByCriteria");
     
     private String id;
     private SqlCommandType sqlCommandType;

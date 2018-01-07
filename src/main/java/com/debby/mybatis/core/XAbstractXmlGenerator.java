@@ -21,7 +21,7 @@ import com.debby.mybatis.core.dom.xml.Document;
  * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 17, 2017 11:35:57 AM
- * @see org.mybatis.generator.codegen.AbstractXmlGenerator
+ * @see 'org.mybatis.generator.codegen.AbstractXmlGenerator'
  */
 public abstract class XAbstractXmlGenerator extends XAbstractGenerator {
     

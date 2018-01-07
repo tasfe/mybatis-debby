@@ -15,6 +15,7 @@
  */
 package com.debby.mybatis.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,8 +24,8 @@ import java.util.List;
  */
 public class QueryResult<T> {
 
-	private List<T> results;
-	private int totalCount;
+	private List<T> results = new ArrayList<>();
+	private long totalCount;
 
 	public List<T> getResults() {
 		return results;
@@ -34,11 +35,11 @@ public class QueryResult<T> {
 		this.results = results;
 	}
 
-	public int getTotalCount() {
+	public long getTotalCount() {
 		return totalCount;
 	}
 
-	public void setTotalCount(int totalCount) {
+	public void setTotalCount(long totalCount) {
 		this.totalCount = totalCount;
 	}
 

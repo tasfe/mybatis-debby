@@ -46,7 +46,7 @@ import com.debby.mybatis.util.StringUtils;
  * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 17, 2017 2:20:48 PM
- * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.AbstractXmlElementGenerator
+ * @see 'org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.AbstractXmlElementGenerator'
  */
 public abstract class XAbstractXmlElementGenerator extends XAbstractGenerator {
     
@@ -62,21 +62,23 @@ public abstract class XAbstractXmlElementGenerator extends XAbstractGenerator {
         answer.addAttribute(new Attribute("refid", "baseColumns")); 
         return answer;
     }
-    
-    /**
-     * Get "if" element for "updateByCriteria" statement.
-     *
-     * @return
-     */
-    protected XmlElement getUpdateByCriteriaIfElement() {
-        XmlElement ifElement = new XmlElement("if");
-        ifElement.addAttribute(new Attribute("test", "_parameter != null and _parameter.updatedCriteria != null"));
 
-        XmlElement includeElement = new XmlElement("include");
-        includeElement.addAttribute(new Attribute("refid", "updateWhereSqlFragment"));
-        ifElement.addElement(includeElement);
+    protected XmlElement getUpdateWhereSqlFragment() {
+        XmlElement updateWhereElement = new XmlElement("include");
+        updateWhereElement.addAttribute(new Attribute("refid", "updateWhereSqlFragment"));
+        return updateWhereElement;
+    }
 
-        return ifElement;
+    protected XmlElement getOrderBySqlFragment() {
+        XmlElement orderByElement = new XmlElement("include");
+        orderByElement.addAttribute(new Attribute("refid", "orderBySqlFragment"));
+        return orderByElement;
+    }
+
+    protected XmlElement getSelectWhereSqlFragment() {
+        XmlElement selectWhereElement = new XmlElement("include");
+        selectWhereElement.addAttribute(new Attribute("refid", "selectWhereSqlFragment"));
+        return selectWhereElement;
     }
 
     /**

@@ -33,7 +33,7 @@ import com.debby.mybatis.core.util.XMyBatis3FormattingUtilities;
  * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 20, 2017 10:14:03 AM
- * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.InsertElementGenerator
+ * @see 'org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.InsertElementGenerator'
  */
 public class XInsertElementGenerator extends XAbstractXmlElementGenerator {
     

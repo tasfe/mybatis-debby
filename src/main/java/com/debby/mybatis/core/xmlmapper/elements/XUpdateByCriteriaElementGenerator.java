@@ -30,7 +30,7 @@ import com.debby.mybatis.core.util.XMyBatis3FormattingUtilities;
  * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 21, 2017 5:01:12 PM
- * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.UpdateByExampleWithoutBLOBsElementGenerator
+ * @see 'org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.UpdateByExampleWithoutBLOBsElementGenerator'
  */
 public class XUpdateByCriteriaElementGenerator extends XAbstractXmlElementGenerator {
     
@@ -73,7 +73,7 @@ public class XUpdateByCriteriaElementGenerator extends XAbstractXmlElementGenera
             }
         }
         
-        answer.addElement(getUpdateByCriteriaIfElement());
+        answer.addElement(getUpdateWhereSqlFragment());
         
         parentElement.addElement(answer);
     }

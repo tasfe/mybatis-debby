@@ -39,17 +39,9 @@ public class XSelectCountByCriteriaElementGenerator extends XAbstractXmlElementG
         sb.append(" select count(*) from ");
         sb.append(introspectedContext.getTableName());
         answer.addElement(new TextElement(sb.toString()));
-        
-        sb.setLength(0);
-        sb.append("_parameter!= null and _parameter.criteriaList != null");
-        
-        XmlElement ifElement = new XmlElement("if");
-        ifElement.addAttribute(new Attribute("test", sb.toString()));
-        XmlElement includeElement = new XmlElement("include");
-        includeElement.addAttribute(new Attribute("refid", "selectWhereSqlFragment"));
-        ifElement.addElement(includeElement);
-        answer.addElement(ifElement);
-        
+
+        answer.addElement(getSelectWhereSqlFragment());
+
         parentElement.addElement(answer);
     }
 

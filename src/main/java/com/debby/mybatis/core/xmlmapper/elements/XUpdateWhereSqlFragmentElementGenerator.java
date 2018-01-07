@@ -28,6 +28,9 @@ public class XUpdateWhereSqlFragmentElementGenerator extends XAbstractXmlElement
     public void addElements(XmlElement parentElement) {
         XmlElement answer = new XmlElement("sql");
         answer.addAttribute(new Attribute("id", "updateWhereSqlFragment"));
+
+        XmlElement ifElement = new XmlElement("if");
+        ifElement.addAttribute(new Attribute("test", "_parameter != null and _parameter.updatedCriteria != null and _parameter.updatedCriteria.criteriaList != null and _parameter.updatedCriteria.criteriaList.size() > 0"));
         
         XmlElement whereElement = new XmlElement("where");
         XmlElement forEachElement = new XmlElement("foreach");
@@ -39,7 +42,9 @@ public class XUpdateWhereSqlFragmentElementGenerator extends XAbstractXmlElement
         
         forEachElement.addElement(includeElement);
         whereElement.addElement(forEachElement);
-        answer.addElement(whereElement);
+
+        ifElement.addElement(whereElement);
+        answer.addElement(ifElement);
         
         parentElement.addElement(answer);
     }

@@ -22,7 +22,7 @@ import com.debby.mybatis.core.dom.xml.XmlElement;
  * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 23, 2017 2:57:56 PM
- * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.ExampleWhereClauseElementGenerator
+ * @see 'org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.ExampleWhereClauseElementGenerator'
  */
 public class XSelectWhereSqlFragmentElementGenerator extends XAbstractXmlElementGenerator {
 
@@ -30,6 +30,9 @@ public class XSelectWhereSqlFragmentElementGenerator extends XAbstractXmlElement
     public void addElements(XmlElement parentElement) {
         XmlElement answer = new XmlElement("sql");
         answer.addAttribute(new Attribute("id", "selectWhereSqlFragment"));
+
+        XmlElement ifElement = new XmlElement("if");
+        ifElement.addAttribute(new Attribute("test", "_parameter != null and _parameter.criteriaList != null and _parameter.criteriaList.size() > 0"));
         
         XmlElement whereElement = new XmlElement("where");
         XmlElement forEachElement = new XmlElement("foreach");
@@ -41,7 +44,9 @@ public class XSelectWhereSqlFragmentElementGenerator extends XAbstractXmlElement
         
         forEachElement.addElement(includeElement);
         whereElement.addElement(forEachElement);
-        answer.addElement(whereElement);
+
+        ifElement.addElement(whereElement);
+        answer.addElement(ifElement);
         
         parentElement.addElement(answer);
     }

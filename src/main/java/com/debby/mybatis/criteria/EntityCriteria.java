@@ -96,4 +96,12 @@ public class EntityCriteria {
         this.distinct = distinct;
     }
 
+    public List<Criteria> getCriteriaList() {
+        return criteriaList;
+    }
+
+    public List<Order> getOrderList() {
+        return orderList;
+    }
+
 }

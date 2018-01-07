@@ -25,7 +25,7 @@ import com.debby.mybatis.criteria.EntityCriteria;
  * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 23, 2017 2:10:36 PM
- * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.SelectByExampleWithoutBLOBsElementGenerator
+ * @see 'org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.SelectByExampleWithoutBLOBsElementGenerator'
  */
 public class XSelectByCriteriaElementGenerator extends XAbstractXmlElementGenerator {
 
@@ -49,27 +49,9 @@ public class XSelectByCriteriaElementGenerator extends XAbstractXmlElementGenera
         sb.append("from ");
         sb.append(introspectedContext.getTableName());
         answer.addElement(new TextElement(sb.toString()));
-        
-        XmlElement criteriaListIfElement= new XmlElement("if");
-        criteriaListIfElement.addAttribute(new Attribute("test", "_parameter != null and _parameter.criteriaList != null"));
-        XmlElement includeElement = new XmlElement("include");
-        includeElement.addAttribute(new Attribute("refid", "selectWhereSqlFragment"));
-        criteriaListIfElement.addElement(includeElement);
-        answer.addElement(criteriaListIfElement);
-        
-        XmlElement entityOrderListIfElement = new XmlElement("if");
-        entityOrderListIfElement.addAttribute(new Attribute("test", "_parameter != null and _parameter.orderList != null"));
-        sb.setLength(0);
-        sb.append(" ORDER BY ");
-        entityOrderListIfElement.addElement(new TextElement(sb.toString()));
-        
-        XmlElement forEachElement = new XmlElement("foreach");
-        forEachElement.addAttribute(new Attribute("collection", "orderList"));
-        forEachElement.addAttribute(new Attribute("item", "order"));
-        forEachElement.addAttribute(new Attribute("separator", ","));
-        forEachElement.addElement(new TextElement("${order}"));
-        entityOrderListIfElement.addElement(forEachElement);
-        answer.addElement(entityOrderListIfElement);
+
+        answer.addElement(getSelectWhereSqlFragment());
+        answer.addElement(getOrderBySqlFragment());
         
         parentElement.addElement(answer);
     }

@@ -20,28 +20,13 @@ import com.debby.mybatis.core.XInternalStatements;
 import com.debby.mybatis.core.dom.XmlConstants;
 import com.debby.mybatis.core.dom.xml.Document;
 import com.debby.mybatis.core.dom.xml.XmlElement;
-import com.debby.mybatis.core.xmlmapper.elements.XAbstractXmlElementGenerator;
-import com.debby.mybatis.core.xmlmapper.elements.XBaseColumnListElementGenerator;
-import com.debby.mybatis.core.xmlmapper.elements.XCriteriaSqlFragmentElementGenerator;
-import com.debby.mybatis.core.xmlmapper.elements.XDeleteByCriteriaElementGenerator;
-import com.debby.mybatis.core.xmlmapper.elements.XDeleteByPrimaryKeyElementGenerator;
-import com.debby.mybatis.core.xmlmapper.elements.XInsertElementGenerator;
-import com.debby.mybatis.core.xmlmapper.elements.XInsertSelectiveElementGenerator;
-import com.debby.mybatis.core.xmlmapper.elements.XSelectByCriteriaElementGenerator;
-import com.debby.mybatis.core.xmlmapper.elements.XSelectByPrimaryKeyElementGenerator;
-import com.debby.mybatis.core.xmlmapper.elements.XSelectCountByCriteriaElementGenerator;
-import com.debby.mybatis.core.xmlmapper.elements.XSelectWhereSqlFragmentElementGenerator;
-import com.debby.mybatis.core.xmlmapper.elements.XUpdateByCriteriaElementGenerator;
-import com.debby.mybatis.core.xmlmapper.elements.XUpdateByCriteriaSelectiveElementGenerator;
-import com.debby.mybatis.core.xmlmapper.elements.XUpdateByPrimaryKeyElementGenerator;
-import com.debby.mybatis.core.xmlmapper.elements.XUpdateByPrimaryKeySelectiveElementGenerator;
-import com.debby.mybatis.core.xmlmapper.elements.XUpdateWhereSqlFragmentElementGenerator;
+import com.debby.mybatis.core.xmlmapper.elements.*;
 
 /**
  * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 17, 2017 11:40:50 AM
- * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator
+ * @see 'org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator'
  */
 public class XXMLMapperGenerator extends XAbstractXmlGenerator {
 
@@ -56,6 +41,7 @@ public class XXMLMapperGenerator extends XAbstractXmlGenerator {
         addCriteriaSqlFragmentElement(answer);
         addSelectWhereSqlFragmentElement(answer);
         addUpdateWhereSqlFragmentElement(answer);
+        addOrderBySqlFragmentElement(answer);
         addInsertElement(answer);
         addInsertSelectiveElement(answer);
         addUpdateByPrimaryKeyElement(answer);
@@ -64,6 +50,8 @@ public class XXMLMapperGenerator extends XAbstractXmlGenerator {
         addUpdateByCriteriaSelectiveElement(answer);
         addSelectByPrimaryKeyElement(answer);
         addSelectByCriteriaElement(answer);
+        addSelectByCriteriaForPaginationElement(answer);
+        addSelectPaginationByCriteriaElement(answer);
         addSelectCountByCriteriaElement(answer);
         addDeleteByPrimaryKeyElement(answer);
         addDeleteByCriteriaElement(answer);
@@ -87,6 +75,11 @@ public class XXMLMapperGenerator extends XAbstractXmlGenerator {
     
     protected void addUpdateWhereSqlFragmentElement(XmlElement parentElement) {
         XAbstractXmlElementGenerator elementGenerator = new XUpdateWhereSqlFragmentElementGenerator();
+        initializeAndExecuteGenerator(elementGenerator, parentElement);
+    }
+
+    protected void addOrderBySqlFragmentElement(XmlElement parentElement) {
+        XAbstractXmlElementGenerator elementGenerator = new XOrderBySqlFragmentElementGenerator();
         initializeAndExecuteGenerator(elementGenerator, parentElement);
     }
     
@@ -142,6 +135,20 @@ public class XXMLMapperGenerator extends XAbstractXmlGenerator {
     protected void addSelectByCriteriaElement(XmlElement parentElement) {
         if (!introspectedContext.getAlreadyOwnedInternalStatements().contains(XInternalStatements.SELECT_BY_CRITERIA)) {
             XAbstractXmlElementGenerator elementGenerator = new XSelectByCriteriaElementGenerator();
+            initializeAndExecuteGenerator(elementGenerator, parentElement);
+        }
+    }
+
+    protected void addSelectByCriteriaForPaginationElement(XmlElement parentElement) {
+        if (!introspectedContext.getAlreadyOwnedInternalStatements().contains(XInternalStatements.INTERNAL_SELECT_PAGINATION_BY_CRITERIA)) {
+            XAbstractXmlElementGenerator elementGenerator = new XSelectByCriteriaForPaginationElementGenerator();
+            initializeAndExecuteGenerator(elementGenerator, parentElement);
+        }
+    }
+
+    protected void addSelectPaginationByCriteriaElement(XmlElement parentElement) {
+        if (!introspectedContext.getAlreadyOwnedInternalStatements().contains(XInternalStatements.SELECT_PAGINATION_BY_CRITERIA)) {
+            XAbstractXmlElementGenerator elementGenerator = new XSelectPaginationByCriteriaElementGenerator();
             initializeAndExecuteGenerator(elementGenerator, parentElement);
         }
     }

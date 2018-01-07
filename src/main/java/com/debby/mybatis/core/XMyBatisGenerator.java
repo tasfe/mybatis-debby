@@ -23,6 +23,8 @@ import java.util.Set;
 
 import javax.persistence.Table;
 
+import com.debby.mybatis.core.interceptor.PaginationExecutorInterceptor;
+import com.debby.mybatis.core.interceptor.PaginationResultSetHandlerInterceptor;
 import org.apache.ibatis.builder.BuilderException;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.mapping.ResultMap;
@@ -65,6 +67,8 @@ public class XMyBatisGenerator {
         try {
 
 			xConfiguration.getConfiguration().getTypeAliasRegistry().registerAlias("EntityCriteria", EntityCriteria.class);
+			xConfiguration.getConfiguration().addInterceptor(new PaginationExecutorInterceptor());
+			xConfiguration.getConfiguration().addInterceptor(new PaginationResultSetHandlerInterceptor());
 
 			XIntrospectedContext context = null;
 			Set<String> loadedResources = xConfiguration.getLoadedResources();
@@ -107,7 +111,7 @@ public class XMyBatisGenerator {
 							for (int i = 0; i<xInternalStatements.length; i++) {
 								if (xConfiguration.getConfiguration().hasStatement(namespace + "." + xInternalStatements[i].getId())) {
 									if(xInternalStatements[i].getSqlCommandType() ==
-											xConfiguration.getConfiguration().getMappedStatement(xInternalStatements[i].getId()).getSqlCommandType()) {
+											xConfiguration.getConfiguration().getMappedStatement(namespace + "." + xInternalStatements[i].getId()).getSqlCommandType()) {
 										alreadyOwnedInternalStatements.add(xInternalStatements[i]);
 									}
 								}

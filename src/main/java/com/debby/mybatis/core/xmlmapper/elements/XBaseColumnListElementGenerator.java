@@ -27,7 +27,7 @@ import com.debby.mybatis.core.dom.xml.XmlElement;
  * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 17, 2017 2:33:02 PM
- * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.BaseColumnListElementGenerator
+ * @see 'org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.BaseColumnListElementGenerator'
  */
 public class XBaseColumnListElementGenerator extends XAbstractXmlElementGenerator {
     

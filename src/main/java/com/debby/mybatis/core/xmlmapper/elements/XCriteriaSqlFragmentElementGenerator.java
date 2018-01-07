@@ -22,7 +22,7 @@ import com.debby.mybatis.core.dom.xml.XmlElement;
 /**
  * @author rocky.hu
  * @date Nov 23, 2017 3:21:53 PM
- * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.ExampleWhereClauseElementGenerator
+ * @see 'org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.ExampleWhereClauseElementGenerator'
  */
 public class XCriteriaSqlFragmentElementGenerator extends XAbstractXmlElementGenerator {
 

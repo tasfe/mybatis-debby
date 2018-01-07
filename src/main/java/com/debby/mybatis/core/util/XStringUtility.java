@@ -17,7 +17,7 @@ package com.debby.mybatis.core.util;
 
 /**
  * @author Jeff Butler
- * @see org.mybatis.generator.internal.util.StringUtility
+ * @see 'org.mybatis.generator.internal.util.StringUtility'
  */
 public class XStringUtility {
 	

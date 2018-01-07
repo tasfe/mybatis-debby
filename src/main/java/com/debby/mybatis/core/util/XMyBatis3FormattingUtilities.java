@@ -27,7 +27,7 @@ import com.debby.mybatis.util.StringUtils;
  * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 20, 2017 10:42:07 PM
- * @see org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities
+ * @see 'org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities'
  */
 public class XMyBatis3FormattingUtilities {
 	

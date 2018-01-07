@@ -31,7 +31,7 @@ import com.debby.mybatis.util.StringUtils;
  * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 23, 2017 9:04:54 PM
- * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.UpdateByPrimaryKeySelectiveElementGenerator
+ * @see 'org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.UpdateByPrimaryKeySelectiveElementGenerator'
  */
 public class XUpdateByPrimaryKeySelectiveElementGenerator extends XAbstractXmlElementGenerator {
 
