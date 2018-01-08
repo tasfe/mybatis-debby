@@ -17,6 +17,9 @@ package com.debby.mybatis.core.dialect;
 
 import com.debby.mybatis.core.dialect.identity.DB2IdentityColumnStrategy;
 import com.debby.mybatis.core.dialect.identity.IdentityColumnStrategy;
+import com.debby.mybatis.core.dom.xml.Attribute;
+import com.debby.mybatis.core.dom.xml.TextElement;
+import com.debby.mybatis.core.dom.xml.XmlElement;
 import com.debby.mybatis.exception.MappingException;
 
 /**
@@ -25,14 +28,56 @@ import com.debby.mybatis.exception.MappingException;
  */
 public class DB2Dialect extends Dialect {
 
-    @Override
-    public IdentityColumnStrategy getIdentityColumnStrategy() {
-        return new DB2IdentityColumnStrategy();
-    }
+	@Override
+	public IdentityColumnStrategy getIdentityColumnStrategy() {
+		return new DB2IdentityColumnStrategy();
+	}
 
-    @Override
-    public String getSequenceNextValString(String sequenceName) throws MappingException {
-        return "values nextval for " + sequenceName;
-    }
-    
+	@Override
+	public String getSequenceNextValString(String sequenceName) throws MappingException {
+		return "values nextval for " + sequenceName;
+	}
+
+	@Override
+	public void processLimitPrefixSqlFragment(XmlElement parentElement) {
+		XmlElement chooseElement = new XmlElement("choose");
+
+		StringBuilder sb = new StringBuilder();
+		
+		XmlElement whenElement = new XmlElement("when");
+		whenElement.addAttribute(new Attribute("test", "firstResult != null"));
+		sb.append("select * from ( select inner2_.*, rownumber() over(order by order of inner2_) as rownumber_ from ( ");
+		whenElement.addElement(new TextElement(sb.toString()));
+		
+		chooseElement.addElement(whenElement);
+		parentElement.addElement(chooseElement);
+	}
+
+	@Override
+	public void processLimitSuffixSqlFragment(XmlElement parentElement) {
+		XmlElement chooseElement = new XmlElement("choose");
+
+		StringBuilder sb = new StringBuilder();
+
+		XmlElement whenElement = new XmlElement("when");
+		whenElement.addAttribute(new Attribute("test", "firstResult != null"));
+		sb.append(" fetch first ");
+		sb.append("(#{maxResults}+#{firstResult})");
+		sb.append(" rows only ) as inner2_ ) as inner1_ where rownumber_ > ");
+		sb.append("#{firstResult}");
+		sb.append(" order by rownumber_");
+		whenElement.addElement(new TextElement(sb.toString()));
+
+		XmlElement otherwiseElement = new XmlElement("otherwise");
+		sb.setLength(0);
+		sb.append(" fetch first ");
+		sb.append("(#{maxResults}+#{firstResult})");
+		sb.append(" rows only");
+		otherwiseElement.addElement(new TextElement(sb.toString()));
+
+		chooseElement.addElement(whenElement);
+		chooseElement.addElement(otherwiseElement);
+		parentElement.addElement(chooseElement);
+	}
+
 }

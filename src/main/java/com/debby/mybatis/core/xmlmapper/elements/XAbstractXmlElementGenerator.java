@@ -80,6 +80,18 @@ public abstract class XAbstractXmlElementGenerator extends XAbstractGenerator {
         selectWhereElement.addAttribute(new Attribute("refid", "selectWhereSqlFragment"));
         return selectWhereElement;
     }
+    
+    protected XmlElement getPaginationPrefixSqlFragment() {
+    	XmlElement element = new XmlElement("include");
+    	element.addAttribute(new Attribute("refid", "prefixPaginationSqlFragment"));
+        return element;
+    }
+    
+    protected XmlElement getPaginationSuffixSqlFragment() {
+    	XmlElement element = new XmlElement("include");
+    	element.addAttribute(new Attribute("refid", "suffixPaginationSqlFragment"));
+        return element;
+    }
 
     /**
      * Determine if is a id result mapping.

@@ -28,6 +28,7 @@ public class DebbySqlSessionFactoryBuilderTest {
 
         SqlSessionFactory sqlSessionFactory = new DebbySqlSessionFactoryBuilder(debbyConfiguration).build(configInputStream);
         Configuration configuration = sqlSessionFactory.getConfiguration();
+        System.out.println(configuration);
     }
 
 }

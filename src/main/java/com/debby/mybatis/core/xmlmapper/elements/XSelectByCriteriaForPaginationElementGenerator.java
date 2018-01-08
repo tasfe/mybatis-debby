@@ -16,6 +16,8 @@
 package com.debby.mybatis.core.xmlmapper.elements;
 
 import com.debby.mybatis.core.XInternalStatements;
+import com.debby.mybatis.core.XIntrospectedContext;
+import com.debby.mybatis.core.dialect.Dialect;
 import com.debby.mybatis.core.dom.xml.Attribute;
 import com.debby.mybatis.core.dom.xml.TextElement;
 import com.debby.mybatis.core.dom.xml.XmlElement;
@@ -36,6 +38,8 @@ public class XSelectByCriteriaForPaginationElementGenerator extends XAbstractXml
         answer.addAttribute(new Attribute("parameterType", EntityCriteria.class.getName()));
         answer.addAttribute(new Attribute("resultMap", "baseResultMap"));
         
+        answer.addElement(getPaginationPrefixSqlFragment());
+        
         answer.addElement(new TextElement("select"));
         XmlElement ifElement = new XmlElement("if"); 
         ifElement.addAttribute(new Attribute("test", "distinct")); 
@@ -52,6 +56,7 @@ public class XSelectByCriteriaForPaginationElementGenerator extends XAbstractXml
 
         answer.addElement(getSelectWhereSqlFragment());
         answer.addElement(getOrderBySqlFragment());
+        answer.addElement(getPaginationSuffixSqlFragment());
         
         parentElement.addElement(answer);
     }

@@ -16,7 +16,6 @@
 package com.debby.mybatis.core.xmlmapper.elements;
 
 import com.debby.mybatis.bean.QueryResult;
-import com.debby.mybatis.core.XAbstractXmlGenerator;
 import com.debby.mybatis.core.XInternalStatements;
 import com.debby.mybatis.core.dom.xml.Attribute;
 import com.debby.mybatis.core.dom.xml.XmlElement;

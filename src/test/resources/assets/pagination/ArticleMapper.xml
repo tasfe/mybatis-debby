@@ -10,12 +10,9 @@
 		<result column="title" property="title" />
 	</resultMap>
 	
-	<!--<select id="_selectPaginationByCriteria" parameterType="com.debby.mybatis.criteria.EntityCriteria" resultMap="baseResultMap">-->
-		<!--select id, create_time, title-->
-		<!--from t_article-->
-	<!--</select>-->
-
-	<!--<select id="selectPaginationByCriteria" parameterType="com.debby.mybatis.criteria.EntityCriteria" resultType="com.debby.mybatis.bean.QueryResult">-->
-	<!--</select>-->
+	<!-- <select id="_selectPaginationByCriteria" parameterType="com.debby.mybatis.criteria.EntityCriteria" resultMap="baseResultMap">
+		select id, create_time, title
+		from t_article
+	</select> -->
 
 </mapper>

@@ -17,6 +17,9 @@ package com.debby.mybatis.core.dialect;
 
 import com.debby.mybatis.core.dialect.identity.IdentityColumnStrategy;
 import com.debby.mybatis.core.dialect.identity.MySQLIdentityColumnStrategy;
+import com.debby.mybatis.core.dom.xml.Attribute;
+import com.debby.mybatis.core.dom.xml.TextElement;
+import com.debby.mybatis.core.dom.xml.XmlElement;
 
 /**
  * @author rocky.hu
@@ -28,5 +31,34 @@ public class MySQLDialect extends Dialect {
     public IdentityColumnStrategy getIdentityColumnStrategy() {
         return new MySQLIdentityColumnStrategy();
     }
+
+	@Override
+	public void processLimitPrefixSqlFragment(XmlElement parentElement) {
+		// do nothing
+	}
+
+	@Override
+	public void processLimitSuffixSqlFragment(XmlElement parentElement) {
+		XmlElement chooseElement = new XmlElement("choose");
+		
+		StringBuilder sb = new StringBuilder();
+		
+		XmlElement whenElement = new XmlElement("when");
+		whenElement.addAttribute(new Attribute("test", "firstResult != null"));
+		sb.append(" limit ");
+		sb.append("#{firstResult} , #{maxResults}");
+		whenElement.addElement(new TextElement(sb.toString()));
+		
+		XmlElement otherwiseElement = new XmlElement("otherwise");
+		sb.setLength(0);
+		sb.append(" limit ");
+		sb.append("#{maxResults}");
+		otherwiseElement.addElement(new TextElement(sb.toString()));
+		
+		chooseElement.addElement(whenElement);
+		chooseElement.addElement(otherwiseElement);
+		
+		parentElement.addElement(chooseElement);
+	}
 
 }

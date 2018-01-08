@@ -15,6 +15,9 @@
  */
 package com.debby.mybatis.core.dialect;
 
+import com.debby.mybatis.core.dom.xml.Attribute;
+import com.debby.mybatis.core.dom.xml.TextElement;
+import com.debby.mybatis.core.dom.xml.XmlElement;
 import com.debby.mybatis.exception.MappingException;
 
 /**
@@ -23,9 +26,53 @@ import com.debby.mybatis.exception.MappingException;
  */
 public class OracleDialect extends Dialect {
 
-    @Override
-    public String getSequenceNextValString(String sequenceName) throws MappingException {
-        return "select " + sequenceName + ".nextval" + " from dual";
-    }
-    
+	@Override
+	public String getSequenceNextValString(String sequenceName) throws MappingException {
+		return "select " + sequenceName + ".nextval" + " from dual";
+	}
+
+	@Override
+	public void processLimitPrefixSqlFragment(XmlElement parentElement) {
+		XmlElement chooseElement = new XmlElement("choose");
+
+		StringBuilder sb = new StringBuilder();
+
+		XmlElement whenElement = new XmlElement("when");
+		whenElement.addAttribute(new Attribute("test", "firstResult != null"));
+		sb.append("select * from ( select row_.*, rownum rownum_ from ( ");
+		whenElement.addElement(new TextElement(sb.toString()));
+
+		XmlElement otherwiseElement = new XmlElement("otherwise");
+		sb.setLength(0);
+		sb.append("select * from ( ");
+		otherwiseElement.addElement(new TextElement(sb.toString()));
+
+		chooseElement.addElement(whenElement);
+		chooseElement.addElement(otherwiseElement);
+
+		parentElement.addElement(chooseElement);
+	}
+
+	@Override
+	public void processLimitSuffixSqlFragment(XmlElement parentElement) {
+		XmlElement chooseElement = new XmlElement("choose");
+
+		StringBuilder sb = new StringBuilder();
+
+		XmlElement whenElement = new XmlElement("when");
+		whenElement.addAttribute(new Attribute("test", "firstResult != null"));
+		sb.append(" ) row_ where rownum <= #{maxResults}) where rownum_ > #{firstResult}");
+		whenElement.addElement(new TextElement(sb.toString()));
+
+		XmlElement otherwiseElement = new XmlElement("otherwise");
+		sb.setLength(0);
+		sb.append(" ) where rownum <= #{maxResults}");
+		otherwiseElement.addElement(new TextElement(sb.toString()));
+
+		chooseElement.addElement(whenElement);
+		chooseElement.addElement(otherwiseElement);
+
+		parentElement.addElement(chooseElement);
+	}
+
 }

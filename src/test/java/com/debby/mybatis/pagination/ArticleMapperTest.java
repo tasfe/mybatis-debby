@@ -22,9 +22,13 @@ public class ArticleMapperTest extends DebbyMapperTest<ArticleMapper> {
 	@Test
 	@Override
 	public void testSelectPaginationByCriteria() {
-		QueryResult<Article> queryResult = mapper.selectPaginationByCriteria(new EntityCriteria(Article.class));
+		EntityCriteria entityCriteria = EntityCriteria.forEntity(Article.class);
+		entityCriteria.setFirstResult(0);
+		entityCriteria.setMaxResults(10);
+		
+		QueryResult<Article> queryResult = mapper.selectPaginationByCriteria(entityCriteria);
 		Assert.assertEquals(queryResult.getTotalCount(), 50l);
-		Assert.assertEquals(queryResult.getResults().size(), 50);
+		Assert.assertEquals(queryResult.getResults().size(), 10);
 	}
     
 }

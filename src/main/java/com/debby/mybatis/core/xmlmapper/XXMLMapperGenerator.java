@@ -42,6 +42,8 @@ public class XXMLMapperGenerator extends XAbstractXmlGenerator {
         addSelectWhereSqlFragmentElement(answer);
         addUpdateWhereSqlFragmentElement(answer);
         addOrderBySqlFragmentElement(answer);
+        addPaginationPrefixSqlFragmentElement(answer);
+        addPaginationSuffixSqlFragmentElement(answer);
         addInsertElement(answer);
         addInsertSelectiveElement(answer);
         addUpdateByPrimaryKeyElement(answer);
@@ -81,6 +83,16 @@ public class XXMLMapperGenerator extends XAbstractXmlGenerator {
     protected void addOrderBySqlFragmentElement(XmlElement parentElement) {
         XAbstractXmlElementGenerator elementGenerator = new XOrderBySqlFragmentElementGenerator();
         initializeAndExecuteGenerator(elementGenerator, parentElement);
+    }
+    
+    protected void addPaginationPrefixSqlFragmentElement(XmlElement parentElement) {
+    	XAbstractXmlElementGenerator elementGenerator = new XPaginationPrefixSqlFragmentElementGenerator();
+    	initializeAndExecuteGenerator(elementGenerator, parentElement);
+    }
+    
+    protected void addPaginationSuffixSqlFragmentElement(XmlElement parentElement) {
+    	XAbstractXmlElementGenerator elementGenerator = new XPaginationSuffixSqlFragmentElementGenerator();
+    	initializeAndExecuteGenerator(elementGenerator, parentElement);
     }
     
     protected void addInsertElement(XmlElement parentElement) {

@@ -43,6 +43,10 @@ public class EntityCriteria {
     public EntityCriteria(Class<?> clazz) {
         this.entityOrClassName = clazz.getName();
     }
+    
+    public static EntityCriteria forEntity(Class<?> clazz) {
+    	return new EntityCriteria(clazz);
+    }
 
     public Criteria createCriteria() {
         Criteria criteria = createCriteriaInternal();
