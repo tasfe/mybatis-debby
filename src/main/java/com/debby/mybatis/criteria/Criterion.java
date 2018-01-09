@@ -104,4 +104,36 @@ public abstract class Criterion implements Serializable {
         this.typeHandler = typeHandler;
     }
 
+	public boolean isNoValue() {
+		return noValue;
+	}
+
+	public void setNoValue(boolean noValue) {
+		this.noValue = noValue;
+	}
+
+	public boolean isSingleValue() {
+		return singleValue;
+	}
+
+	public void setSingleValue(boolean singleValue) {
+		this.singleValue = singleValue;
+	}
+
+	public boolean isBetweenValue() {
+		return betweenValue;
+	}
+
+	public void setBetweenValue(boolean betweenValue) {
+		this.betweenValue = betweenValue;
+	}
+
+	public boolean isListValue() {
+		return listValue;
+	}
+
+	public void setListValue(boolean listValue) {
+		this.listValue = listValue;
+	}
+
 }

@@ -16,8 +16,6 @@
 package com.debby.mybatis.core.xmlmapper.elements;
 
 import com.debby.mybatis.core.XInternalStatements;
-import com.debby.mybatis.core.XIntrospectedContext;
-import com.debby.mybatis.core.dialect.Dialect;
 import com.debby.mybatis.core.dom.xml.Attribute;
 import com.debby.mybatis.core.dom.xml.TextElement;
 import com.debby.mybatis.core.dom.xml.XmlElement;

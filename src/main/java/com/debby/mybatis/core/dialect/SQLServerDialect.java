@@ -17,8 +17,11 @@ package com.debby.mybatis.core.dialect;
 
 import com.debby.mybatis.core.dialect.identity.IdentityColumnStrategy;
 import com.debby.mybatis.core.dialect.identity.SQLServerIdentityColumnStrategy;
+import com.debby.mybatis.core.dom.xml.XmlElement;
 
 /**
+ * A dialect for Microsoft SQL Server 2000
+ * 
  * @author rocky.hu
  * @date 2017-12-16 9:06 PM
  */
@@ -29,4 +32,12 @@ public class SQLServerDialect extends Dialect {
         return new SQLServerIdentityColumnStrategy();
     }
 
+	@Override
+	public void processLimitPrefixSqlFragment(XmlElement parentElement) {
+	}
+
+	@Override
+	public void processLimitSuffixSqlFragment(XmlElement parentElement) {
+	}
+    
 }

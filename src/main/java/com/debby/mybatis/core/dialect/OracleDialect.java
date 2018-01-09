@@ -61,7 +61,7 @@ public class OracleDialect extends Dialect {
 
 		XmlElement whenElement = new XmlElement("when");
 		whenElement.addAttribute(new Attribute("test", "firstResult != null"));
-		sb.append(" ) row_ where rownum <= #{maxResults}) where rownum_ > #{firstResult}");
+		sb.append(" ) row_ where rownum <= (#{maxResults}+#{firstResult})) where rownum_ > #{firstResult}");
 		whenElement.addElement(new TextElement(sb.toString()));
 
 		XmlElement otherwiseElement = new XmlElement("otherwise");
