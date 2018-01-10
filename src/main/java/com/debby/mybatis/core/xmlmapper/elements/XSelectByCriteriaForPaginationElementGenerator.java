@@ -38,12 +38,6 @@ public class XSelectByCriteriaForPaginationElementGenerator extends XAbstractXml
         
         answer.addElement(getPaginationPrefixSqlFragment());
         
-        answer.addElement(new TextElement("select"));
-        XmlElement ifElement = new XmlElement("if"); 
-        ifElement.addAttribute(new Attribute("test", "distinct")); 
-        ifElement.addElement(new TextElement("distinct"));
-        answer.addElement(ifElement);
-        
         StringBuilder sb = new StringBuilder();
         answer.addElement(getBaseColumnListElement() );
         

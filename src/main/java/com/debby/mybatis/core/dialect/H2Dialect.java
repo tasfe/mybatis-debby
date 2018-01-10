@@ -39,11 +39,6 @@ public class H2Dialect extends Dialect {
     }
     
 	@Override
-	public void processLimitPrefixSqlFragment(XmlElement parentElement) {
-		// do nothing
-	}
-
-	@Override
 	public void processLimitSuffixSqlFragment(XmlElement parentElement) {
 		XmlElement chooseElement = new XmlElement("choose");
 		

@@ -15,37 +15,24 @@
  */
 package com.debby.mybatis.core.dialect;
 
-import com.debby.mybatis.core.dialect.identity.IdentityColumnStrategy;
-import com.debby.mybatis.core.dialect.identity.SQLServerIdentityColumnStrategy;
-import com.debby.mybatis.core.dom.xml.TextElement;
 import com.debby.mybatis.core.dom.xml.XmlElement;
 
 /**
- * A dialect for Microsoft SQL Server 2000
+ * A dialect for Microsoft SQL Server 2008.
  * 
  * @author rocky.hu
- * @date 2017-12-16 9:06 PM
+ * @date Jan 10, 2018 10:00:38 AM
  */
-public class SQLServerDialect extends Dialect {
-
-    @Override
-    public IdentityColumnStrategy getIdentityColumnStrategy() {
-        return new SQLServerIdentityColumnStrategy();
-    }
+public class SQLServer2008Dialect extends SQLServer2005Dialect {
 
 	@Override
 	public void processLimitPrefixSqlFragment(XmlElement parentElement) {
 		super.processLimitPrefixSqlFragment(parentElement);
-		
-		StringBuilder sb = new StringBuilder();
-		sb.append(" TOP ");
-		sb.append("#{maxResults} ");
-    	parentElement.addElement(new TextElement(sb.toString()));
 	}
 
 	@Override
 	public void processLimitSuffixSqlFragment(XmlElement parentElement) {
-		// do nothing
+		super.processLimitSuffixSqlFragment(parentElement);
 	}
-    
+
 }

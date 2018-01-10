@@ -17,6 +17,8 @@ package com.debby.mybatis.core.dialect;
 
 import com.debby.mybatis.core.dialect.identity.IdentityColumnStrategy;
 import com.debby.mybatis.core.dialect.identity.IdentityColumnStrategyImpl;
+import com.debby.mybatis.core.dom.xml.Attribute;
+import com.debby.mybatis.core.dom.xml.TextElement;
 import com.debby.mybatis.core.dom.xml.XmlElement;
 import com.debby.mybatis.exception.MappingException;
 
@@ -26,15 +28,24 @@ import com.debby.mybatis.exception.MappingException;
  */
 public abstract class Dialect {
 
-    public IdentityColumnStrategy getIdentityColumnStrategy(){
+	public IdentityColumnStrategy getIdentityColumnStrategy(){
         return new IdentityColumnStrategyImpl();
     }
 
-    public String getSequenceNextValString(String sequenceName) throws MappingException {
+	public String getSequenceNextValString(String sequenceName) throws MappingException {
         throw new MappingException( getClass().getName() + " does not support sequences" );
     }
     
-    public abstract void processLimitPrefixSqlFragment(XmlElement parentElement);
+    public void processLimitPrefixSqlFragment(XmlElement parentElement) {
+    	
+    	parentElement.addElement(new TextElement("select"));
+    	
+    	XmlElement ifElement = new XmlElement("if");
+    	ifElement.addAttribute(new Attribute("test", "distinct"));
+    	ifElement.addElement(new TextElement("distinct"));
+    	
+    	parentElement.addElement(ifElement);
+    }
     
     public abstract void processLimitSuffixSqlFragment(XmlElement parentElement);
 }

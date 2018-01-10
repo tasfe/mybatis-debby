@@ -51,6 +51,8 @@ public class DB2Dialect extends Dialect {
 		
 		chooseElement.addElement(whenElement);
 		parentElement.addElement(chooseElement);
+		
+		super.processLimitPrefixSqlFragment(parentElement);
 	}
 
 	@Override

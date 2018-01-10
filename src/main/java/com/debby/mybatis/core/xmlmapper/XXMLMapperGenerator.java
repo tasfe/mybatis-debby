@@ -86,13 +86,17 @@ public class XXMLMapperGenerator extends XAbstractXmlGenerator {
     }
     
     protected void addPaginationPrefixSqlFragmentElement(XmlElement parentElement) {
-    	XAbstractXmlElementGenerator elementGenerator = new XPaginationPrefixSqlFragmentElementGenerator();
-    	initializeAndExecuteGenerator(elementGenerator, parentElement);
+    	if (!introspectedContext.getAlreadyOwnedInternalStatements().contains(XInternalStatements.INTERNAL_SELECT_PAGINATION_BY_CRITERIA)) {
+    		XAbstractXmlElementGenerator elementGenerator = new XPaginationPrefixSqlFragmentElementGenerator();
+        	initializeAndExecuteGenerator(elementGenerator, parentElement);
+    	}
     }
     
     protected void addPaginationSuffixSqlFragmentElement(XmlElement parentElement) {
-    	XAbstractXmlElementGenerator elementGenerator = new XPaginationSuffixSqlFragmentElementGenerator();
-    	initializeAndExecuteGenerator(elementGenerator, parentElement);
+    	if (!introspectedContext.getAlreadyOwnedInternalStatements().contains(XInternalStatements.INTERNAL_SELECT_PAGINATION_BY_CRITERIA)) {
+    		XAbstractXmlElementGenerator elementGenerator = new XPaginationSuffixSqlFragmentElementGenerator();
+        	initializeAndExecuteGenerator(elementGenerator, parentElement);
+    	}
     }
     
     protected void addInsertElement(XmlElement parentElement) {

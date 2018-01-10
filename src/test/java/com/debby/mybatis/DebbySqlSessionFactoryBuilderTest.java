@@ -7,8 +7,6 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import com.debby.mybatis.core.dialect.H2Dialect;
-
 /**
  * @author rocky.hu
  * @date 2017-11-23 10:30 PM
@@ -24,7 +22,7 @@ public class DebbySqlSessionFactoryBuilderTest {
         debbyConfiguration.setDebugEnabled(true);
         debbyConfiguration.setMapperXMLOutputDirectory(System.getProperty("user.home") + File.separator + ".debby" + File.separator);
         debbyConfiguration.setTablePrefix("t_");
-        debbyConfiguration.setDialect(new H2Dialect());
+        debbyConfiguration.setDialect(new com.debby.mybatis.core.dialect.SQLServer2005Dialect());
 
         SqlSessionFactory sqlSessionFactory = new DebbySqlSessionFactoryBuilder(debbyConfiguration).build(configInputStream);
         Configuration configuration = sqlSessionFactory.getConfiguration();

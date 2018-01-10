@@ -51,6 +51,8 @@ public class OracleDialect extends Dialect {
 		chooseElement.addElement(otherwiseElement);
 
 		parentElement.addElement(chooseElement);
+		
+		super.processLimitPrefixSqlFragment(parentElement);
 	}
 
 	@Override
