@@ -30,7 +30,7 @@ public class EntityCriteria {
     private final String entityOrClassName;
 
     private Integer maxResults;
-    private Integer firstResult;
+    private Integer firstResult;// the index of the first result, which is start with 0
     private Boolean distinct;
 
     private List<Criteria> criteriaList = new ArrayList<Criteria>();

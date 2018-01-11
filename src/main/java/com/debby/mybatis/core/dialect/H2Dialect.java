@@ -45,7 +45,7 @@ public class H2Dialect extends Dialect {
 		StringBuilder sb = new StringBuilder();
 		
 		XmlElement whenElement = new XmlElement("when");
-		whenElement.addAttribute(new Attribute("test", "firstResult != null"));
+		whenElement.addAttribute(new Attribute("test", "firstResult != null and firstResult > 0"));
 		sb.append(" limit #{maxResults}");
 		sb.append(" offset #{firstResult}");
 		whenElement.addElement(new TextElement(sb.toString()));

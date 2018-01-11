@@ -38,7 +38,7 @@ public class OracleDialect extends Dialect {
 		StringBuilder sb = new StringBuilder();
 
 		XmlElement whenElement = new XmlElement("when");
-		whenElement.addAttribute(new Attribute("test", "firstResult != null"));
+		whenElement.addAttribute(new Attribute("test", "firstResult != null and firstResult > 0"));
 		sb.append("select * from ( select row_.*, rownum rownum_ from ( ");
 		whenElement.addElement(new TextElement(sb.toString()));
 
@@ -62,7 +62,7 @@ public class OracleDialect extends Dialect {
 		StringBuilder sb = new StringBuilder();
 
 		XmlElement whenElement = new XmlElement("when");
-		whenElement.addAttribute(new Attribute("test", "firstResult != null"));
+		whenElement.addAttribute(new Attribute("test", "firstResult != null and firstResult > 0"));
 		sb.append(" ) row_ where rownum <= (#{maxResults}+#{firstResult})) where rownum_ > #{firstResult}");
 		whenElement.addElement(new TextElement(sb.toString()));
 

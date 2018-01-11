@@ -50,7 +50,7 @@ public class HSQLDialect extends Dialect {
 		StringBuilder sb = new StringBuilder();
 
 		XmlElement whenElement = new XmlElement("when");
-		whenElement.addAttribute(new Attribute("test", "firstResult != null"));
+		whenElement.addAttribute(new Attribute("test", "firstResult != null and firstResult > 0"));
 		sb.append(" offset #{firstResult} ");
 		sb.append(" limit #{maxResults}");
 		whenElement.addElement(new TextElement(sb.toString()));

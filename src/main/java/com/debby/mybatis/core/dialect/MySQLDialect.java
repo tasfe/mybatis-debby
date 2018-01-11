@@ -39,7 +39,7 @@ public class MySQLDialect extends Dialect {
 		StringBuilder sb = new StringBuilder();
 		
 		XmlElement whenElement = new XmlElement("when");
-		whenElement.addAttribute(new Attribute("test", "firstResult != null"));
+		whenElement.addAttribute(new Attribute("test", "firstResult != null and firstResult > 0"));
 		sb.append(" limit ");
 		sb.append("#{firstResult} , #{maxResults}");
 		whenElement.addElement(new TextElement(sb.toString()));
