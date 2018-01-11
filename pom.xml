@@ -15,6 +15,7 @@
 		<springframework.version>4.3.13.RELEASE</springframework.version>
 		<logback.classic.version>1.2.3</logback.classic.version>
 		<mysql.connector.version>5.1.44</mysql.connector.version>
+		<mssql.jdbc.version>6.2.2.jre7</mssql.jdbc.version>
 		<testng.version>6.10</testng.version>
 		<dbunit.version>2.5.4</dbunit.version>
 		<h2.version>1.4.196</h2.version>
@@ -58,6 +59,13 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.connector.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<version>${mssql.jdbc.version}</version>
 			<scope>test</scope>
 		</dependency>
 

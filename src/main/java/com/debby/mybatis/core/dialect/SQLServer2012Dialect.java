@@ -29,7 +29,11 @@ public class SQLServer2012Dialect extends SQLServer2008Dialect {
 
 	@Override
 	public void processLimitPrefixSqlFragment(XmlElement parentElement) {
-		// do nothing
+		XmlElement ifElement = new XmlElement("if");
+		ifElement.addAttribute(new Attribute("test", "_parameter != null and (orderList == null or orderList.size() == 0)"));
+		super.processLimitPrefixSqlFragment(ifElement);
+		
+		parentElement.addElement(ifElement);
 	}
 
 	@Override
@@ -40,7 +44,7 @@ public class SQLServer2012Dialect extends SQLServer2008Dialect {
 		
 		// when
 		XmlElement whenElement = new XmlElement("when");
-		whenElement.addAttribute(new Attribute("test", "_parameter != null and entityOrderList != null and entityOrderList.size() > 0"));
+		whenElement.addAttribute(new Attribute("test", "_parameter != null and orderList != null and orderList.size() > 0"));
 		
 		XmlElement ifElement = new XmlElement("if");
 		ifElement.addAttribute(new Attribute("test", "_parameter != null and maxResults != null and maxResults > 0"));
@@ -62,6 +66,11 @@ public class SQLServer2012Dialect extends SQLServer2008Dialect {
 		ifElement.addElement(ofChooseElement);
 		whenElement.addElement(ifElement);
 		chooseElement.addElement(whenElement);
+		
+		// otherwise
+		XmlElement otherwiseElement = new XmlElement("otherwise");
+		super.processLimitSuffixSqlFragment(otherwiseElement);
+		chooseElement.addElement(otherwiseElement);
 		
 		parentElement.addElement(chooseElement);
 	}

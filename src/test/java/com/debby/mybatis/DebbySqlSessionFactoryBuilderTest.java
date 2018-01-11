@@ -22,7 +22,7 @@ public class DebbySqlSessionFactoryBuilderTest {
         debbyConfiguration.setDebugEnabled(true);
         debbyConfiguration.setMapperXMLOutputDirectory(System.getProperty("user.home") + File.separator + ".debby" + File.separator);
         debbyConfiguration.setTablePrefix("t_");
-        debbyConfiguration.setDialect(new com.debby.mybatis.core.dialect.SQLServer2005Dialect());
+        debbyConfiguration.setDialect(new com.debby.mybatis.core.dialect.SQLServer2012Dialect());
 
         SqlSessionFactory sqlSessionFactory = new DebbySqlSessionFactoryBuilder(debbyConfiguration).build(configInputStream);
         Configuration configuration = sqlSessionFactory.getConfiguration();

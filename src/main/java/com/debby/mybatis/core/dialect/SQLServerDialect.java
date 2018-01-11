@@ -39,7 +39,7 @@ public class SQLServerDialect extends Dialect {
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append(" TOP ");
-		sb.append("#{maxResults} ");
+		sb.append("${maxResults} ");
     	parentElement.addElement(new TextElement(sb.toString()));
 	}
 

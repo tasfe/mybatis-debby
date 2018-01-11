@@ -51,10 +51,10 @@ public class SQLServer2005Dialect extends SQLServerDialect {
 		whenElement.addElement(distinctIfElement);
 		
 		XmlElement topIfElement = new XmlElement("if");
-		topIfElement.addAttribute(new Attribute("test", "_parameter != null and entityOrderList != null and entityOrderList.size() > 0"));
+		topIfElement.addAttribute(new Attribute("test", "_parameter != null and orderList != null and orderList.size() > 0"));
 		sb.setLength(0);
 		sb.append(" TOP ");
-		sb.append("(#{maxResults}+#{firstResult}-1)");
+		sb.append("(${maxResults}+${firstResult}-1)");
 		topIfElement.addElement(new TextElement(sb.toString()));
 		whenElement.addElement(topIfElement);
 		
@@ -85,7 +85,7 @@ public class SQLServer2005Dialect extends SQLServerDialect {
 		ifElement.addElement(includeElement);
 		
 		sb.setLength(0);
-		sb.append("FROM query WHERE __row_nr__ &gt;= #{firstResult} AND __row_nr__ &lt;(#{firstResult}+#{maxResults})");
+		sb.append("FROM query WHERE __row_nr__ &gt;= (#{firstResult}+1) AND __row_nr__ &lt;(#{firstResult}+#{maxResults})");
 		ifElement.addElement(new TextElement(sb.toString()));
 		
 		parentElement.addElement(ifElement);

@@ -20,10 +20,10 @@
 		<environment id="development">
 			<transactionManager type="JDBC" />
 			<dataSource type="POOLED">
-				<property name="driver" value="${h2.driver}" />
-				<property name="url" value="${h2.url}" />
-				<property name="username" value="${h2.username}" />
-				<property name="password" value="${h2.password}" />
+				<property name="driver" value="${mssql.driver}" />
+				<property name="url" value="${mssql.url}" />
+				<property name="username" value="${mssql.username}" />
+				<property name="password" value="${mssql.password}" />
 			</dataSource>
 		</environment>
 	</environments>
@@ -37,9 +37,9 @@
 	</databaseIdProvider>
 
 	<mappers>
-		<mapper resource="assets/key/composite/MemberMapper.xml" />
+		<!-- <mapper resource="assets/key/composite/MemberMapper.xml" /> -->
 		<!-- <mapper resource="assets/key/strategy/sequence/AuthorMapper.xml" /> -->
-		<mapper resource="assets/normal/ProductMapper.xml" />
+		<!-- <mapper resource="assets/normal/ProductMapper.xml" /> -->
 		<mapper resource="assets/pagination/ArticleMapper.xml" />
  	</mappers>
 
