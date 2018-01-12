@@ -29,11 +29,28 @@ public class SQLServer2012Dialect extends SQLServer2008Dialect {
 
 	@Override
 	public void processLimitPrefixSqlFragment(XmlElement parentElement) {
-		XmlElement ifElement = new XmlElement("if");
-		ifElement.addAttribute(new Attribute("test", "_parameter != null and (orderList == null or orderList.size() == 0)"));
-		super.processLimitPrefixSqlFragment(ifElement);
+		XmlElement chooseElement = new XmlElement("choose");
 		
-		parentElement.addElement(ifElement);
+		/**
+		 * 1. has order by clause
+		 */
+		XmlElement whenElement = new XmlElement("when");
+		whenElement.addAttribute(new Attribute("test", "_parameter != null and orderList != null and orderList.size() > 0"));
+		whenElement.addElement(new TextElement("select"));
+    	XmlElement ifElement = new XmlElement("if");
+    	ifElement.addAttribute(new Attribute("test", "distinct"));
+    	ifElement.addElement(new TextElement("distinct"));
+    	whenElement.addElement(ifElement);
+		
+    	/**
+    	 * 2. not has order by clause
+    	 */
+		XmlElement otherwiseElement = new XmlElement("otherwise");
+		super.processLimitPrefixSqlFragment(otherwiseElement);
+		
+		chooseElement.addElement(whenElement);
+		chooseElement.addElement(otherwiseElement);
+		parentElement.addElement(chooseElement);
 	}
 
 	@Override
@@ -42,19 +59,24 @@ public class SQLServer2012Dialect extends SQLServer2008Dialect {
 		
 		StringBuilder sb = new StringBuilder();
 		
+		/**
+		 * 1. has order by clause 
+		 */
 		// when
 		XmlElement whenElement = new XmlElement("when");
 		whenElement.addAttribute(new Attribute("test", "_parameter != null and orderList != null and orderList.size() > 0"));
 		
+		// 1.1  maxResults != null && maxResults > 0
 		XmlElement ifElement = new XmlElement("if");
 		ifElement.addAttribute(new Attribute("test", "_parameter != null and maxResults != null and maxResults > 0"));
 		
 		XmlElement ofChooseElement = new XmlElement("choose");
+		// 1.1.1 firstResult > 0
 		XmlElement ofWhenElement = new XmlElement("when");
 		ofWhenElement.addAttribute(new Attribute("test", "_parameter != null and firstResult != null and firstResult > 0"));
 		sb.append("offset #{firstResult} rows fetch next #{maxResults} rows only");
 		ofWhenElement.addElement(new TextElement(sb.toString()));
-		
+		// 1.1.2 firstResult == 0
 		XmlElement ofOtherwiseElement = new XmlElement("otherwise");
 		sb.setLength(0);
 		sb.append("offset 0 rows fetch next #{maxResults} rows only");
@@ -62,11 +84,14 @@ public class SQLServer2012Dialect extends SQLServer2008Dialect {
 		
 		ofChooseElement.addElement(ofWhenElement);
 		ofChooseElement.addElement(ofOtherwiseElement);
-		
 		ifElement.addElement(ofChooseElement);
+		
 		whenElement.addElement(ifElement);
 		chooseElement.addElement(whenElement);
 		
+		/**
+		 * 2. not has order by clause
+		 */
 		// otherwise
 		XmlElement otherwiseElement = new XmlElement("otherwise");
 		super.processLimitSuffixSqlFragment(otherwiseElement);

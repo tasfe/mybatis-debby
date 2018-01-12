@@ -32,9 +32,12 @@ public class SQLServer2005Dialect extends SQLServerDialect {
 		
 		StringBuilder sb = new StringBuilder();
 		
+		/**
+		 * 1. has first row (firstResult > 0)
+		 */
 		XmlElement chooseElement = new XmlElement("choose");
 		XmlElement whenElement = new XmlElement("when");
-		whenElement.addAttribute(new Attribute("test", "_parameter != null and firstResult > 0"));
+		whenElement.addAttribute(new Attribute("test", "_parameter != null and firstResult != null and firstResult > 0"));
 		
 		sb.append("WITH query AS (");
 		whenElement.addElement(new TextElement(sb.toString()));
@@ -58,6 +61,9 @@ public class SQLServer2005Dialect extends SQLServerDialect {
 		topIfElement.addElement(new TextElement(sb.toString()));
 		whenElement.addElement(topIfElement);
 		
+		/**
+		 * 2. not has first row
+		 */
 		XmlElement otherwiseElement = new XmlElement("otherwise");
 		super.processLimitPrefixSqlFragment(otherwiseElement);
 		
@@ -71,8 +77,11 @@ public class SQLServer2005Dialect extends SQLServerDialect {
 	public void processLimitSuffixSqlFragment(XmlElement parentElement) {
 		StringBuilder sb = new StringBuilder();
 		
+		/**
+		 * 1. has first row (firstResult > 0)
+		 */
 		XmlElement ifElement = new XmlElement("if");
-		ifElement.addAttribute(new Attribute("test", "_parameter != null and firstResult > 0"));
+		ifElement.addAttribute(new Attribute("test", "_parameter != null and firstResult != null and firstResult > 0"));
 		
 		sb.append(" ) inner_query ");
 		sb.append(")");

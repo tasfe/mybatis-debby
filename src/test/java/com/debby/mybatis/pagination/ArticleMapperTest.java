@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 import com.debby.mybatis.DebbyMapperTest;
 import com.debby.mybatis.bean.QueryResult;
 import com.debby.mybatis.criteria.EntityCriteria;
+import com.debby.mybatis.criteria.Order;
 
 /**
  * @author rocky.hu
@@ -23,8 +24,11 @@ public class ArticleMapperTest extends DebbyMapperTest<ArticleMapper> {
 	@Override
 	public void testSelectPaginationByCriteria() {
 		EntityCriteria entityCriteria = EntityCriteria.forEntity(Article.class);
-		entityCriteria.setFirstResult(0);
+		entityCriteria.setFirstResult(1);
 		entityCriteria.setMaxResults(10);
+		
+		entityCriteria.addOrder(Order.asc("createTime"));
+		entityCriteria.addOrder(Order.asc("id"));
 		
 		QueryResult<Article> queryResult = mapper.selectPaginationByCriteria(entityCriteria);
 		Assert.assertEquals(queryResult.getTotalCount(), 50l);
