@@ -15,6 +15,7 @@
  */
 package com.debby.mybatis.core.xmlmapper.elements;
 
+import com.debby.mybatis.core.constant.XConstants;
 import org.apache.ibatis.mapping.ResultMap;
 
 import com.debby.mybatis.core.XInternalStatements;
@@ -34,7 +35,7 @@ public class XSelectByPrimaryKeyElementGenerator extends XAbstractXmlElementGene
     public void addElements(XmlElement parentElement) {
         XmlElement answer = new XmlElement("select");
         answer.addAttribute(new Attribute("id", XInternalStatements.SELECT_BY_PRIMARY_KEY.getId()));
-        answer.addAttribute(new Attribute("resultMap", "baseResultMap"));
+        answer.addAttribute(new Attribute("resultMap", XConstants.BASE_RESULT_MAP_ID));
 
         ResultMap resultMap = introspectedContext.getResultMap();
         if (getIdResultMappingsCount(resultMap) == 0) {

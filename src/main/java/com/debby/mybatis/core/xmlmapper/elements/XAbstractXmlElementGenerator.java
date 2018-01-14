@@ -20,13 +20,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-
+import com.debby.mybatis.annotation.KeyGenerationStrategy;
+import com.debby.mybatis.annotation.KeySequenceGenerator;
+import com.debby.mybatis.annotation.MappingCompositeId;
+import com.debby.mybatis.annotation.MappingId;
+import com.debby.mybatis.core.constant.XConstants;
+import com.debby.mybatis.core.helper.EntityHelper;
 import org.apache.ibatis.mapping.ResultFlag;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
@@ -53,43 +52,43 @@ public abstract class XAbstractXmlElementGenerator extends XAbstractGenerator {
     public abstract void addElements(XmlElement parentElement);
 
     /**
-     * Get "baseColumns" include element.
+     * Get base columns include element.
      *
      * @return
      */
     protected XmlElement getBaseColumnListElement() {
         XmlElement answer = new XmlElement("include");
-        answer.addAttribute(new Attribute("refid", "baseColumns")); 
+        answer.addAttribute(new Attribute("refid", XConstants.BASE_COLUMNS_ID));
         return answer;
     }
 
     protected XmlElement getUpdateWhereSqlFragment() {
         XmlElement updateWhereElement = new XmlElement("include");
-        updateWhereElement.addAttribute(new Attribute("refid", "updateWhereSqlFragment"));
+        updateWhereElement.addAttribute(new Attribute("refid", XConstants.UPDATE_WHERE_SQL_FRAGMENT_ID));
         return updateWhereElement;
     }
 
     protected XmlElement getOrderBySqlFragment() {
         XmlElement orderByElement = new XmlElement("include");
-        orderByElement.addAttribute(new Attribute("refid", "orderBySqlFragment"));
+        orderByElement.addAttribute(new Attribute("refid", XConstants.ORDER_BY_SQL_FRAGMENT_ID));
         return orderByElement;
     }
 
     protected XmlElement getSelectWhereSqlFragment() {
         XmlElement selectWhereElement = new XmlElement("include");
-        selectWhereElement.addAttribute(new Attribute("refid", "selectWhereSqlFragment"));
+        selectWhereElement.addAttribute(new Attribute("refid", XConstants.SELECT_WHERE_SQL_FRAGMENT_ID));
         return selectWhereElement;
     }
     
     protected XmlElement getPaginationPrefixSqlFragment() {
     	XmlElement element = new XmlElement("include");
-    	element.addAttribute(new Attribute("refid", "prefixPaginationSqlFragment"));
+    	element.addAttribute(new Attribute("refid", XConstants.PREFIX_PAGINATION_SQL_FRAGMENT_ID));
         return element;
     }
     
     protected XmlElement getPaginationSuffixSqlFragment() {
     	XmlElement element = new XmlElement("include");
-    	element.addAttribute(new Attribute("refid", "suffixPaginationSqlFragment"));
+    	element.addAttribute(new Attribute("refid", XConstants.SUFFIX_PAGINATION_SQL_FRAGMENT_ID));
         return element;
     }
 
@@ -210,7 +209,7 @@ public abstract class XAbstractXmlElementGenerator extends XAbstractGenerator {
     }
     
     protected String getMapperInterfaceName(ResultMap baseResultMap) {
-    	return baseResultMap.getId().replace(".baseResultMap", "");
+    	return baseResultMap.getId().replace("." + XConstants.BASE_RESULT_MAP_ID, "");
     }
 
     /**
@@ -225,60 +224,51 @@ public abstract class XAbstractXmlElementGenerator extends XAbstractGenerator {
             Class<?> entityType = resultMap.getType();
 
             List<ResultMapping> idResultMappingList = getIdResultMappings(resultMap);
-            
+
             String idProperty = null;
-            
+
             Field idField = null;
             if (idResultMappingList.size() == 1) {
             	ResultMapping idResultMapping = idResultMappingList.get(0);
             	idProperty = idResultMapping.getProperty();
             	idField = ReflectUtils.findField(entityType, idProperty);
-            	Id id = idField.getAnnotation(Id.class);
-            	if (id == null) {
+            	MappingId mappingId = idField.getAnnotation(MappingId.class);
+            	if (mappingId == null) {
             		return;
             	}
             } else if (idResultMappingList.size() > 1) {// composite key
-            	Field embeddedIdField = BeanUtils.findField(entityType, EmbeddedId.class);
-            	if (embeddedIdField == null) {
+            	Field compositeIdField = BeanUtils.findField(entityType, MappingCompositeId.class);
+            	if (compositeIdField == null) {
             		return;
             	}
-        		Class<?> idType = embeddedIdField.getType();
-        		Embeddable embeddable = idType.getAnnotation(Embeddable.class);
-        		if (embeddable == null) {
-                    throw new IdConfigException("The [" + idType + "] must be annotated with @Embeddable!");
-        		}
-        		idField = BeanUtils.findField(idType, GeneratedValue.class);
+        		Class<?> compositeIdClass = compositeIdField.getType();
+        		idField = EntityHelper.getGeneratedValueField(compositeIdClass);
         		if (idField == null) {
         			return;
         		}
-        		
-        		idProperty = embeddedIdField.getName() + "." + idField.getName();
+
+        		idProperty = compositeIdField.getName() + "." + idField.getName();
             }
-            
-            GeneratedValue generatedValue = idField.getAnnotation(GeneratedValue.class);
-            if (generatedValue == null) {
-            	return;
+
+            MappingId mappingId = idField.getAnnotation(MappingId.class);
+            boolean generatedValue = mappingId.generatedValue();
+            if (!generatedValue) {
+                return;
             }
-            
-            GenerationType generationType = generatedValue.strategy();
-            if (generationType == null) {
-            	generationType = GenerationType.IDENTITY;
-            }
-            if (generationType != GenerationType.IDENTITY && generationType != GenerationType.SEQUENCE) {
-            	throw new IdConfigException("Only supports IDENTITY or SEQUENCE strategy for id generation!");
-            }
-            
+
+            KeyGenerationStrategy keyGenerationStrategy = mappingId.generationStrategy();
+
         	Dialect dialect = introspectedContext.getDebbyConfiguration().getDialect();
-            
+
             XmlElement selectKeyElement = new XmlElement("selectKey");
             selectKeyElement.addAttribute(new Attribute("keyProperty", idProperty));
             selectKeyElement.addAttribute(new Attribute("resultType", idField.getType().getName()));
-            if (generationType == GenerationType.IDENTITY) {
+            if (keyGenerationStrategy == KeyGenerationStrategy.IDENTITY) {
                 selectKeyElement.addAttribute(new Attribute("order", "AFTER" ));
                 selectKeyElement.addElement(new TextElement(dialect.getIdentityColumnStrategy().getIdentitySelectString()));
-            } else if (generationType == GenerationType.SEQUENCE){
-            	String generator = generatedValue.generator();
-            	SequenceGenerator sequenceGenerator = idField.getAnnotation(SequenceGenerator.class);
+            } else if (keyGenerationStrategy == KeyGenerationStrategy.SEQUENCE){
+            	String generator = mappingId.generator();
+            	KeySequenceGenerator sequenceGenerator = idField.getAnnotation(KeySequenceGenerator.class);
             	if (StringUtils.isNullOrEmpty(generator) || sequenceGenerator == null || !generator.equals(sequenceGenerator.name())) {
             		throw new IdConfigException("No sequence generator is configed for '" + idProperty + "'");
             	}
@@ -286,9 +276,9 @@ public abstract class XAbstractXmlElementGenerator extends XAbstractGenerator {
                 selectKeyElement.addAttribute(new Attribute("order", "BEFORE" ));
                 selectKeyElement.addElement(new TextElement(dialect.getSequenceNextValString(sequenceName)));
             }
-            
+
             parentElement.addElement(selectKeyElement);
-            
+
         }
     }
 

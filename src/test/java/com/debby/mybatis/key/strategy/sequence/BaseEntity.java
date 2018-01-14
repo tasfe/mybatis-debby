@@ -15,10 +15,9 @@
  */
 package com.debby.mybatis.key.strategy.sequence;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import com.debby.mybatis.annotation.KeyGenerationStrategy;
+import com.debby.mybatis.annotation.KeySequenceGenerator;
+import com.debby.mybatis.annotation.MappingId;
 
 /**
  * @author rocky.hu
@@ -26,9 +25,8 @@ import javax.persistence.SequenceGenerator;
  */
 public abstract class BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqGenerator")
-    @SequenceGenerator(name = "seqGenerator", sequenceName = "SEQ_ID")
+    @MappingId(generationStrategy = KeyGenerationStrategy.SEQUENCE, generator = "seqGenerator")
+    @KeySequenceGenerator(name = "seqGenerator", sequenceName = "SEQ_ID")
     private Long id;
 
     public Long getId() {

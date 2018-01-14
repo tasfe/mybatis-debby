@@ -114,4 +114,10 @@ public class ProductMapperTest extends DebbyMapperTest<ProductMapper> {
         Assert.assertEquals(product.getTitle(), "p1");
     }
 
+    @Test
+    public void testTestVarargs() {
+        Product product = mapper.testVarargs(1);
+        Assert.assertEquals(product.getTitle(), "p1");
+    }
+
 }

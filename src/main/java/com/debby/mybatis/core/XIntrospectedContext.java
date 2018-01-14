@@ -15,8 +15,10 @@
  */
 package com.debby.mybatis.core;
 
+import com.debby.mybatis.annotation.MappingTable;
+import com.debby.mybatis.util.StringUtils;
 import org.apache.ibatis.mapping.ResultMap;
-import org.apache.ibatis.session.XConfiguration;
+import org.apache.ibatis.session.Configuration;
 import com.debby.mybatis.DebbyConfiguration;
 
 import java.util.ArrayList;
@@ -28,23 +30,44 @@ import java.util.List;
  */
 public class XIntrospectedContext {
 
-    private String tableName;
+    private Class<?> entityType;
     private ResultMap resultMap;
-    private XConfiguration xConfiguration;
+    private Configuration configuration;
     private DebbyConfiguration debbyConfiguration;
     private List<XInternalStatements> alreadyOwnedInternalStatements;
 
-    public XIntrospectedContext(XConfiguration xConfiguration, DebbyConfiguration debbyConfiguration) {
-        this.xConfiguration = xConfiguration;
+    public XIntrospectedContext(Configuration configuration, DebbyConfiguration debbyConfiguration) {
+        this.configuration = configuration;
         this.debbyConfiguration = debbyConfiguration;
     }
 
-    public String getTableName() {
-        return tableName;
+    public Class<?> getEntityType() {
+        return entityType;
     }
 
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
+    public void setEntityType(Class<?> entityType) {
+        this.entityType = entityType;
+    }
+
+    /**
+     * Parse the table name if the entity class is annotated with MappingTable annotation.
+     * @return
+     */
+    public String getTableName() {
+        String tableName = "";
+        String tablePrefix = "";
+        Class<?> type = resultMap.getType();
+        MappingTable mappingTable = type.getAnnotation(MappingTable.class);
+        if (mappingTable != null) {
+            tableName = mappingTable.name();
+        } else {
+            if (!StringUtils.isNullOrEmpty(debbyConfiguration.getTablePrefix())) {
+                tablePrefix = debbyConfiguration.getTablePrefix();
+            }
+            tableName = tablePrefix + StringUtils.camelToUnderscore(type.getSimpleName(), false);
+        }
+
+        return tableName;
     }
 
     public ResultMap getResultMap() {
@@ -55,12 +78,12 @@ public class XIntrospectedContext {
         this.resultMap = resultMap;
     }
 
-    public XConfiguration getxConfiguration() {
-        return xConfiguration;
+    public Configuration getConfiguration() {
+        return configuration;
     }
 
-    public void setxConfiguration(XConfiguration xConfiguration) {
-        this.xConfiguration = xConfiguration;
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
     }
 
     public DebbyConfiguration getDebbyConfiguration() {

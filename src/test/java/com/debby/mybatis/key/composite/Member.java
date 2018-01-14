@@ -1,6 +1,6 @@
 package com.debby.mybatis.key.composite;
 
-import javax.persistence.EmbeddedId;
+import com.debby.mybatis.annotation.MappingCompositeId;
 
 /**
  * @author rocky.hu
@@ -8,7 +8,7 @@ import javax.persistence.EmbeddedId;
  */
 public class Member {
 
-    @EmbeddedId
+    @MappingCompositeId
     private MemberPK memberPK;
     private int age;
 

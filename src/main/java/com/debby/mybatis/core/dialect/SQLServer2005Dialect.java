@@ -15,6 +15,7 @@
  */
 package com.debby.mybatis.core.dialect;
 
+import com.debby.mybatis.core.constant.XConstants;
 import com.debby.mybatis.core.dom.xml.Attribute;
 import com.debby.mybatis.core.dom.xml.TextElement;
 import com.debby.mybatis.core.dom.xml.XmlElement;
@@ -90,7 +91,7 @@ public class SQLServer2005Dialect extends SQLServerDialect {
 		ifElement.addElement(new TextElement(sb.toString()));
 		
 		XmlElement includeElement = new XmlElement("include");
-		includeElement.addAttribute(new Attribute("refid", "baseColumns"));
+		includeElement.addAttribute(new Attribute("refid", XConstants.BASE_COLUMNS_ID));
 		ifElement.addElement(includeElement);
 		
 		sb.setLength(0);

@@ -15,11 +15,18 @@
  */
 package com.debby.mybatis.annotation;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * No mapping node notation.
  * 
  * @author rocky.hu
  * @date Jan 11, 2018 11:35:34 AM
  */
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD})
 public @interface MappingTransient {
 }

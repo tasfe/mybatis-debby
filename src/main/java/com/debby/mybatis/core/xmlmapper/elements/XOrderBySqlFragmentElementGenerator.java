@@ -15,6 +15,7 @@
  */
 package com.debby.mybatis.core.xmlmapper.elements;
 
+import com.debby.mybatis.core.constant.XConstants;
 import com.debby.mybatis.core.dom.xml.Attribute;
 import com.debby.mybatis.core.dom.xml.TextElement;
 import com.debby.mybatis.core.dom.xml.XmlElement;
@@ -30,7 +31,7 @@ public class XOrderBySqlFragmentElementGenerator extends XAbstractXmlElementGene
     @Override
     public void addElements(XmlElement parentElement) {
         XmlElement answer = new XmlElement("sql");
-        answer.addAttribute(new Attribute("id", "orderBySqlFragment"));
+        answer.addAttribute(new Attribute("id", XConstants.ORDER_BY_SQL_FRAGMENT_ID));
 
         StringBuilder sb = new StringBuilder();
 

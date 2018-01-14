@@ -1,10 +1,8 @@
 package com.debby.mybatis.pagination;
 
-import java.util.Date;
+import com.debby.mybatis.annotation.MappingId;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import java.util.Date;
 
 /**
  * @author rocky.hu
@@ -12,8 +10,7 @@ import javax.persistence.Id;
  */
 public class Article {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@MappingId
 	private Integer id;
 	private Date createTime;
 	private String title;

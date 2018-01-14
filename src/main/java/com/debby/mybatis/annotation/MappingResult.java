@@ -15,8 +15,10 @@
  */
 package com.debby.mybatis.annotation;
 
-import org.apache.ibatis.type.JdbcType;
-import org.apache.ibatis.type.TypeHandler;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Mapping to <result/> node of <resultMap/>
@@ -24,12 +26,12 @@ import org.apache.ibatis.type.TypeHandler;
  * @author rocky.hu
  * @date Jan 11, 2018 11:22:58 AM
  */
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD})
 public @interface MappingResult {
 	
-	String column();
-	
-	JdbcType jdbcType();
-	
-	Class<? extends TypeHandler<?>> typeHandler();
+	String column() default "";
 
+	boolean association() default false;
+	
 }

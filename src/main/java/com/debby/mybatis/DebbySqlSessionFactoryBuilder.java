@@ -18,7 +18,6 @@ package com.debby.mybatis;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.apache.ibatis.session.XConfiguration;
 import com.debby.mybatis.core.XMyBatisGenerator;
 
 import java.io.InputStream;
@@ -32,10 +31,6 @@ import java.util.Properties;
 public class DebbySqlSessionFactoryBuilder extends SqlSessionFactoryBuilder {
 
     private DebbyConfiguration debbyConfiguration;
-
-    public DebbySqlSessionFactoryBuilder() {
-        debbyConfiguration = new DebbyConfiguration();
-    }
 
     public DebbySqlSessionFactoryBuilder(DebbyConfiguration debbyConfiguration) {
         this.debbyConfiguration = debbyConfiguration;
@@ -56,9 +51,16 @@ public class DebbySqlSessionFactoryBuilder extends SqlSessionFactoryBuilder {
     }
 
     private void boost(Configuration configuration) {
-        XConfiguration xConfiguration = new XConfiguration(configuration);
-        XMyBatisGenerator xMyBatisGenerator = new XMyBatisGenerator(debbyConfiguration, xConfiguration);
+        XMyBatisGenerator xMyBatisGenerator = new XMyBatisGenerator(debbyConfiguration, configuration);
         xMyBatisGenerator.execute();
+    }
+
+    public DebbyConfiguration getDebbyConfiguration() {
+        return debbyConfiguration;
+    }
+
+    public void setDebbyConfiguration(DebbyConfiguration debbyConfiguration) {
+        this.debbyConfiguration = debbyConfiguration;
     }
 
 }

@@ -15,6 +15,7 @@
  */
 package com.debby.mybatis.core.xmlmapper.elements;
 
+import com.debby.mybatis.core.constant.XConstants;
 import com.debby.mybatis.core.dom.xml.Attribute;
 import com.debby.mybatis.core.dom.xml.XmlElement;
 
@@ -29,7 +30,7 @@ public class XSelectWhereSqlFragmentElementGenerator extends XAbstractXmlElement
     @Override
     public void addElements(XmlElement parentElement) {
         XmlElement answer = new XmlElement("sql");
-        answer.addAttribute(new Attribute("id", "selectWhereSqlFragment"));
+        answer.addAttribute(new Attribute("id", XConstants.SELECT_WHERE_SQL_FRAGMENT_ID));
 
         XmlElement ifElement = new XmlElement("if");
         ifElement.addAttribute(new Attribute("test", "_parameter != null and _parameter.criteriaList != null and _parameter.criteriaList.size() > 0"));
@@ -40,7 +41,7 @@ public class XSelectWhereSqlFragmentElementGenerator extends XAbstractXmlElement
         forEachElement.addAttribute(new Attribute("item", "criteria"));
         forEachElement.addAttribute(new Attribute("separator", "or"));
         XmlElement includeElement = new XmlElement("include");
-        includeElement.addAttribute(new Attribute("refid", "criteriaSqlFragment"));
+        includeElement.addAttribute(new Attribute("refid", XConstants.CRITERIA_SQL_FRAGMENT_ID));
         
         forEachElement.addElement(includeElement);
         whereElement.addElement(forEachElement);

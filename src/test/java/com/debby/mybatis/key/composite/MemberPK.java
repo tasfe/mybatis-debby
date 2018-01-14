@@ -1,20 +1,18 @@
 package com.debby.mybatis.key.composite;
 
-import java.io.Serializable;
+import com.debby.mybatis.annotation.MappingId;
 
-import javax.persistence.Embeddable;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import java.io.Serializable;
 
 /**
  * @author rocky.hu
  * @date 2017-12-16 12:08 PM
  */
-@Embeddable
 public class MemberPK implements Serializable {
 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@MappingId
 	private Integer id;
+	@MappingId(generatedValue = false)
 	private String name;
 
 	public Integer getId() {

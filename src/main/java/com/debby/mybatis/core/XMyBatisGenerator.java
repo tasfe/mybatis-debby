@@ -17,17 +17,21 @@ package com.debby.mybatis.core;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import javax.persistence.Table;
-
+import com.debby.mybatis.core.constant.XConstants;
+import com.debby.mybatis.core.helper.EntityHelper;
 import com.debby.mybatis.core.interceptor.PaginationExecutorInterceptor;
 import com.debby.mybatis.core.interceptor.PaginationResultSetHandlerInterceptor;
+import com.debby.mybatis.core.xmlmapper.XBaseResultMapGenerator;
+import org.apache.ibatis.binding.MapperRegistry;
 import org.apache.ibatis.builder.BuilderException;
-import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.mapping.ResultMap;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.XConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,15 +53,16 @@ public class XMyBatisGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(XMyBatisGenerator.class);
 
     private DebbyConfiguration debbyConfiguration;
-    private XConfiguration xConfiguration;
+    private Configuration configuration;
     
-    public XMyBatisGenerator(DebbyConfiguration debbyConfiguration, XConfiguration xConfiguration) {
+    public XMyBatisGenerator(DebbyConfiguration debbyConfiguration, Configuration configuration) {
 		super();
 		this.debbyConfiguration = debbyConfiguration;
-		this.xConfiguration = xConfiguration;
+		this.configuration = configuration;
 	}
 
 	public void execute() {
+
         LOGGER.info("Debby-Info ：[Start] debby mapper support...");
 
         if (debbyConfiguration.isDebugEnabled() && StringUtils.isNullOrEmpty(debbyConfiguration.getMapperXMLOutputDirectory())) {
@@ -66,85 +71,91 @@ public class XMyBatisGenerator {
 
         try {
 
-			xConfiguration.getConfiguration().getTypeAliasRegistry().registerAlias("EntityCriteria", EntityCriteria.class);
-			xConfiguration.getConfiguration().addInterceptor(new PaginationExecutorInterceptor());
-			xConfiguration.getConfiguration().addInterceptor(new PaginationResultSetHandlerInterceptor());
+			configuration.getTypeAliasRegistry().registerAlias("EntityCriteria", EntityCriteria.class);
+			configuration.addInterceptor(new PaginationExecutorInterceptor());
+			configuration.addInterceptor(new PaginationResultSetHandlerInterceptor());
 
-			XIntrospectedContext context = null;
-			Set<String> loadedResources = xConfiguration.getLoadedResources();
-	        for (String resource : loadedResources) {
-	        	if (resource.startsWith("interface ")) {
-	                String namespace = resource.substring(resource.indexOf(" ") + 1);
-	                ResultMap resultMap = xConfiguration.getConfiguration().getResultMap(namespace + ".baseResultMap");
-	                if (resultMap != null) {
-	                    
-	                	// parse the table name
-	                    String tableName = "";
-	                    String tablePrefix = "";
-	                    Class<?> type = resultMap.getType();
-	                    Table table = type.getAnnotation(Table.class);
-	                    if (table != null) {
-	                        tableName = table.name();
-	                    } else {
-	                    	if (!StringUtils.isNullOrEmpty(debbyConfiguration.getTablePrefix())) {
-								tablePrefix = debbyConfiguration.getTablePrefix();
-							}
-	                        tableName = tablePrefix + StringUtils.camelToUnderscore(type.getSimpleName(), false);
-	                    }
+			XIntrospectedContext introspectedContext = null;
+			XBaseResultMapGenerator baseResultMapGenerator = null;
+			XXMLMapperGenerator mapperGenerator = null;
 
-						XResultMapRegistry.putResultMap(type.getName(), resultMap);
+			MapperRegistry mapperRegistry = configuration.getMapperRegistry();
+	        for (Class<?> mapperClass : mapperRegistry.getMappers()) {
 
-						// determine if the Mapper interface is a subclass of DebbyMapper
-						Class<?> boundType = null;
-						try {
-							boundType = Resources.classForName(namespace);
-						} catch (ClassNotFoundException e) {
-							continue;
+				if (DebbyMapper.class.isAssignableFrom(mapperClass)) {
+					String mapperName = mapperClass.getName();
+					String baseResultMapId = mapperName + "." + XConstants.BASE_RESULT_MAP_ID;
+
+					// get the entity type
+					Class<?> entityType = null;
+					ParameterizedType parameterizedType = (ParameterizedType) (mapperClass.getGenericInterfaces()[0]);
+					Type[] argumentTypes = parameterizedType.getActualTypeArguments();
+					entityType = (Class<?>) argumentTypes[0];
+
+					// Construct the base result map if it's not be predefined in the mapper xml.
+					if (!EntityHelper.hasResultMap(configuration, baseResultMapId)) {
+						introspectedContext = new XIntrospectedContext(configuration, debbyConfiguration);
+						introspectedContext.setEntityType(entityType);
+
+						baseResultMapGenerator = new XBaseResultMapGenerator();
+						baseResultMapGenerator.setIntrospectedContext(introspectedContext);
+
+						String formattedContent = baseResultMapGenerator.getDocument().getFormattedContent();
+						if (debbyConfiguration.isDebugEnabled()) {
+							LOGGER.debug("[{}][BASE_RESULT_MAP] : {}", mapperName, formattedContent);
 						}
 
-						if (boundType != null && DebbyMapper.class.isAssignableFrom(boundType)) {
+						parse(formattedContent, mapperName);
+					}
 
-							// if the mapper xml or mapper annotation have the same statements(the name and the SqlCommandType is all same) as the DebbyMapper, that ignore the latter.
-							List<XInternalStatements> alreadyOwnedInternalStatements = new ArrayList<XInternalStatements>();
+					ResultMap baseResultMap = configuration.getResultMap(baseResultMapId);
+					XBaseResultMapRegistry.putResultMap(entityType.getName(), baseResultMap);
 
-							XInternalStatements[] xInternalStatements = XInternalStatements.values();
-							for (int i = 0; i<xInternalStatements.length; i++) {
-								if (xConfiguration.getConfiguration().hasStatement(namespace + "." + xInternalStatements[i].getId())) {
-									if(xInternalStatements[i].getSqlCommandType() ==
-											xConfiguration.getConfiguration().getMappedStatement(namespace + "." + xInternalStatements[i].getId()).getSqlCommandType()) {
-										alreadyOwnedInternalStatements.add(xInternalStatements[i]);
-									}
-								}
+					// if the mapper xml or mapper annotation have the same statements(the name and the SqlCommandType is all same) as the DebbyMapper, that ignore the latter.
+					List<XInternalStatements> alreadyOwnedInternalStatements = new ArrayList<XInternalStatements>();
+					XInternalStatements[] xInternalStatements = XInternalStatements.values();
+					for (int i = 0; i<xInternalStatements.length; i++) {
+						if (configuration.hasStatement(mapperName + "." + xInternalStatements[i].getId(), false)) {
+							if(xInternalStatements[i].getSqlCommandType() ==
+									configuration.getMappedStatement(mapperName + "." + xInternalStatements[i].getId(), false).getSqlCommandType()) {
+								alreadyOwnedInternalStatements.add(xInternalStatements[i]);
 							}
-
-							context = new XIntrospectedContext(xConfiguration, debbyConfiguration);
-							context.setResultMap(resultMap);
-							context.setTableName(tableName);
-							context.setAlreadyOwnedInternalStatements(alreadyOwnedInternalStatements);
-
-							XXMLMapperGenerator mapperGenerator = new XXMLMapperGenerator();
-							mapperGenerator.setIntrospectedContext(context);
-
-							String formattedContent = mapperGenerator.getDocument().getFormattedContent();
-
-							if (debbyConfiguration.isDebugEnabled()) {
-								FileUtils.writeFile(debbyConfiguration.getMapperXMLOutputDirectory() + namespace.replace(".", "_") + ".xml", formattedContent, "UTF-8");
-							}
-
-							InputStream inputStream = new ByteArrayInputStream(formattedContent.getBytes("UTF-8"));
-							XXMLMapperBuilder builder = new XXMLMapperBuilder(inputStream, xConfiguration.getConfiguration(), null, xConfiguration.getConfiguration().getSqlFragments(), namespace);
-							builder.parse();
 						}
+					}
 
-	                }
-	        	}
+					introspectedContext = new XIntrospectedContext(configuration, debbyConfiguration);
+					introspectedContext.setResultMap(baseResultMap);
+					introspectedContext.setEntityType(entityType);
+					introspectedContext.setAlreadyOwnedInternalStatements(alreadyOwnedInternalStatements);
+
+					mapperGenerator = new XXMLMapperGenerator();
+					mapperGenerator.setIntrospectedContext(introspectedContext);
+
+					String formattedContent = mapperGenerator.getDocument().getFormattedContent();
+
+					if (debbyConfiguration.isDebugEnabled()) {
+						FileUtils.writeFile(debbyConfiguration.getMapperXMLOutputDirectory() + mapperName.replace(".", "_") + ".xml", formattedContent, "UTF-8");
+					}
+
+					parse(formattedContent, mapperName);
+				}
+
 	        }
-			
+
+			new XConfiguration(configuration).buildAllStatements();
+
 		} catch (Exception e) {
             LOGGER.error("Debby-Error ：debby mapper support...", e);
             throw new BuilderException("[Exception] debby mapper support.");
 		}
+
         LOGGER.info("Debby-Info ：[END] debby mapper support...");
     }
+
+	private void parse(String content, String mapperName) throws UnsupportedEncodingException {
+		InputStream inputStream = new ByteArrayInputStream(content.getBytes("UTF-8"));
+		XXMLMapperBuilder builder = new XXMLMapperBuilder(inputStream, configuration, null, configuration.getSqlFragments(), mapperName);
+		builder.parse();
+	}
 
 }

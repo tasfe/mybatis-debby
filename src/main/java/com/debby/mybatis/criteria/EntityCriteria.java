@@ -16,7 +16,7 @@
 package com.debby.mybatis.criteria;
 
 import org.apache.ibatis.mapping.ResultMapping;
-import com.debby.mybatis.core.XResultMapRegistry;
+import com.debby.mybatis.core.XBaseResultMapRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +69,7 @@ public class EntityCriteria {
 
     public EntityCriteria addOrder(Order ordering) {
         String propertyName = ordering.getPropertyName();
-        ResultMapping resultMapping = XResultMapRegistry.getResultMapping(entityOrClassName, propertyName);
+        ResultMapping resultMapping = XBaseResultMapRegistry.getResultMapping(entityOrClassName, propertyName);
         String column = resultMapping.getColumn();
         ordering.setPropertyName(column);
         orderList.add(ordering);

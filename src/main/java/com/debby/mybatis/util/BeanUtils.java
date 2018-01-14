@@ -86,7 +86,7 @@ public class BeanUtils {
         return null;
     }
 
-    private static PropertyDescriptor[] getPropertyDescriptors(Class<?> clazz) {
+    public static PropertyDescriptor[] getPropertyDescriptors(Class<?> clazz) {
         BeanInfo beanInfo = null;
         try {
             beanInfo = Introspector.getBeanInfo(clazz, Object.class);

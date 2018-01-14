@@ -17,6 +17,7 @@ package com.debby.mybatis.core.xmlmapper.elements;
 
 import java.util.Iterator;
 
+import com.debby.mybatis.core.constant.XConstants;
 import org.apache.ibatis.mapping.ResultMapping;
 
 import com.debby.mybatis.core.dom.xml.Attribute;
@@ -34,7 +35,7 @@ public class XBaseColumnListElementGenerator extends XAbstractXmlElementGenerato
     @Override
     public void addElements(XmlElement parentElement) {
         XmlElement answer = new XmlElement("sql");
-        answer.addAttribute(new Attribute("id", "baseColumns"));
+        answer.addAttribute(new Attribute("id", XConstants.BASE_COLUMNS_ID));
         
         StringBuilder sb = new StringBuilder();
         Iterator<ResultMapping> iter = getPropertyResultMappings(introspectedContext.getResultMap()).iterator();

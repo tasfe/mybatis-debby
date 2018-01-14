@@ -15,6 +15,7 @@
  */
 package com.debby.mybatis.core.xmlmapper.elements;
 
+import com.debby.mybatis.core.constant.XConstants;
 import com.debby.mybatis.core.dom.xml.Attribute;
 import com.debby.mybatis.core.dom.xml.XmlElement;
 
@@ -27,7 +28,7 @@ public class XUpdateWhereSqlFragmentElementGenerator extends XAbstractXmlElement
     @Override
     public void addElements(XmlElement parentElement) {
         XmlElement answer = new XmlElement("sql");
-        answer.addAttribute(new Attribute("id", "updateWhereSqlFragment"));
+        answer.addAttribute(new Attribute("id", XConstants.UPDATE_WHERE_SQL_FRAGMENT_ID));
 
         XmlElement ifElement = new XmlElement("if");
         ifElement.addAttribute(new Attribute("test", "_parameter != null and _parameter.updatedCriteria != null and _parameter.updatedCriteria.criteriaList != null and _parameter.updatedCriteria.criteriaList.size() > 0"));
@@ -38,7 +39,7 @@ public class XUpdateWhereSqlFragmentElementGenerator extends XAbstractXmlElement
         forEachElement.addAttribute(new Attribute("item", "criteria"));
         forEachElement.addAttribute(new Attribute("separator", "or"));
         XmlElement includeElement = new XmlElement("include");
-        includeElement.addAttribute(new Attribute("refid", "criteriaSqlFragment"));
+        includeElement.addAttribute(new Attribute("refid", XConstants.CRITERIA_SQL_FRAGMENT_ID));
         
         forEachElement.addElement(includeElement);
         whereElement.addElement(forEachElement);

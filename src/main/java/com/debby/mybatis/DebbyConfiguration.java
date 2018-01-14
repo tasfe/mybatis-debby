@@ -16,6 +16,7 @@
 package com.debby.mybatis;
 
 import com.debby.mybatis.core.dialect.Dialect;
+import com.debby.mybatis.exception.DebbyException;
 
 /**
  * @author rocky.hu
@@ -27,6 +28,14 @@ public class DebbyConfiguration {
     private String mapperXMLOutputDirectory;
     private String tablePrefix;
     private Dialect dialect;
+    private boolean camelToUnderscore = false;
+
+    public DebbyConfiguration() {
+    }
+
+    public DebbyConfiguration(Dialect dialect) {
+        this.dialect = dialect;
+    }
 
     public boolean isDebugEnabled() {
         return debugEnabled;
@@ -54,6 +63,9 @@ public class DebbyConfiguration {
 
 	public Dialect getDialect()
 	{
+	    if (dialect == null) {
+	        throw new DebbyException("Dialect is required.");
+        }
 		return dialect;
 	}
 
@@ -61,5 +73,13 @@ public class DebbyConfiguration {
 	{
 		this.dialect = dialect;
 	}
+
+    public boolean getCamelToUnderscore() {
+        return camelToUnderscore;
+    }
+
+    public void setCamelToUnderscore(boolean camelToUnderscore) {
+        this.camelToUnderscore = camelToUnderscore;
+    }
 
 }

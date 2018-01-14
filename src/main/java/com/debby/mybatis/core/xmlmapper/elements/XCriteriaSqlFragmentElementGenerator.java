@@ -15,6 +15,7 @@
  */
 package com.debby.mybatis.core.xmlmapper.elements;
 
+import com.debby.mybatis.core.constant.XConstants;
 import com.debby.mybatis.core.dom.xml.Attribute;
 import com.debby.mybatis.core.dom.xml.TextElement;
 import com.debby.mybatis.core.dom.xml.XmlElement;
@@ -29,7 +30,7 @@ public class XCriteriaSqlFragmentElementGenerator extends XAbstractXmlElementGen
     @Override
     public void addElements(XmlElement parentElement) {
         XmlElement answer = new XmlElement("sql");
-        answer.addAttribute(new Attribute("id", "criteriaSqlFragment"));
+        answer.addAttribute(new Attribute("id", XConstants.CRITERIA_SQL_FRAGMENT_ID));
         
         XmlElement ifElement = new XmlElement("if");
         ifElement.addAttribute(new Attribute("test", "criteria.valid"));

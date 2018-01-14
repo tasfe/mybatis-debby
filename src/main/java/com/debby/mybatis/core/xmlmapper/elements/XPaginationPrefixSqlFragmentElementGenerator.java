@@ -16,6 +16,7 @@
 package com.debby.mybatis.core.xmlmapper.elements;
 
 import com.debby.mybatis.core.XIntrospectedContext;
+import com.debby.mybatis.core.constant.XConstants;
 import com.debby.mybatis.core.dialect.Dialect;
 import com.debby.mybatis.core.dom.xml.Attribute;
 import com.debby.mybatis.core.dom.xml.XmlElement;
@@ -29,7 +30,7 @@ public class XPaginationPrefixSqlFragmentElementGenerator extends XAbstractXmlEl
 	@Override
 	public void addElements(XmlElement parentElement) {
 		XmlElement answer = new XmlElement("sql");
-		answer.addAttribute(new Attribute("id", "prefixPaginationSqlFragment"));
+		answer.addAttribute(new Attribute("id", XConstants.PREFIX_PAGINATION_SQL_FRAGMENT_ID));
 
 		XIntrospectedContext introspectedContext = getIntrospectedContext();
 		Dialect dialect = introspectedContext.getDebbyConfiguration().getDialect();

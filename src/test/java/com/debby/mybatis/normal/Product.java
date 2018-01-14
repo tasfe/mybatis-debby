@@ -1,11 +1,12 @@
 package com.debby.mybatis.normal;
 
+import com.debby.mybatis.annotation.MappingId;
+import com.debby.mybatis.annotation.MappingResult;
+import com.debby.mybatis.annotation.MappingTypeHandler;
+import org.apache.ibatis.type.EnumOrdinalTypeHandler;
+
 import java.math.BigDecimal;
 import java.util.Date;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 /**
  * @author rocky.hu
@@ -17,8 +18,7 @@ public class Product {
         SMALL, MIDDLE, BIG
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @MappingId
     private Integer id;
     private Date createTime;
     private String title;
@@ -26,8 +26,10 @@ public class Product {
     private BigDecimal price;
     private boolean soldOut;
     private double weight;
+    @MappingTypeHandler(value = EnumOrdinalTypeHandler.class)
     private PM pm;
 
+    @MappingResult(association = true)
     private ProductCategory productCategory;
 
     public Product() {

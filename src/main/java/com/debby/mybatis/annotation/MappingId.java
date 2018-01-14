@@ -20,11 +20,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.ibatis.type.JdbcType;
-import org.apache.ibatis.type.TypeHandler;
-
-import com.debby.mybatis.type.NonTypeHandler;
-
 /**
  * Mapping to <id/> node of <resultMap/>.
  * 
@@ -34,16 +29,12 @@ import com.debby.mybatis.type.NonTypeHandler;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
 public @interface MappingId {
-	
+
 	String column() default "";
 	
-	JdbcType jdbcType();
+	boolean generatedValue() default true;
 	
-	Class<? extends TypeHandler<?>> typeHandler() default NonTypeHandler.class;
-	
-	boolean generatedValue() default false;
-	
-	IdGenerationStrategy generationStrategy() default IdGenerationStrategy.IDENTITY;
+	KeyGenerationStrategy generationStrategy() default KeyGenerationStrategy.IDENTITY;
 	
 	String generator() default "";
 
