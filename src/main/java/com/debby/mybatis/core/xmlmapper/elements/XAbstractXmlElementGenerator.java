@@ -241,8 +241,7 @@ public abstract class XAbstractXmlElementGenerator extends XAbstractGenerator {
             	if (compositeIdField == null) {
             		return;
             	}
-        		Class<?> compositeIdClass = compositeIdField.getType();
-        		idField = EntityHelper.getGeneratedValueField(compositeIdClass);
+        		idField = EntityHelper.getGeneratedValueField(compositeIdField.getType());
         		if (idField == null) {
         			return;
         		}

@@ -43,9 +43,9 @@ public class XSelectByCriteriaElementGenerator extends XAbstractXmlElementGenera
         ifElement.addElement(new TextElement("distinct"));
         answer.addElement(ifElement);
         
-        StringBuilder sb = new StringBuilder();
-        answer.addElement(getBaseColumnListElement() );
+        answer.addElement(new TextElement("${columns}"));
         
+        StringBuilder sb = new StringBuilder();
         sb.setLength(0);
         sb.append("from ");
         sb.append(introspectedContext.getTableName());

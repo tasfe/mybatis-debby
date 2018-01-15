@@ -16,12 +16,16 @@
 package com.debby.mybatis.core.helper;
 
 import com.debby.mybatis.annotation.*;
+import com.debby.mybatis.core.XBaseResultMapRegistry;
 import com.debby.mybatis.core.XResultMapping;
 import com.debby.mybatis.exception.IdConfigException;
 import com.debby.mybatis.exception.MappingException;
 import com.debby.mybatis.util.BeanUtils;
 import com.debby.mybatis.util.ReflectUtils;
 import com.debby.mybatis.util.StringUtils;
+
+import org.apache.ibatis.mapping.ResultMap;
+import org.apache.ibatis.mapping.ResultMapping;
 import org.apache.ibatis.session.Configuration;
 
 import java.beans.PropertyDescriptor;
@@ -171,6 +175,32 @@ public class EntityHelper {
         });
 
         return resultMappingList;
+    }
+    
+    /**
+     * Get property result mappings of a entityType.
+     * <p>
+     *     Exclude nested result mappings.
+     * </p>
+     * 
+     * @param entityType
+     * @return
+     */
+    public static List<ResultMapping> getPropertyResultMappings(Class<?> entityType) {
+    	ResultMap resultMap = XBaseResultMapRegistry.getResultMap(entityType.getName());
+    	List<ResultMapping> propertyResultMappings = new ArrayList<ResultMapping>();
+        if (resultMap.getPropertyResultMappings() != null && resultMap.getPropertyResultMappings().size() > 0) {
+            Iterator<ResultMapping> iter = resultMap.getPropertyResultMappings().iterator();
+            while (iter.hasNext()) {
+                ResultMapping propertyResultMapping = iter.next();
+                if (!StringUtils.isNullOrEmpty(propertyResultMapping.getNestedQueryId()) || !StringUtils.isNullOrEmpty(propertyResultMapping.getNestedResultMapId())) {
+                    continue;
+                }
+                propertyResultMappings.add(propertyResultMapping);
+            }
+        }
+
+        return propertyResultMappings;
     }
 
 }

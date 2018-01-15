@@ -15,33 +15,41 @@
  */
 package com.debby.mybatis.criteria;
 
-import org.apache.ibatis.mapping.ResultMapping;
-import com.debby.mybatis.core.XBaseResultMapRegistry;
-
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import org.apache.ibatis.mapping.ResultMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.debby.mybatis.core.XBaseResultMapRegistry;
+import com.debby.mybatis.core.helper.EntityHelper;
+import com.debby.mybatis.criteria.filter.PropertyFilterMode;
 
 /**
  * @author rocky.hu
  * @date 2017-12-09 3:40 PM
  */
 public class EntityCriteria {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(EntityCriteria.class);
 
-    private final String entityOrClassName;
-
+	private final Class<?> entityType;
+	private String columns;
+	
     private Integer maxResults;
-    private Integer firstResult;// the index of the first result, which is start with 0
+    private Integer firstResult; // the index of the first result, which is start with 0
     private Boolean distinct;
-
     private List<Criteria> criteriaList = new ArrayList<Criteria>();
     private List<Order> orderList = new ArrayList<Order>();
-
-    public EntityCriteria(String entityOrClassName) {
-        this.entityOrClassName = entityOrClassName;
-    }
+    
+    /** property query filter */
+    private PropertyFilterMode propertyFilterMode = PropertyFilterMode.EXCLUDE;
+    private List<String> propertyFilterList = new ArrayList<String>();
 
     public EntityCriteria(Class<?> clazz) {
-        this.entityOrClassName = clazz.getName();
+    	this.entityType = clazz;
     }
     
     public static EntityCriteria forEntity(Class<?> clazz) {
@@ -63,17 +71,22 @@ public class EntityCriteria {
     }
 
     private Criteria createCriteriaInternal() {
-        Criteria criteria = new Criteria(entityOrClassName);
+        Criteria criteria = new Criteria(entityType.getName());
         return criteria;
     }
 
     public EntityCriteria addOrder(Order ordering) {
         String propertyName = ordering.getPropertyName();
-        ResultMapping resultMapping = XBaseResultMapRegistry.getResultMapping(entityOrClassName, propertyName);
+        ResultMapping resultMapping = XBaseResultMapRegistry.getResultMapping(entityType.getName(), propertyName);
         String column = resultMapping.getColumn();
         ordering.setPropertyName(column);
         orderList.add(ordering);
         return this;
+    }
+    
+    public EntityCriteria addFilterProperty(String property) {
+    	propertyFilterList.add(property);
+    	return this;
     }
 
     public Integer getMaxResults() {
@@ -107,5 +120,56 @@ public class EntityCriteria {
     public List<Order> getOrderList() {
         return orderList;
     }
+
+	public PropertyFilterMode getPropertyFilterMode() {
+		return propertyFilterMode;
+	}
+
+	public void setPropertyFilterMode(PropertyFilterMode propertyFilterMode) {
+		this.propertyFilterMode = propertyFilterMode;
+	}
+
+	public List<String> getPropertyFilterList() {
+		return propertyFilterList;
+	}
+
+	public String getColumns() {
+		StringBuilder sb = new StringBuilder();
+		List<ResultMapping> resultMappingList = EntityHelper.getPropertyResultMappings(entityType);
+		List<String> columnList = new ArrayList<String>();
+		for (int i=0; i<resultMappingList.size(); i++) {
+			ResultMapping resultMapping = resultMappingList.get(i);
+			String propertyName = resultMapping.getProperty();
+			String column = resultMapping.getColumn();
+			
+			if(propertyName.contains(".")) {
+				propertyName = propertyName.substring(0, propertyName.indexOf("."));
+			}
+			
+			if (propertyFilterMode == PropertyFilterMode.EXCLUDE) {
+				if (propertyFilterList.contains(propertyName)) {
+					continue;
+				}
+			} else {
+				if (!propertyFilterList.contains(propertyName)) {
+					continue;
+				}
+			}
+			
+			columnList.add(column);
+		}
+		
+		Iterator<String> iter = columnList.iterator();
+		while (iter.hasNext()) {
+			sb.append(iter.next());
+			if (iter.hasNext()) {
+				sb.append(", ");
+			}
+		}
+		
+		columns = sb.toString();
+		LOGGER.debug("[{}][COLUMNS]: [{}]", entityType.getName(), columns);
+		return columns;
+	}
 
 }

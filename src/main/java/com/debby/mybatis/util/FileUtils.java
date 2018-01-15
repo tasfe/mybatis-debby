@@ -15,7 +15,10 @@
  */
 package com.debby.mybatis.util;
 
-import java.io.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * @author rocky.hu
@@ -23,48 +26,22 @@ import java.io.*;
  */
 public class FileUtils {
 
-    /**
-     * Writes, or overwrites, the contents of the specified file.
-     *
-     * @param file         the file
-     * @param content      the content
-     * @param fileEncoding the file encoding
-     * @throws IOException Signals that an I/O exception has occurred.
-     */
-    public static void writeFile(File file, String content, String fileEncoding) throws IOException {
-        FileOutputStream fos = new FileOutputStream(file, false);
-        OutputStreamWriter osw;
-        if (fileEncoding == null) {
-            osw = new OutputStreamWriter(fos);
-        }
-        else {
-            osw = new OutputStreamWriter(fos, fileEncoding);
-        }
-
-        BufferedWriter bw = new BufferedWriter(osw);
-        bw.write(content);
-        bw.close();
+	/**
+	 * Writes the content to a file with specified path.
+	 * 
+	 * @param directory
+	 * @param fileName
+	 * @param content
+	 * 
+	 * @throws IOException
+	 */
+    public static void writeFile(String directory, String fileName , String content) throws IOException {
+    	
+    	Path directoryPath = Paths.get(directory);
+    	Files.createDirectories(directoryPath);
+    	
+    	Path filePath = Paths.get(directory, fileName);
+    	Files.write(filePath, content.getBytes("UTF-8"));
     }
-
-    /**
-     * Writes the content to a file with specified path.
-     *
-     * @param filePath
-     * @param content
-     * @param fieldEncoding
-     */
-    public static void writeFile(String filePath, String content, String fieldEncoding) throws IOException {
-        File file = new File(filePath);
-        if (file.exists() && file.isDirectory()) {
-            return;
-        } else if (!file.exists()) {
-            File dir = new File(file.getParent());
-            dir.mkdirs();
-            file.createNewFile();
-        }
-
-        writeFile(file, content, fieldEncoding);
-    }
-
 
 }

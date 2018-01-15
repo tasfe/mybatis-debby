@@ -24,17 +24,19 @@ import java.util.regex.Pattern;
  */
 public class StringUtils {
 	
+	private static Pattern CAMEL_PATTERN = Pattern.compile("(?<=[a-z])[A-Z]");
+	
 	public static boolean isNullOrEmpty(String string) {
 		return ((string == null) || (string.isEmpty()));
 	}
 	
-	public static String camelToUnderscore(String str, boolean upperCase) {
-		Matcher m = Pattern.compile("(?<=[a-z])[A-Z]").matcher(str);
+	public static String camelToUnderscore(final String str, boolean upperCase) {
+		Matcher matcher = CAMEL_PATTERN.matcher(str);
 		StringBuffer sb = new StringBuffer();
-		while (m.find()) {
-		    m.appendReplacement(sb, "_" + m.group().toLowerCase());
+		while (matcher.find()) {
+		    matcher.appendReplacement(sb, "_" + matcher.group().toLowerCase());
 		}
-		m.appendTail(sb);
+		matcher.appendTail(sb);
 		
 		return upperCase ? sb.toString().toUpperCase() : sb.toString().toLowerCase();
 	}

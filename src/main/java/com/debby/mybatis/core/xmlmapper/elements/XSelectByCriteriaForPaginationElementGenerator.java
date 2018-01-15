@@ -39,9 +39,9 @@ public class XSelectByCriteriaForPaginationElementGenerator extends XAbstractXml
         
         answer.addElement(getPaginationPrefixSqlFragment());
         
-        StringBuilder sb = new StringBuilder();
-        answer.addElement(getBaseColumnListElement() );
+        answer.addElement(new TextElement("${columns}"));
         
+        StringBuilder sb = new StringBuilder();
         sb.setLength(0);
         sb.append("from ");
         sb.append(introspectedContext.getTableName());

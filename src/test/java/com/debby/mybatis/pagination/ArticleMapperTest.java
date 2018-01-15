@@ -24,14 +24,16 @@ public class ArticleMapperTest extends DebbyMapperTest<ArticleMapper> {
 	@Override
 	public void testSelectPaginationByCriteria() {
 		EntityCriteria entityCriteria = EntityCriteria.forEntity(Article.class);
-		entityCriteria.setFirstResult(1);
+		entityCriteria.setFirstResult(0);
 		entityCriteria.setMaxResults(10);
 		
 		entityCriteria.addOrder(Order.asc("createTime"));
 		entityCriteria.addOrder(Order.asc("id"));
 		
+		entityCriteria.addFilterProperty("createTime");
+		
 		QueryResult<Article> queryResult = mapper.selectPaginationByCriteria(entityCriteria);
-		Assert.assertEquals(queryResult.getTotalCount(), 50l);
+		Assert.assertEquals(queryResult.getTotalCount(), 50L);
 		Assert.assertEquals(queryResult.getResults().size(), 10);
 	}
     

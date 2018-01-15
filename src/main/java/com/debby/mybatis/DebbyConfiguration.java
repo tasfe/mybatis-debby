@@ -28,7 +28,7 @@ public class DebbyConfiguration {
     private String mapperXMLOutputDirectory;
     private String tablePrefix;
     private Dialect dialect;
-    private boolean camelToUnderscore = false;
+    private boolean camelToUnderscore;
 
     public DebbyConfiguration() {
     }

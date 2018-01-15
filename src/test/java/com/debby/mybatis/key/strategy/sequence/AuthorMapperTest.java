@@ -35,7 +35,7 @@ public class AuthorMapperTest extends DebbyMapperTest<AuthorMapper> {
     @Override
     public void testSelectByPrimaryKey() {
     	
-        Author author = mapper.selectByPrimaryKey(1l);
+        Author author = mapper.selectByPrimaryKey(1L);
         Assert.assertEquals(author.getName(), "m1");
         Assert.assertEquals(author.getAge(), 20);
     }

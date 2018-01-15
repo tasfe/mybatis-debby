@@ -134,7 +134,7 @@ public class XMyBatisGenerator {
 					String formattedContent = mapperGenerator.getDocument().getFormattedContent();
 
 					if (debbyConfiguration.isDebugEnabled()) {
-						FileUtils.writeFile(debbyConfiguration.getMapperXMLOutputDirectory() + mapperName.replace(".", "_") + ".xml", formattedContent, "UTF-8");
+						FileUtils.writeFile(debbyConfiguration.getMapperXMLOutputDirectory(), mapperName.replace(".", "_") + ".xml", formattedContent);
 					}
 
 					parse(formattedContent, mapperName);

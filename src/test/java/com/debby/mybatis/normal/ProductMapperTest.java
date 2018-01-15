@@ -7,7 +7,6 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.debby.mybatis.DebbyMapperTest;
-import com.debby.mybatis.criteria.EntityCriteria;
 
 /**
  * @author rocky.hu
@@ -100,11 +99,6 @@ public class ProductMapperTest extends DebbyMapperTest<ProductMapper> {
     @Test
     @Override
     public void testUpdateByCriteria() {
-        
-        Product product = new Product();
-        product.setQuantity(101);;
-
-        EntityCriteria entityCriteria = new EntityCriteria(Product.class);
     }
 
     @Test

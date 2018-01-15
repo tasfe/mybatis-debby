@@ -20,7 +20,6 @@ import com.debby.mybatis.core.dom.XmlConstants;
 import com.debby.mybatis.core.dom.xml.Document;
 import com.debby.mybatis.core.dom.xml.XmlElement;
 import com.debby.mybatis.core.xmlmapper.elements.XAbstractXmlElementGenerator;
-import com.debby.mybatis.core.xmlmapper.elements.XBaseColumnListElementGenerator;
 import com.debby.mybatis.core.xmlmapper.elements.XBaseResultMapElementGenerator;
 
 /**
