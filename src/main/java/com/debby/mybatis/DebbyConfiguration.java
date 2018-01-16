@@ -15,8 +15,10 @@
  */
 package com.debby.mybatis;
 
+import com.debby.mybatis.core.XDialectFactory;
 import com.debby.mybatis.core.dialect.Dialect;
 import com.debby.mybatis.exception.DebbyException;
+import com.debby.mybatis.util.StringUtils;
 
 /**
  * @author rocky.hu
@@ -27,13 +29,13 @@ public class DebbyConfiguration {
     private boolean debugEnabled;
     private String mapperXMLOutputDirectory;
     private String tablePrefix;
-    private Dialect dialect;
+    private String dialect;
     private boolean camelToUnderscore;
 
     public DebbyConfiguration() {
     }
 
-    public DebbyConfiguration(Dialect dialect) {
+    public DebbyConfiguration(String dialect) {
         this.dialect = dialect;
     }
 
@@ -63,13 +65,14 @@ public class DebbyConfiguration {
 
 	public Dialect getDialect()
 	{
-	    if (dialect == null) {
-	        throw new DebbyException("Dialect is required.");
-        }
-		return dialect;
+		if (StringUtils.isNullOrEmpty(dialect)) {
+			throw new DebbyException("Dialect is required.");
+		}
+		Dialect instance = XDialectFactory.getDialect(dialect);
+		return instance;
 	}
 
-	public void setDialect(Dialect dialect)
+	public void setDialect(String dialect)
 	{
 		this.dialect = dialect;
 	}

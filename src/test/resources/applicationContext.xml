@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+                http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+                http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+                http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:jdbc.properties" />
+	</bean>
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName">
+			<value>${h2.driver}</value>
+		</property>
+		<property name="url">
+			<value>${h2.url}</value>
+		</property>
+		<property name="username">
+			<value>${h2.username}</value>
+		</property>
+		<property name="password">
+			<value>${h2.password}</value>
+		</property>
+	</bean>
+	
+	<bean id="debbyConfiguration" class="com.debby.mybatis.DebbyConfiguration">
+		<property name="debugEnabled" value="true"/>
+		<property name="mapperXMLOutputDirectory" value="f://test//mapper"/>
+		<property name="tablePrefix" value="t_"/>
+		<property name="dialect" value="h2"/>
+		<property name="camelToUnderscore" value="true"/>
+	</bean>
+
+	<bean id="sqlSessionFactory" class="com.debby.mybatis.DebbySqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis-config.xml"/>
+		<!-- <property name="mapperLocations" value="classpath:assets/**/*Mapper.xml"/> -->
+		<property name="debbyConfiguration" ref="debbyConfiguration"/>
+	</bean>
+
+	<!-- <bean id="productMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.debby.mybatis.normal.ProductMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean> -->
+	
+	 <mybatis:scan base-package="com.debby.mybatis.normal" />
+
+</beans>

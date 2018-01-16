@@ -3,7 +3,6 @@ package com.debby.mybatis;
 import java.io.File;
 import java.io.InputStream;
 
-import com.debby.mybatis.core.dialect.H2Dialect;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
 
@@ -25,7 +24,7 @@ public class MyBatisHelper {
 			debbyConfiguration.setDebugEnabled(true);
 			debbyConfiguration.setMapperXMLOutputDirectory(System.getProperty("user.home") + File.separator + ".debby" + File.separator);
 			debbyConfiguration.setTablePrefix("t_");
-			debbyConfiguration.setDialect(new H2Dialect());
+			debbyConfiguration.setDialect("h2");
 			debbyConfiguration.setCamelToUnderscore(true);
 
 			sqlSessionFactory = new DebbySqlSessionFactoryBuilder(debbyConfiguration).build(configInputStream);
