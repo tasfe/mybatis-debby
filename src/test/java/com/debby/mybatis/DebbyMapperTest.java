@@ -35,7 +35,7 @@ public abstract class DebbyMapperTest<MAPPER extends DebbyMapper<?, ?>> {
 	public void beforeMethod() {
 		dbUnitHelper.createTableFromFile(ddlPath);
 		dbUnitHelper.executeDatasetAsRefresh(dataXmlPath);
-        sqlSession = MyBatisHelper.getSqlSessionFactory().openSession(true);
+        sqlSession = MyBatisHelper.getSqlSessionFactory().openSession(false);
         mapper = sqlSession.getMapper(mapperClass);
 	}
 

@@ -28,7 +28,7 @@ import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
 
-import com.debby.mybatis.bean.QueryResult;
+import com.debby.mybatis.bean.Page;
 import com.debby.mybatis.core.session.PaginationRowBounds;
 import com.debby.mybatis.util.ReflectUtils;
 
@@ -49,10 +49,10 @@ public class PaginationResultSetHandlerInterceptor implements Interceptor {
             Object value = field.get(defaultResultSetHandler);
             if (value instanceof PaginationRowBounds) {
                 value = (PaginationRowBounds) value;
-                QueryResult queryResult = new QueryResult();
-                queryResult.setResults(((PaginationRowBounds) value).getList());
-                queryResult.setTotalCount(((PaginationRowBounds) value).getCount());
-                ((ArrayList) result).add(queryResult);
+                Page paginationResult = new Page();
+                paginationResult.setResults(((PaginationRowBounds) value).getList());
+                paginationResult.setTotalCount(((PaginationRowBounds) value).getCount());
+                ((ArrayList) result).add(paginationResult);
             }
         }
 

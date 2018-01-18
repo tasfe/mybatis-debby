@@ -15,7 +15,7 @@
  */
 package org.apache.ibatis.session;
 
-import com.debby.mybatis.core.constant.XConstants;
+import com.debby.mybatis.core.constant.Constants;
 import com.debby.mybatis.util.ReflectUtils;
 import org.apache.ibatis.builder.xml.XMLStatementBuilder;
 import org.apache.ibatis.parsing.XNode;
@@ -44,7 +44,7 @@ public class XConfiguration {
             Field field = ReflectUtils.findField(XMLStatementBuilder.class, "context");
             field.setAccessible(true);
             XNode xNode = (XNode) field.get(xmlStatementBuilder);
-            if (XConstants.BASE_RESULT_MAP_ID.equals(xNode.getStringAttribute("resultMap"))) {
+            if (Constants.BASE_RESULT_MAP_ID.equals(xNode.getStringAttribute("resultMap"))) {
                 iter.remove();
             }
         }

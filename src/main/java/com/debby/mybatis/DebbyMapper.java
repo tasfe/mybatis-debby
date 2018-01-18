@@ -20,14 +20,14 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.debby.mybatis.bean.QueryResult;
+import com.debby.mybatis.bean.Page;
 import com.debby.mybatis.criteria.EntityCriteria;
 
 /**
  * @author rocky.hu
  * @date Aug 6, 2016 11:03:23 PM
  */
-public interface DebbyMapper<ENTITY, PK extends Serializable> {
+public interface DebbyMapper<ENTITY, ID extends Serializable> {
     
     /**
      * Insert an entity.
@@ -39,7 +39,7 @@ public interface DebbyMapper<ENTITY, PK extends Serializable> {
     /**
      * Insert an entity selectively.
      *
-     * Don't like {@link #insert(Object)}}, the method just insert the property which the value is not null.
+     * Unlike {@link #insert(Object)}}, the method just insert the property which the value is not null.
      *
      * @param entity
      */
@@ -50,16 +50,16 @@ public interface DebbyMapper<ENTITY, PK extends Serializable> {
      *
      * @param entity
      */
-    void updateByPrimaryKey(ENTITY entity);
+    void updateById(ENTITY entity);
 
     /**
      * Update an entity selectively by primary key.
      *
-     * Don't like {@link #updateByPrimaryKey(Object)}}, the method just update the property which the value is not null.
+     * Unlike {@link #updateById(Object)}}, the method just update the property which the value is not null.
      *
      * @param entity
      */
-    void updateByPrimaryKeySelective(ENTITY entity);
+    void updateByIdSelective(ENTITY entity);
 
     /**
      * Update an entity by updated conditions.
@@ -68,26 +68,26 @@ public interface DebbyMapper<ENTITY, PK extends Serializable> {
      * @param updatedCriteria
      * @return
      */
-    int updateByCriteria(@Param("record") ENTITY record, @Param("updatedCriteria") EntityCriteria updatedCriteria);
+    int update(@Param("record") ENTITY record, @Param("updatedCriteria") EntityCriteria updatedCriteria);
 
     /**
      * Update an entity selective by updated conditions.
      *
-     * Don't like {@link #updateByCriteria(Object, EntityCriteria)}, the method just update the property which the value is not null.
+     * Unlike {@link #updateByCriteria(Object, EntityCriteria)}, the method just update the property which the value is not null.
      *
      * @param record
      * @param updatedCriteria
      * @return
      */
-    int updateByCriteriaSelective(@Param("record") ENTITY record, @Param("updatedCriteria") EntityCriteria updatedCriteria);
+    int updateSelective(@Param("record") ENTITY record, @Param("updatedCriteria") EntityCriteria updatedCriteria);
 
     /**
      * Select an entity by primary key.
      *
-     * @param pk
+     * @param id
      * @return
      */
-    ENTITY selectByPrimaryKey(PK pk);
+    ENTITY selectById(ID id);
 
     /**
      * A enhanced select method that accept different selective conditions.
@@ -95,15 +95,15 @@ public interface DebbyMapper<ENTITY, PK extends Serializable> {
      * @param criteria
      * @return
      */
-    List<ENTITY> selectByCriteria(EntityCriteria criteria);
+    List<ENTITY> selectList(EntityCriteria criteria);
     
     /**
-     * Paged Query.
+     * Paging Query.
      * 
      * @param criteria
      * @return
      */
-    QueryResult<ENTITY> selectPaginationByCriteria(EntityCriteria criteria);
+    Page<ENTITY> selectPage(EntityCriteria criteria);
     
     /**
      * Count the records by different conditions.
@@ -111,21 +111,21 @@ public interface DebbyMapper<ENTITY, PK extends Serializable> {
      * @param criteria
      * @return
      */
-    long selectCountByCriteria(EntityCriteria criteria);
+    long selectCount(EntityCriteria criteria);
 
     /**
      * Delete an entity by primary key.
      *
-     * @param pk
+     * @param id
      */
-    void deleteByPrimaryKey(PK pk);
+    void deleteById(ID id);
 
     /**
-     * A enhanced select method that accept different deleted conditions.
+     * A enhanced delete method that accept different deleted conditions.
      *
      * @param criteria
      * @return
      */
-    int deleteByCriteria(EntityCriteria criteria);
+    int delete(EntityCriteria criteria);
 
 }

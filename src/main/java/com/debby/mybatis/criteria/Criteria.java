@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.apache.ibatis.mapping.ResultMapping;
 
-import com.debby.mybatis.core.XBaseResultMapRegistry;
+import com.debby.mybatis.core.BaseResultMapRegistry;
 import com.debby.mybatis.util.StringUtils;
 
 /**
@@ -60,7 +60,7 @@ public class Criteria {
         String propertyName = segment[0];
         String sqlOperator = segment[1];
 
-        ResultMapping resultMapping = XBaseResultMapRegistry.getResultMapping(entityOrClassName, propertyName);
+        ResultMapping resultMapping = BaseResultMapRegistry.getResultMapping(entityOrClassName, propertyName);
         String column = resultMapping.getColumn();
         String typeHandler = resultMapping.getTypeHandler().getClass().getName();
 

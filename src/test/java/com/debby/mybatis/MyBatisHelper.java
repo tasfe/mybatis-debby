@@ -24,7 +24,7 @@ public class MyBatisHelper {
 			debbyConfiguration.setDebugEnabled(true);
 			debbyConfiguration.setMapperXMLOutputDirectory(System.getProperty("user.home") + File.separator + ".debby" + File.separator);
 			debbyConfiguration.setTablePrefix("t_");
-			debbyConfiguration.setDialect("h2");
+			debbyConfiguration.setDialect("mysql");
 			debbyConfiguration.setCamelToUnderscore(true);
 
 			sqlSessionFactory = new DebbySqlSessionFactoryBuilder(debbyConfiguration).build(configInputStream);

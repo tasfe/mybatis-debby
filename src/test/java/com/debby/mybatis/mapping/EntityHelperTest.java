@@ -15,7 +15,7 @@
  */
 package com.debby.mybatis.mapping;
 
-import com.debby.mybatis.core.XResultMapping;
+import com.debby.mybatis.core.DebbyResultMapping;
 import com.debby.mybatis.core.helper.EntityHelper;
 import com.debby.mybatis.key.composite.Member;
 import org.testng.annotations.Test;
@@ -30,8 +30,8 @@ public class EntityHelperTest {
 
     @Test
     public void test() {
-        List<XResultMapping> resultMappingList = EntityHelper.getXResultMappingList(Member.class, true);
-        for (XResultMapping resultMapping : resultMappingList) {
+        List<DebbyResultMapping> resultMappingList = EntityHelper.getXResultMappingList(Member.class, true);
+        for (DebbyResultMapping resultMapping : resultMappingList) {
             System.out.println(resultMapping);
         }
     }

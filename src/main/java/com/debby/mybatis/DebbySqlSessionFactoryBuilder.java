@@ -18,7 +18,7 @@ package com.debby.mybatis;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import com.debby.mybatis.core.XMyBatisGenerator;
+import com.debby.mybatis.core.DebbyMyBatisGenerator;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -51,7 +51,7 @@ public class DebbySqlSessionFactoryBuilder extends SqlSessionFactoryBuilder {
     }
 
     private void boost(Configuration configuration) {
-        XMyBatisGenerator xMyBatisGenerator = new XMyBatisGenerator(debbyConfiguration, configuration);
+        DebbyMyBatisGenerator xMyBatisGenerator = new DebbyMyBatisGenerator(debbyConfiguration, configuration);
         xMyBatisGenerator.execute();
     }
 

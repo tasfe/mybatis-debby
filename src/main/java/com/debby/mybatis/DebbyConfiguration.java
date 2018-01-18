@@ -15,7 +15,7 @@
  */
 package com.debby.mybatis;
 
-import com.debby.mybatis.core.XDialectFactory;
+import com.debby.mybatis.core.DialectFactory;
 import com.debby.mybatis.core.dialect.Dialect;
 import com.debby.mybatis.exception.DebbyException;
 import com.debby.mybatis.util.StringUtils;
@@ -68,7 +68,7 @@ public class DebbyConfiguration {
 		if (StringUtils.isNullOrEmpty(dialect)) {
 			throw new DebbyException("Dialect is required.");
 		}
-		Dialect instance = XDialectFactory.getDialect(dialect);
+		Dialect instance = DialectFactory.getDialect(dialect);
 		return instance;
 	}
 

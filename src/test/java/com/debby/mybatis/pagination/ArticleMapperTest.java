@@ -4,7 +4,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.debby.mybatis.DebbyMapperTest;
-import com.debby.mybatis.bean.QueryResult;
+import com.debby.mybatis.bean.Page;
 import com.debby.mybatis.criteria.EntityCriteria;
 import com.debby.mybatis.criteria.Order;
 
@@ -32,7 +32,7 @@ public class ArticleMapperTest extends DebbyMapperTest<ArticleMapper> {
 		
 		entityCriteria.addFilterProperty("createTime");
 		
-		QueryResult<Article> queryResult = mapper.selectPaginationByCriteria(entityCriteria);
+		Page<Article> queryResult = mapper.selectPaginationByCriteria(entityCriteria);
 		Assert.assertEquals(queryResult.getTotalCount(), 50L);
 		Assert.assertEquals(queryResult.getResults().size(), 10);
 	}

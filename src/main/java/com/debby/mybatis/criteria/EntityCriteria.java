@@ -23,7 +23,7 @@ import org.apache.ibatis.mapping.ResultMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.debby.mybatis.core.XBaseResultMapRegistry;
+import com.debby.mybatis.core.BaseResultMapRegistry;
 import com.debby.mybatis.core.helper.EntityHelper;
 import com.debby.mybatis.criteria.filter.PropertyFilterMode;
 
@@ -77,7 +77,7 @@ public class EntityCriteria {
 
     public EntityCriteria addOrder(Order ordering) {
         String propertyName = ordering.getPropertyName();
-        ResultMapping resultMapping = XBaseResultMapRegistry.getResultMapping(entityType.getName(), propertyName);
+        ResultMapping resultMapping = BaseResultMapRegistry.getResultMapping(entityType.getName(), propertyName);
         String column = resultMapping.getColumn();
         ordering.setPropertyName(column);
         orderList.add(ordering);

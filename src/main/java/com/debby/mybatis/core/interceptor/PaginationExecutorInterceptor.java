@@ -33,7 +33,7 @@ import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
-import com.debby.mybatis.core.XInternalStatements;
+import com.debby.mybatis.core.InternalStatements;
 import com.debby.mybatis.core.session.PaginationRowBounds;
 
 /**
@@ -57,10 +57,10 @@ public class PaginationExecutorInterceptor implements Interceptor {
         String mappedStatementId = mappedStatement.getId();
         String namespace = mappedStatementId.substring(0, mappedStatementId.lastIndexOf("."));
         String id = mappedStatementId.substring(mappedStatementId.lastIndexOf(".") + 1);
-        if (XInternalStatements.SELECT_PAGINATION_BY_CRITERIA.getId().equals(id)) {
+        if (InternalStatements.SELECT_PAGE.getId().equals(id)) {
             try {
-                MappedStatement internalPagingMappedStatement = mappedStatement.getConfiguration().getMappedStatement(namespace + "." + XInternalStatements.INTERNAL_SELECT_PAGINATION_BY_CRITERIA.getId());
-                MappedStatement selectCountByCriteriaMappedStatement = mappedStatement.getConfiguration().getMappedStatement(namespace + "." + XInternalStatements.SELECT_COUNT_BY_CRITERIA.getId());
+                MappedStatement internalPagingMappedStatement = mappedStatement.getConfiguration().getMappedStatement(namespace + "." + InternalStatements.INTERNAL_SELECT_LIST_FOR_PAGING.getId());
+                MappedStatement selectCountByCriteriaMappedStatement = mappedStatement.getConfiguration().getMappedStatement(namespace + "." + InternalStatements.SELECT_COUNT.getId());
                 List<?> resultList = null;
                 List<Long> countList = null;
                 if (args.length == 4) {

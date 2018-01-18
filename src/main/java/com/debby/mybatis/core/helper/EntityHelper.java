@@ -16,8 +16,8 @@
 package com.debby.mybatis.core.helper;
 
 import com.debby.mybatis.annotation.*;
-import com.debby.mybatis.core.XBaseResultMapRegistry;
-import com.debby.mybatis.core.XResultMapping;
+import com.debby.mybatis.core.BaseResultMapRegistry;
+import com.debby.mybatis.core.DebbyResultMapping;
 import com.debby.mybatis.exception.IdConfigException;
 import com.debby.mybatis.exception.MappingException;
 import com.debby.mybatis.util.BeanUtils;
@@ -73,8 +73,8 @@ public class EntityHelper {
         return appropriateMappindIdField;
     }
 
-    public static List<XResultMapping> getXResultMappingList(Class<?> entityClazz, boolean camelToUnderscore) {
-        List<XResultMapping> resultMappingList = new ArrayList<XResultMapping>();
+    public static List<DebbyResultMapping> getXResultMappingList(Class<?> entityClazz, boolean camelToUnderscore) {
+        List<DebbyResultMapping> resultMappingList = new ArrayList<DebbyResultMapping>();
         PropertyDescriptor[] propertyDescriptors = BeanUtils.getPropertyDescriptors(entityClazz);
         for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
             String propertyName = propertyDescriptor.getName();
@@ -106,8 +106,8 @@ public class EntityHelper {
             // MappingCompositeId
             MappingCompositeId mappingCompositeId = field.getAnnotation(MappingCompositeId.class);
             if (mappingCompositeId != null) {
-                List<XResultMapping> embbedResultMappingList = getXResultMappingList(field.getType(), camelToUnderscore);
-                for (XResultMapping resultMapping : embbedResultMappingList) {
+                List<DebbyResultMapping> embbedResultMappingList = getXResultMappingList(field.getType(), camelToUnderscore);
+                for (DebbyResultMapping resultMapping : embbedResultMappingList) {
                     resultMapping.setProperty(field.getName() + "." + resultMapping.getProperty());
                 }
                 resultMappingList.addAll(embbedResultMappingList);
@@ -144,7 +144,7 @@ public class EntityHelper {
                 typeHandler = mappingTypeHandler.value().getName();
             }
 
-            XResultMapping resultMapping = new XResultMapping();
+            DebbyResultMapping resultMapping = new DebbyResultMapping();
             resultMapping.setColumn(column);
             resultMapping.setProperty(propertyName);
             resultMapping.setId(isId);
@@ -159,9 +159,9 @@ public class EntityHelper {
             resultMappingList.add(resultMapping);
         }
 
-        Collections.sort(resultMappingList, new Comparator<XResultMapping>() {
+        Collections.sort(resultMappingList, new Comparator<DebbyResultMapping>() {
             @Override
-            public int compare(XResultMapping o1, XResultMapping o2) {
+            public int compare(DebbyResultMapping o1, DebbyResultMapping o2) {
                 boolean isId1 = o1.isId();
                 boolean isId2 = o2.isId();
                 if (isId1 == true && isId2 == false) {
@@ -187,7 +187,7 @@ public class EntityHelper {
      * @return
      */
     public static List<ResultMapping> getPropertyResultMappings(Class<?> entityType) {
-    	ResultMap resultMap = XBaseResultMapRegistry.getResultMap(entityType.getName());
+    	ResultMap resultMap = BaseResultMapRegistry.getResultMap(entityType.getName());
     	List<ResultMapping> propertyResultMappings = new ArrayList<ResultMapping>();
         if (resultMap.getPropertyResultMappings() != null && resultMap.getPropertyResultMappings().size() > 0) {
             Iterator<ResultMapping> iter = resultMap.getPropertyResultMappings().iterator();
