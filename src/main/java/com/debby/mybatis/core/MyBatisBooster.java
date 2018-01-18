@@ -16,18 +16,16 @@
 package com.debby.mybatis.core;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import com.debby.mybatis.core.constant.Constants;
-import com.debby.mybatis.core.helper.EntityHelper;
-import com.debby.mybatis.core.interceptor.PaginationExecutorInterceptor;
-import com.debby.mybatis.core.interceptor.PaginationResultSetHandlerInterceptor;
-import com.debby.mybatis.core.xmlmapper.BaseResultMapGenerator;
 import org.apache.ibatis.binding.MapperRegistry;
 import org.apache.ibatis.builder.BuilderException;
 import org.apache.ibatis.mapping.ResultMap;
@@ -39,6 +37,11 @@ import org.slf4j.LoggerFactory;
 import com.debby.mybatis.DebbyConfiguration;
 import com.debby.mybatis.DebbyMapper;
 import com.debby.mybatis.core.builder.XXMLMapperBuilder;
+import com.debby.mybatis.core.constant.Constants;
+import com.debby.mybatis.core.helper.EntityHelper;
+import com.debby.mybatis.core.interceptor.PaginationExecutorInterceptor;
+import com.debby.mybatis.core.interceptor.PaginationResultSetHandlerInterceptor;
+import com.debby.mybatis.core.xmlmapper.BaseResultMapGenerator;
 import com.debby.mybatis.core.xmlmapper.XMLMapperGenerator;
 import com.debby.mybatis.criteria.EntityCriteria;
 import com.debby.mybatis.util.FileUtils;
@@ -51,6 +54,8 @@ import com.debby.mybatis.util.StringUtils;
 public class MyBatisBooster {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(MyBatisBooster.class);
+    
+    private static final String DEBBY_MAPPER_FILE_SUFFIX = "_DEBBY.xml";
 
     private DebbyConfiguration debbyConfiguration;
     private Configuration configuration;
@@ -65,9 +70,11 @@ public class MyBatisBooster {
 
         LOGGER.info("Debby-Info ：[Start] debby mapper support...");
 
-        if (debbyConfiguration.isDebugEnabled() && StringUtils.isNullOrEmpty(debbyConfiguration.getMapperXMLOutputDirectory())) {
-			throw new BuilderException("[Exception] 'mapperXMLOuputDirectory' must be set on debug mode.");
-		}
+        if (debbyConfiguration.isDebugEnabled() && StringUtils.isNullOrEmpty(debbyConfiguration.getMapperXmlOutputPath())) {
+			throw new BuilderException("[Exception] 'mapperXmlOutputPath' must be set on debug mode.");
+		} 
+        
+        String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 
         try {
 
@@ -78,6 +85,9 @@ public class MyBatisBooster {
 			IntrospectedContext introspectedContext = null;
 			BaseResultMapGenerator baseResultMapGenerator = null;
 			XMLMapperGenerator mapperGenerator = null;
+			
+			StringBuilder directory = new StringBuilder();
+			StringBuilder fileName = new StringBuilder();
 
 			MapperRegistry mapperRegistry = configuration.getMapperRegistry();
 	        for (Class<?> mapperClass : mapperRegistry.getMappers()) {
@@ -134,7 +144,17 @@ public class MyBatisBooster {
 					String formattedContent = mapperGenerator.getDocument().getFormattedContent();
 
 					if (debbyConfiguration.isDebugEnabled()) {
-						FileUtils.writeFile(debbyConfiguration.getMapperXMLOutputDirectory(), mapperName.replace(".", "_") + ".xml", formattedContent);
+						
+						directory.setLength(0);
+						directory.append(debbyConfiguration.getMapperXmlOutputPath());
+						directory.append(currentTime);
+						directory.append(File.separator);
+						
+						fileName.setLength(0);
+						fileName.append(mapperName.replace(".", "$"));
+						fileName.append(DEBBY_MAPPER_FILE_SUFFIX);
+						
+						FileUtils.writeFile(directory.toString(), fileName.toString(), formattedContent);
 					}
 
 					parse(formattedContent, mapperName);

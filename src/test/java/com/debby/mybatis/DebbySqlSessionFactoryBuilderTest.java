@@ -20,7 +20,7 @@ public class DebbySqlSessionFactoryBuilderTest {
 
         DebbyConfiguration debbyConfiguration = new DebbyConfiguration();
         debbyConfiguration.setDebugEnabled(true);
-        debbyConfiguration.setMapperXMLOutputDirectory(System.getProperty("user.home") + File.separator + ".debby" + File.separator);
+        debbyConfiguration.setMapperXmlOutputPath(System.getProperty("user.home") + File.separator + ".debby" + File.separator);
         debbyConfiguration.setTablePrefix("t_");
         debbyConfiguration.setDialect("h2");
         debbyConfiguration.setCamelToUnderscore(true);

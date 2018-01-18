@@ -11,7 +11,7 @@ import org.testng.annotations.BeforeMethod;
  * @author rocky.hu
  * @date 2017-12-16 11:59 AM
  */
-public abstract class DebbyMapperTest<MAPPER extends DebbyMapper<?, ?>> {
+public abstract class AbstractDebbyMapperTest<MAPPER extends DebbyMapper<?, ?>> {
 
 	protected MAPPER mapper;
 	private Class<MAPPER> mapperClass;
@@ -21,7 +21,7 @@ public abstract class DebbyMapperTest<MAPPER extends DebbyMapper<?, ?>> {
 	protected String dataXmlPath;
 	
 	@SuppressWarnings("unchecked")
-	public DebbyMapperTest() {
+	public AbstractDebbyMapperTest() {
 		this.mapperClass = null;
         Class<?> c = getClass();
         Type type = c.getGenericSuperclass();
@@ -60,40 +60,20 @@ public abstract class DebbyMapperTest<MAPPER extends DebbyMapper<?, ?>> {
 		this.dataXmlPath = dataXmlPath;
 	}
 
-	public void testInsert() {
-	}
-
-	public void testInsertSelective() {
-	}
-
-	public void testUpdateByPrimaryKey() {
-	}
-
-	public void testUpdateByPrimaryKeySelective() {
-	}
-
-	public void testUpdateByCriteria() {
-	}
-
-	public void testUpdateByCriteriaSelective() {
-	}
-
-	public void testSelectByPrimaryKey() {
-	}
-
-	public void testSelectByCriteria() {
-	}
-
-	public void testSelectPaginationByCriteria() {
-	}
-
-	public void testSelectCountByCriteria() {
-	}
-
-	public void testDeleteByPrimaryKey() {
-	}
-
-	public void testDeleteByCriteria() {
-	}
+	// test methods
+	
+    public void testInsert(){};
+    public void testInsertSelective(){};
+    public void testUpdateById(){};
+    public void testUpdateByIdSelective(){};
+    public void testUpdate(){};
+    public void testUpdateSelective(){};
+    public void testSelectById(){};
+    public void testSelectList(){};
+    public void testSelectPage(){};
+    public void testSelectCount(){};
+    public void testDeleteById(){};
+    public void testDelete(){};
+	
 	
 }

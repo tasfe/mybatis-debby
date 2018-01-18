@@ -26,10 +26,15 @@ import com.debby.mybatis.util.StringUtils;
  */
 public class DebbyConfiguration {
 
+	/** Enable debug mode to view the mapper xml which the framework auto generate */
     private boolean debugEnabled;
-    private String mapperXMLOutputDirectory;
+    /** The mapper xml output path */
+    private String mapperXmlOutputPath;
+    /** Global config for table prefix */
     private String tablePrefix;
+    /** The dialect alias */
     private String dialect;
+    /** Set the value to 'true', when use auto mapping, the property will be mapped to under score format */
     private boolean camelToUnderscore;
 
     public DebbyConfiguration() {
@@ -47,15 +52,15 @@ public class DebbyConfiguration {
         this.debugEnabled = debugEnabled;
     }
 
-    public String getMapperXMLOutputDirectory() {
-        return mapperXMLOutputDirectory;
-    }
+	public String getMapperXmlOutputPath() {
+		return mapperXmlOutputPath;
+	}
 
-    public void setMapperXMLOutputDirectory(String mapperXMLOutputDirectory) {
-        this.mapperXMLOutputDirectory = mapperXMLOutputDirectory;
-    }
+	public void setMapperXmlOutputPath(String mapperXmlOutputPath) {
+		this.mapperXmlOutputPath = mapperXmlOutputPath;
+	}
 
-    public String getTablePrefix() {
+	public String getTablePrefix() {
         return tablePrefix;
     }
 

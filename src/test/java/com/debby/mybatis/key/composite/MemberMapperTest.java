@@ -3,18 +3,18 @@ package com.debby.mybatis.key.composite;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.debby.mybatis.DebbyMapperTest;
+import com.debby.mybatis.AbstractDebbyMapperTest;
 
 /**
  * @author rocky.hu
  * @date 2017-11-29 9:41 PM
  */
-public class MemberMapperTest extends DebbyMapperTest<MemberMapper> {
+public class MemberMapperTest extends AbstractDebbyMapperTest<MemberMapper> {
 	
 	public MemberMapperTest() {
 		super();
-		this.setDdlPath("/assets/key/composite/member.ddl");
-		this.setDataXmlPath("/assets/key/composite/member.xml");
+		this.setDdlPath("/data/ddl/member.ddl");
+		this.setDataXmlPath("/data/member.xml");
 	}
 
     @Test
@@ -35,13 +35,13 @@ public class MemberMapperTest extends DebbyMapperTest<MemberMapper> {
 
     @Test
     @Override
-    public void testSelectByPrimaryKey() {
+    public void testSelectById() {
     	
         MemberPK memberPK = new MemberPK();
         memberPK.setId(1);
         memberPK.setName("m1");
 
-        Member member = mapper.selectByPrimaryKey(memberPK);
+        Member member = mapper.selectById(memberPK);
         Assert.assertEquals(member.getAge(), 20);
     }
     

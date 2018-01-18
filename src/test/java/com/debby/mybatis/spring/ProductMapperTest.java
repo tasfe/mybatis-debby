@@ -11,9 +11,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.debby.mybatis.DBUnitHelper;
-import com.debby.mybatis.normal.Product;
-import com.debby.mybatis.normal.ProductCategory;
-import com.debby.mybatis.normal.ProductMapper;
+import com.debby.mybatis.association.Product;
+import com.debby.mybatis.association.ProductCategory;
+import com.debby.mybatis.association.ProductMapper;
 
 /**
  * @author rocky.hu
@@ -32,8 +32,8 @@ public class ProductMapperTest {
 	
 	@BeforeMethod
 	public void beforeMethod() {
-		dbUnitHelper.createTableFromFile("/assets/normal/product.ddl");
-		dbUnitHelper.executeDatasetAsRefresh("/assets/normal/product.xml");
+		dbUnitHelper.createTableFromFile("/data/ddl/product.ddl");
+		dbUnitHelper.executeDatasetAsRefresh("/data/product.xml");
 	}
 	
 	@Test
@@ -77,7 +77,7 @@ public class ProductMapperTest {
         Assert.assertEquals(product.getId().intValue(), 4);
 
         // use the default value for 'title'
-        product = mapper.selectByPrimaryKey(4);
+        product = mapper.selectById(4);
         Assert.assertNotNull(product);
         Assert.assertEquals(product.getTitle(), "test");
     }
@@ -89,9 +89,9 @@ public class ProductMapperTest {
         product.setId(1);
         product.setTitle("p1-1");
 
-        mapper.updateByPrimaryKey(product);
+        mapper.updateById(product);
 
-        product = mapper.selectByPrimaryKey(1);
+        product = mapper.selectById(1);
         Assert.assertNull(product.getCreateTime());
     }
 
@@ -102,9 +102,9 @@ public class ProductMapperTest {
         product.setId(1);
         product.setTitle("p1-1");
 
-        mapper.updateByPrimaryKeySelective(product);
+        mapper.updateByIdSelective(product);
 
-        product = mapper.selectByPrimaryKey(1);
+        product = mapper.selectById(1);
         Assert.assertNotNull(product.getCreateTime());
     }
 
@@ -114,7 +114,7 @@ public class ProductMapperTest {
 
     @Test
     public void testSelectByPrimaryKey() {
-        Product product = mapper.selectByPrimaryKey(1);
+        Product product = mapper.selectById(1);
         Assert.assertEquals(product.getTitle(), "p1");
     }
 

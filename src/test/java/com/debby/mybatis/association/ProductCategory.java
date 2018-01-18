@@ -1,4 +1,4 @@
-package com.debby.mybatis.normal;
+package com.debby.mybatis.association;
 
 import com.debby.mybatis.annotation.MappingId;
 

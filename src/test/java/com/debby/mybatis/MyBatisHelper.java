@@ -22,9 +22,9 @@ public class MyBatisHelper {
 			InputStream configInputStream = Resources.getResourceAsStream(config);
 			DebbyConfiguration debbyConfiguration = new DebbyConfiguration();
 			debbyConfiguration.setDebugEnabled(true);
-			debbyConfiguration.setMapperXMLOutputDirectory(System.getProperty("user.home") + File.separator + ".debby" + File.separator);
+			debbyConfiguration.setMapperXmlOutputPath(System.getProperty("user.home") + File.separator + ".debby" + File.separator);
 			debbyConfiguration.setTablePrefix("t_");
-			debbyConfiguration.setDialect("mysql");
+			debbyConfiguration.setDialect("h2");
 			debbyConfiguration.setCamelToUnderscore(true);
 
 			sqlSessionFactory = new DebbySqlSessionFactoryBuilder(debbyConfiguration).build(configInputStream);

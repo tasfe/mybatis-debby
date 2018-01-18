@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="TEST">
+	<test name="Key_Composite">
+		<classes>
+			<class name="com.debby.mybatis.key.composite.MemberMapperTest" />
+		</classes>
+	</test>
+	<test name="Key_Strategy_Sequence">
+		<classes>
+			<class name="com.debby.mybatis.key.strategy.sequence.AuthorMapperTest" />
+		</classes>
+	</test>
+	<test name="Association">
+		<classes>
+			<class name="com.debby.mybatis.association.ProductMapperTest" />
+		</classes>
+	</test>
+	<test name="Pagination">
+		<classes>
+			<class name="com.debby.mybatis.pagination.ArticleMapperTest" />
+		</classes>
+	</test>
+</suite>  	

@@ -15,12 +15,13 @@
  */
 package com.debby.mybatis.mapping;
 
-import com.debby.mybatis.core.XResultMapping;
-import com.debby.mybatis.core.helper.EntityHelper;
-import com.debby.mybatis.key.composite.Member;
+import java.util.List;
+
 import org.testng.annotations.Test;
 
-import java.util.List;
+import com.debby.mybatis.core.bean.XResultMapping;
+import com.debby.mybatis.core.helper.EntityHelper;
+import com.debby.mybatis.key.composite.Member;
 
 /**
  * @author rocky.hu
