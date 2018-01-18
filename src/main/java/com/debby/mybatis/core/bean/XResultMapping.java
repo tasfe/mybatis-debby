@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.debby.mybatis.core;
+package com.debby.mybatis.core.bean;
 
 /**
  * @author rocky.hu
  * @date 2018-01-14 12:25 AM
  */
-public class DebbyResultMapping {
+public class XResultMapping {
 
     private String property;
     private String column;

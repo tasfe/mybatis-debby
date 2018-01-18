@@ -15,22 +15,33 @@
  */
 package com.debby.mybatis.core.helper;
 
-import com.debby.mybatis.annotation.*;
-import com.debby.mybatis.core.BaseResultMapRegistry;
-import com.debby.mybatis.core.DebbyResultMapping;
-import com.debby.mybatis.exception.IdConfigException;
-import com.debby.mybatis.exception.MappingException;
-import com.debby.mybatis.util.BeanUtils;
-import com.debby.mybatis.util.ReflectUtils;
-import com.debby.mybatis.util.StringUtils;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
 import org.apache.ibatis.session.Configuration;
 
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Field;
-import java.util.*;
+import com.debby.mybatis.annotation.MappingCompositeId;
+import com.debby.mybatis.annotation.MappingId;
+import com.debby.mybatis.annotation.MappingJdbcType;
+import com.debby.mybatis.annotation.MappingResult;
+import com.debby.mybatis.annotation.MappingTransient;
+import com.debby.mybatis.annotation.MappingTypeHandler;
+import com.debby.mybatis.core.ResultMapRegistry;
+import com.debby.mybatis.core.bean.XResultMapping;
+import com.debby.mybatis.exception.IdConfigException;
+import com.debby.mybatis.exception.MappingException;
+import com.debby.mybatis.util.BeanUtils;
+import com.debby.mybatis.util.ReflectUtils;
+import com.debby.mybatis.util.StringUtils;
 
 /**
  * @author rocky.hu
@@ -73,8 +84,8 @@ public class EntityHelper {
         return appropriateMappindIdField;
     }
 
-    public static List<DebbyResultMapping> getXResultMappingList(Class<?> entityClazz, boolean camelToUnderscore) {
-        List<DebbyResultMapping> resultMappingList = new ArrayList<DebbyResultMapping>();
+    public static List<XResultMapping> getXResultMappingList(Class<?> entityClazz, boolean camelToUnderscore) {
+        List<XResultMapping> resultMappingList = new ArrayList<XResultMapping>();
         PropertyDescriptor[] propertyDescriptors = BeanUtils.getPropertyDescriptors(entityClazz);
         for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
             String propertyName = propertyDescriptor.getName();
@@ -106,8 +117,8 @@ public class EntityHelper {
             // MappingCompositeId
             MappingCompositeId mappingCompositeId = field.getAnnotation(MappingCompositeId.class);
             if (mappingCompositeId != null) {
-                List<DebbyResultMapping> embbedResultMappingList = getXResultMappingList(field.getType(), camelToUnderscore);
-                for (DebbyResultMapping resultMapping : embbedResultMappingList) {
+                List<XResultMapping> embbedResultMappingList = getXResultMappingList(field.getType(), camelToUnderscore);
+                for (XResultMapping resultMapping : embbedResultMappingList) {
                     resultMapping.setProperty(field.getName() + "." + resultMapping.getProperty());
                 }
                 resultMappingList.addAll(embbedResultMappingList);
@@ -144,7 +155,7 @@ public class EntityHelper {
                 typeHandler = mappingTypeHandler.value().getName();
             }
 
-            DebbyResultMapping resultMapping = new DebbyResultMapping();
+            XResultMapping resultMapping = new XResultMapping();
             resultMapping.setColumn(column);
             resultMapping.setProperty(propertyName);
             resultMapping.setId(isId);
@@ -159,9 +170,9 @@ public class EntityHelper {
             resultMappingList.add(resultMapping);
         }
 
-        Collections.sort(resultMappingList, new Comparator<DebbyResultMapping>() {
+        Collections.sort(resultMappingList, new Comparator<XResultMapping>() {
             @Override
-            public int compare(DebbyResultMapping o1, DebbyResultMapping o2) {
+            public int compare(XResultMapping o1, XResultMapping o2) {
                 boolean isId1 = o1.isId();
                 boolean isId2 = o2.isId();
                 if (isId1 == true && isId2 == false) {
@@ -187,7 +198,7 @@ public class EntityHelper {
      * @return
      */
     public static List<ResultMapping> getPropertyResultMappings(Class<?> entityType) {
-    	ResultMap resultMap = BaseResultMapRegistry.getResultMap(entityType.getName());
+    	ResultMap resultMap = ResultMapRegistry.getResultMap(entityType.getName());
     	List<ResultMapping> propertyResultMappings = new ArrayList<ResultMapping>();
         if (resultMap.getPropertyResultMappings() != null && resultMap.getPropertyResultMappings().size() > 0) {
             Iterator<ResultMapping> iter = resultMap.getPropertyResultMappings().iterator();

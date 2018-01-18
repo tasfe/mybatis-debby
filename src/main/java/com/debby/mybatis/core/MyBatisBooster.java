@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 
 import com.debby.mybatis.DebbyConfiguration;
 import com.debby.mybatis.DebbyMapper;
-import com.debby.mybatis.core.builder.DebbyXMLMapperBuilder;
+import com.debby.mybatis.core.builder.XXMLMapperBuilder;
 import com.debby.mybatis.core.xmlmapper.XMLMapperGenerator;
 import com.debby.mybatis.criteria.EntityCriteria;
 import com.debby.mybatis.util.FileUtils;
@@ -48,14 +48,14 @@ import com.debby.mybatis.util.StringUtils;
  * @author rocky.hu
  * @date Nov 22, 2017 11:23:58 AM
  */
-public class DebbyMyBatisGenerator {
+public class MyBatisBooster {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(DebbyMyBatisGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MyBatisBooster.class);
 
     private DebbyConfiguration debbyConfiguration;
     private Configuration configuration;
     
-    public DebbyMyBatisGenerator(DebbyConfiguration debbyConfiguration, Configuration configuration) {
+    public MyBatisBooster(DebbyConfiguration debbyConfiguration, Configuration configuration) {
 		super();
 		this.debbyConfiguration = debbyConfiguration;
 		this.configuration = configuration;
@@ -109,7 +109,7 @@ public class DebbyMyBatisGenerator {
 					}
 
 					ResultMap baseResultMap = configuration.getResultMap(baseResultMapId);
-					BaseResultMapRegistry.putResultMap(entityType.getName(), baseResultMap);
+					ResultMapRegistry.putResultMap(entityType.getName(), baseResultMap);
 
 					// if the mapper xml or mapper annotation have the same statements(the name and the SqlCommandType is all same) as the DebbyMapper, that ignore the latter.
 					List<InternalStatements> alreadyOwnedInternalStatements = new ArrayList<InternalStatements>();
@@ -154,7 +154,7 @@ public class DebbyMyBatisGenerator {
 
 	private void parse(String content, String mapperName) throws UnsupportedEncodingException {
 		InputStream inputStream = new ByteArrayInputStream(content.getBytes("UTF-8"));
-		DebbyXMLMapperBuilder builder = new DebbyXMLMapperBuilder(inputStream, configuration, null, configuration.getSqlFragments(), mapperName);
+		XXMLMapperBuilder builder = new XXMLMapperBuilder(inputStream, configuration, null, configuration.getSqlFragments(), mapperName);
 		builder.parse();
 	}
 

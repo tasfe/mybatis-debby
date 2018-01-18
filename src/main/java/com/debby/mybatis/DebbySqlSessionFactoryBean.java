@@ -21,7 +21,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 
 import com.debby.mybatis.DebbyConfiguration;
-import com.debby.mybatis.core.DebbyMyBatisGenerator;
+import com.debby.mybatis.core.MyBatisBooster;
 
 /**
  * @author rocky.hu
@@ -34,8 +34,8 @@ public class DebbySqlSessionFactoryBean extends SqlSessionFactoryBean {
 	@Override
 	protected SqlSessionFactory buildSqlSessionFactory() throws IOException {
 		SqlSessionFactory sqlSessionFactory = super.buildSqlSessionFactory();
-		DebbyMyBatisGenerator xMyBatisGenerator = new DebbyMyBatisGenerator(debbyConfiguration, sqlSessionFactory.getConfiguration());
-	    xMyBatisGenerator.execute();
+		MyBatisBooster myBatisBooster = new MyBatisBooster(debbyConfiguration, sqlSessionFactory.getConfiguration());
+		myBatisBooster.execute();
 		return sqlSessionFactory;
 	}
 

@@ -30,12 +30,12 @@ import org.apache.ibatis.mapping.ResultFlag;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
 
-import com.debby.mybatis.core.AbstractGenerator;
 import com.debby.mybatis.core.dialect.Dialect;
 import com.debby.mybatis.core.dom.xml.Attribute;
 import com.debby.mybatis.core.dom.xml.TextElement;
 import com.debby.mybatis.core.dom.xml.XmlElement;
 import com.debby.mybatis.core.util.FormattingUtilities;
+import com.debby.mybatis.core.xmlmapper.AbstractGenerator;
 import com.debby.mybatis.exception.IdConfigException;
 import com.debby.mybatis.util.BeanUtils;
 import com.debby.mybatis.util.ReflectUtils;

@@ -15,15 +15,15 @@
  */
 package com.debby.mybatis.core.xmlmapper.elements.resultmap;
 
-import com.debby.mybatis.core.DebbyResultMapping;
+import java.util.List;
+
+import com.debby.mybatis.core.bean.XResultMapping;
 import com.debby.mybatis.core.constant.Constants;
 import com.debby.mybatis.core.dom.xml.Attribute;
 import com.debby.mybatis.core.dom.xml.XmlElement;
 import com.debby.mybatis.core.helper.EntityHelper;
 import com.debby.mybatis.core.xmlmapper.elements.AbstractXmlElementGenerator;
 import com.debby.mybatis.util.StringUtils;
-
-import java.util.List;
 
 /**
  * @author rocky.hu
@@ -39,8 +39,8 @@ public class BaseResultMapElementGenerator extends AbstractXmlElementGenerator {
         answer.addAttribute(new Attribute("id", Constants.BASE_RESULT_MAP_ID));
         answer.addAttribute(new Attribute("type", entityType.getName()));
 
-        List<DebbyResultMapping> resultMappingList = EntityHelper.getXResultMappingList(entityType, introspectedContext.getDebbyConfiguration().getCamelToUnderscore());
-        for (DebbyResultMapping resultMapping : resultMappingList) {
+        List<XResultMapping> resultMappingList = EntityHelper.getXResultMappingList(entityType, introspectedContext.getDebbyConfiguration().getCamelToUnderscore());
+        for (XResultMapping resultMapping : resultMappingList) {
             XmlElement element = null;
             if (resultMapping.isId()) {
                 element = new XmlElement("id");

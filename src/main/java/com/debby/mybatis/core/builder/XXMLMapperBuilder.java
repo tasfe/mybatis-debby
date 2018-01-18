@@ -36,25 +36,25 @@ import org.apache.ibatis.type.TypeHandler;
  * @author rocky.hu
  * @date Nov 22, 2017 10:47:45 PM
  */
-public class DebbyXMLMapperBuilder extends BaseBuilder {
+public class XXMLMapperBuilder extends BaseBuilder {
 
 	private XPathParser parser;
 	private Map<String, XNode> sqlFragments;
 	private MapperBuilderAssistant builderAssistant;
 
-	public DebbyXMLMapperBuilder(InputStream inputStream, Configuration configuration, String resource,
+	public XXMLMapperBuilder(InputStream inputStream, Configuration configuration, String resource,
 			Map<String, XNode> sqlFragments, String namespace) {
 		this(inputStream, configuration, resource, sqlFragments);
 		this.builderAssistant.setCurrentNamespace(namespace);
 	}
 
-	private DebbyXMLMapperBuilder(InputStream inputStream, Configuration configuration, String resource,
+	private XXMLMapperBuilder(InputStream inputStream, Configuration configuration, String resource,
 			Map<String, XNode> sqlFragments) {
 		this(new XPathParser(inputStream, true, configuration.getVariables(), new XMLMapperEntityResolver()),
 				configuration, resource, sqlFragments);
 	}
 
-	private DebbyXMLMapperBuilder(XPathParser parser, Configuration configuration, String resource,
+	private XXMLMapperBuilder(XPathParser parser, Configuration configuration, String resource,
 			Map<String, XNode> sqlFragments) {
 		super(configuration);
 		this.builderAssistant = new MapperBuilderAssistant(configuration, resource);

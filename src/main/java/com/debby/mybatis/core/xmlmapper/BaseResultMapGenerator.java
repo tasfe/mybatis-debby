@@ -15,7 +15,6 @@
  */
 package com.debby.mybatis.core.xmlmapper;
 
-import com.debby.mybatis.core.AbstractXmlGenerator;
 import com.debby.mybatis.core.dom.XmlConstants;
 import com.debby.mybatis.core.dom.xml.Document;
 import com.debby.mybatis.core.dom.xml.XmlElement;

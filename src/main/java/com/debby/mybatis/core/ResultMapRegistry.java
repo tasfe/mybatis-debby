@@ -29,7 +29,7 @@ import com.debby.mybatis.util.StringUtils;
  * @author rocky.hu
  * @date 2017-12-05 10:08 PM
  */
-public class BaseResultMapRegistry {
+public class ResultMapRegistry {
 
     public static final Map<String, ResultMap> ENTITY_RESULT_MAP_MAP = new HashMap<String, ResultMap>();
 
