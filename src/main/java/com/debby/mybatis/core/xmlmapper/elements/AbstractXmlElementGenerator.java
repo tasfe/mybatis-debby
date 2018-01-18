@@ -26,6 +26,7 @@ import com.debby.mybatis.annotation.MappingCompositeId;
 import com.debby.mybatis.annotation.MappingId;
 import com.debby.mybatis.core.constant.Constants;
 import com.debby.mybatis.core.helper.EntityHelper;
+import com.debby.mybatis.exception.MappingException;
 import org.apache.ibatis.mapping.ResultFlag;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
@@ -232,16 +233,16 @@ public abstract class AbstractXmlElementGenerator extends AbstractGenerator {
             	idField = ReflectUtils.findField(entityType, idProperty);
             	MappingId mappingId = idField.getAnnotation(MappingId.class);
             	if (mappingId == null) {
-            		return;
+            		throw new MappingException("No MappingId annotation found on + [" + idProperty + "]");
             	}
-            } else if (idResultMappingList.size() > 1) {// composite key
-            	Field compositeIdField = BeanUtils.findField(entityType, MappingCompositeId.class);
+            } else if (idResultMappingList.size() > 1) {
+            	Field compositeIdField = EntityHelper.getCompositeIdField(entityType);
             	if (compositeIdField == null) {
-            		return;
+            		throw new MappingException("No MappingCompositeId annotation found in [" + entityType.getName() + "]");
             	}
         		idField = EntityHelper.getGeneratedValueField(compositeIdField.getType());
         		if (idField == null) {
-        			return;
+                    throw new MappingException("No MappingId annotation found in + [" + entityType.getName() + "]");
         		}
 
         		idProperty = compositeIdField.getName() + "." + idField.getName();

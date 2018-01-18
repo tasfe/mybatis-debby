@@ -22,6 +22,8 @@ import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,17 +51,18 @@ public class BeanUtils {
         return null;
     }
     
-    public static <A extends Annotation> Field findField(Class<?> clazz, Class<A> annotationType) {
+    public static <A extends Annotation> List<Field> findField(Class<?> clazz, Class<A> annotationType) {
+        List<Field> fieldList = new ArrayList<Field>();
     	PropertyDescriptor[] propertyDescriptors = getPropertyDescriptors(clazz);
     	for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
     		String propertyName = propertyDescriptor.getName();
     		Field field = ReflectUtils.findField(clazz, propertyName);
     		A annotation = field.getAnnotation(annotationType);
     		if (annotation != null) {
-    			return field;
+    		    fieldList.add(field);
     		}
     	}
-    	return null;
+    	return fieldList;
     }
 
     public static Method findReadMethod(Class<?> clazz, String propertyName) {

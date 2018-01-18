@@ -16,6 +16,7 @@
 package com.debby.mybatis.core.helper;
 
 import java.beans.PropertyDescriptor;
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,24 +50,50 @@ import com.debby.mybatis.util.StringUtils;
  */
 public class EntityHelper {
 
+    /**
+     * Check if has the specified result map.
+     *
+     * @param configuration
+     * @param resultMapId
+     * @return
+     */
     public static boolean hasResultMap(Configuration configuration, String resultMapId) {
         return configuration.getResultMapNames().contains(resultMapId);
     }
 
     /**
-     * Get the field which is annotated with MappingId and the value is generated for a composite id class.
+     * Get the composite id field in entity.
+     * <p>
+     *     Note: Only one field can be specified to composite id field.
+     * </p>
      *
-     * @param compositeIdClazz
-     *          composite id class
+     * @param entityType
      * @return
      */
-    public static Field getGeneratedValueField(Class<?> compositeIdClazz) {
+    public static Field getCompositeIdField(Class<?> entityType) {
+        List<Field> fieldList = BeanUtils.findField(entityType, MappingCompositeId.class);
+        if (fieldList.size() > 1) {
+            throw new MappingException("Only one field can be annotated with MappingCompositeId annotation.");
+        }
+        return fieldList.size() == 0 ? null : fieldList.get(0);
+    }
+
+    /**
+     * Get the field which is annotated with MappingId and the value is generated.
+     * <p>
+     *     Note: Only one field can be specified to the value is generated.
+     * </p>
+     *
+     * @param clazz
+     * @return
+     */
+    public static Field getGeneratedValueField(Class<?> clazz) {
         int generatedValueIdCount = 0;
         Field appropriateMappindIdField = null;
-        PropertyDescriptor[] propertyDescriptors = BeanUtils.getPropertyDescriptors(compositeIdClazz);
+        PropertyDescriptor[] propertyDescriptors = BeanUtils.getPropertyDescriptors(clazz);
         for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
             String propertyName = propertyDescriptor.getName();
-            Field field = ReflectUtils.findField(compositeIdClazz, propertyName);
+            Field field = ReflectUtils.findField(clazz, propertyName);
             MappingId mappingId = field.getAnnotation(MappingId.class);
             if (mappingId != null) {
                 boolean generatedValue = mappingId.generatedValue();
@@ -84,8 +111,105 @@ public class EntityHelper {
         return appropriateMappindIdField;
     }
 
-    public static List<XResultMapping> getXResultMappingList(Class<?> entityClazz, boolean camelToUnderscore) {
+    private static boolean validate(Class<?> entityClazz) {
+
+        // check MappingId field
+        List<Field> mappingIdFieldList = BeanUtils.findField(entityClazz, MappingId.class);
+        if (mappingIdFieldList.size() > 1) {
+            throw new MappingException("Use composite id for multiple ids.");
+        }
+
+        // check MappingCompositeId field
+        List<Field> mappingCompositeFieldList = BeanUtils.findField(entityClazz, MappingCompositeId.class);
+        if (mappingCompositeFieldList.size() > 1) {
+            throw new MappingException("Only one field can be annotated with MappingCompositeId annotation.");
+        }
+
+        // MappingId and MappingCompositeId cannot coexist.
+        if (mappingIdFieldList.size() > 0 && mappingCompositeFieldList.size() > 0) {
+            throw new MappingException("Use MappingId or MappingCompositeId, not both.");
+        }
+
+        if (mappingCompositeFieldList.size() == 1) {
+
+            Field mappingCompositeIdField = mappingCompositeFieldList.get(0);
+            Class<?> compositeType = mappingCompositeIdField.getType();
+
+            // composite id type must implement the Serializable interface.
+            if (!Serializable.class.isAssignableFrom(compositeType)) {
+                throw new MappingException("The composite id type must implement the Serializable interface.");
+            }
+
+            // check MappingId field in composite id type.
+            List<Field> embbedMappingIdFieldList = BeanUtils.findField(compositeType, MappingId.class);
+            if (embbedMappingIdFieldList.size() == 0) {
+                throw new MappingException("No MappingId found in composite typpe [" + compositeType.getName() + "]");
+            }
+
+            // check the generated value field
+            getGeneratedValueField(compositeType);
+        }
+
+        return true;
+    }
+
+    public static List<XResultMapping> autoMappingForCompositeIdType(Class<?> compositeIdType, boolean camelToUnderscore) {
+        List<XResultMapping> xResultMappingList = new ArrayList<>();
+        List<Field> idFieldList = BeanUtils.findField(compositeIdType, MappingId.class);
+        XResultMapping xResultMapping = null;
+        for (Field field : idFieldList) {
+            xResultMapping = new XResultMapping();
+            String fieldName = field.getName();
+            String column = camelToUnderscore ? StringUtils.camelToUnderscore(fieldName, false) : fieldName;
+
+            String jdbcType = null;
+            String typeHandler = null;
+
+            // MappingId
+            MappingId mappingId = field.getAnnotation(MappingId.class);
+            if (!StringUtils.isNullOrEmpty(mappingId.column())) {
+                column = mappingId.column();
+            }
+
+            // MappingJdbcType
+            MappingJdbcType mappingJdbcType = field.getAnnotation(MappingJdbcType.class);
+            if (mappingJdbcType != null) {
+                jdbcType = mappingJdbcType.value().name();
+            }
+
+            // MappingTypeHandler
+            MappingTypeHandler mappingTypeHandler = field.getAnnotation(MappingTypeHandler.class);
+            if (mappingTypeHandler != null) {
+                typeHandler = mappingTypeHandler.value().getName();
+            }
+
+            xResultMapping.setColumn(column);
+            xResultMapping.setProperty(fieldName);
+            xResultMapping.setId(true);
+
+            if (!StringUtils.isNullOrEmpty(jdbcType)) {
+                xResultMapping.setJdbcType(jdbcType);
+            }
+            if (!StringUtils.isNullOrEmpty(typeHandler)) {
+                xResultMapping.setTypeHandler(typeHandler);
+            }
+
+            xResultMappingList.add(xResultMapping);
+        }
+
+        return xResultMappingList;
+    }
+
+    /**
+     * Entity property auto mapping.
+     *
+     * @param entityClazz
+     * @param camelToUnderscore
+     * @return
+     */
+    public static List<XResultMapping> autoMapping(Class<?> entityClazz, boolean camelToUnderscore) {
         List<XResultMapping> resultMappingList = new ArrayList<XResultMapping>();
+
         PropertyDescriptor[] propertyDescriptors = BeanUtils.getPropertyDescriptors(entityClazz);
         for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
             String propertyName = propertyDescriptor.getName();
@@ -117,9 +241,9 @@ public class EntityHelper {
             // MappingCompositeId
             MappingCompositeId mappingCompositeId = field.getAnnotation(MappingCompositeId.class);
             if (mappingCompositeId != null) {
-                List<XResultMapping> embbedResultMappingList = getXResultMappingList(field.getType(), camelToUnderscore);
-                for (XResultMapping resultMapping : embbedResultMappingList) {
-                    resultMapping.setProperty(field.getName() + "." + resultMapping.getProperty());
+                List<XResultMapping> embbedResultMappingList = autoMappingForCompositeIdType(field.getType(), camelToUnderscore);
+                for (XResultMapping xResultMapping : embbedResultMappingList) {
+                    xResultMapping.setProperty(field.getName() + "." + xResultMapping.getProperty());
                 }
                 resultMappingList.addAll(embbedResultMappingList);
                 continue;

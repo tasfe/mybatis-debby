@@ -23,6 +23,7 @@ import com.debby.mybatis.core.dom.xml.Attribute;
 import com.debby.mybatis.core.dom.xml.XmlElement;
 import com.debby.mybatis.core.helper.EntityHelper;
 import com.debby.mybatis.core.xmlmapper.elements.AbstractXmlElementGenerator;
+import com.debby.mybatis.exception.MappingException;
 import com.debby.mybatis.util.StringUtils;
 
 /**
@@ -39,7 +40,12 @@ public class BaseResultMapElementGenerator extends AbstractXmlElementGenerator {
         answer.addAttribute(new Attribute("id", Constants.BASE_RESULT_MAP_ID));
         answer.addAttribute(new Attribute("type", entityType.getName()));
 
-        List<XResultMapping> resultMappingList = EntityHelper.getXResultMappingList(entityType, introspectedContext.getDebbyConfiguration().getCamelToUnderscore());
+        List<XResultMapping> resultMappingList = EntityHelper.autoMapping(entityType, introspectedContext.getDebbyConfiguration().getCamelToUnderscore());
+
+        if (resultMappingList.size() == 0) {
+            throw new MappingException("Can't do auto mapping for [" + entityType.getName() + "]");
+        }
+
         for (XResultMapping resultMapping : resultMappingList) {
             XmlElement element = null;
             if (resultMapping.isId()) {
