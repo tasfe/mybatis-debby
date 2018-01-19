@@ -36,7 +36,6 @@ public class EntityCriteria {
 	private static final Logger LOGGER = LoggerFactory.getLogger(EntityCriteria.class);
 
 	private final Class<?> entityType;
-	private String columns;
 	
     private Integer maxResults;
     private Integer firstResult; // the index of the first result, which is start with 0
@@ -167,9 +166,8 @@ public class EntityCriteria {
 			}
 		}
 		
-		columns = sb.toString();
-		LOGGER.debug("[{}][COLUMNS]: [{}]", entityType.getName(), columns);
-		return columns;
+		LOGGER.debug("[{}][COLUMNS]: [{}]", entityType.getName(), sb.toString());
+		return sb.toString();
 	}
 
 }

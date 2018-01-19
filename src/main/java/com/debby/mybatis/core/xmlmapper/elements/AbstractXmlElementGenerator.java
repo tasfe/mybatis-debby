@@ -20,25 +20,23 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.debby.mybatis.annotation.KeyGenerationStrategy;
-import com.debby.mybatis.annotation.KeySequenceGenerator;
-import com.debby.mybatis.annotation.MappingCompositeId;
-import com.debby.mybatis.annotation.MappingId;
-import com.debby.mybatis.core.constant.Constants;
-import com.debby.mybatis.core.helper.EntityHelper;
-import com.debby.mybatis.exception.MappingException;
 import org.apache.ibatis.mapping.ResultFlag;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
 
+import com.debby.mybatis.annotation.KeyGenerationStrategy;
+import com.debby.mybatis.annotation.KeySequenceGenerator;
+import com.debby.mybatis.annotation.MappingId;
+import com.debby.mybatis.core.constant.Constants;
 import com.debby.mybatis.core.dialect.Dialect;
 import com.debby.mybatis.core.dom.xml.Attribute;
 import com.debby.mybatis.core.dom.xml.TextElement;
 import com.debby.mybatis.core.dom.xml.XmlElement;
+import com.debby.mybatis.core.helper.EntityHelper;
 import com.debby.mybatis.core.util.FormattingUtilities;
 import com.debby.mybatis.core.xmlmapper.AbstractGenerator;
 import com.debby.mybatis.exception.IdConfigException;
-import com.debby.mybatis.util.BeanUtils;
+import com.debby.mybatis.exception.MappingException;
 import com.debby.mybatis.util.ReflectUtils;
 import com.debby.mybatis.util.StringUtils;
 
@@ -219,13 +217,9 @@ public abstract class AbstractXmlElementGenerator extends AbstractGenerator {
      */
     protected void addSelectKey(ResultMap resultMap, XmlElement parentElement) {
         if (getIdResultMappingsCount(resultMap) > 0) {
-
+        	List<ResultMapping> idResultMappingList = getIdResultMappings(resultMap);
             Class<?> entityType = resultMap.getType();
-
-            List<ResultMapping> idResultMappingList = getIdResultMappings(resultMap);
-
             String idProperty = null;
-
             Field idField = null;
             if (idResultMappingList.size() == 1) {
             	ResultMapping idResultMapping = idResultMappingList.get(0);

@@ -57,6 +57,7 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
         addUpdateElement(answer);
         addUpdateSelectiveElement(answer);
         addSelectByIdElement(answer);
+        addSelectOneElement(answer);
         addSelectListElement(answer);
         addSelectListForPagingElement(answer);
         addSelectPageElement(answer);
@@ -150,6 +151,13 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
     protected void addSelectByIdElement(XmlElement parentElement) {
         if (!introspectedContext.getAlreadyOwnedInternalStatements().contains(InternalStatements.SELECT_BY_ID)) {
             AbstractXmlElementGenerator elementGenerator = new SelectByIdElementGenerator();
+            initializeAndExecuteGenerator(elementGenerator, parentElement);
+        }
+    }
+    
+    protected void addSelectOneElement(XmlElement parentElement) {
+        if (!introspectedContext.getAlreadyOwnedInternalStatements().contains(InternalStatements.SELECT_ONE)) {
+            AbstractXmlElementGenerator elementGenerator = new SelectOneElementGenerator();
             initializeAndExecuteGenerator(elementGenerator, parentElement);
         }
     }

@@ -101,8 +101,11 @@ public class MyBatisBooster {
 					ParameterizedType parameterizedType = (ParameterizedType) (mapperClass.getGenericInterfaces()[0]);
 					Type[] argumentTypes = parameterizedType.getActualTypeArguments();
 					entityType = (Class<?>) argumentTypes[0];
+					
+					// valid entity
+					EntityHelper.validate(entityType);
 
-					// Construct the base result map if it's not be predefined in the mapper xml.
+					// construct the base result map if it's not be predefined in the mapper xml.
 					if (!EntityHelper.hasResultMap(configuration, baseResultMapId)) {
 						introspectedContext = new IntrospectedContext(configuration, debbyConfiguration);
 						introspectedContext.setEntityType(entityType);
@@ -162,7 +165,8 @@ public class MyBatisBooster {
 
 	        }
 
-			new XConfiguration(configuration).buildAllStatements();
+	        XConfiguration xConfiguration = new XConfiguration(configuration);
+	        xConfiguration.buildAllStatements();
 
 		} catch (Exception e) {
             LOGGER.error("Debby-Error ：debby mapper support...", e);

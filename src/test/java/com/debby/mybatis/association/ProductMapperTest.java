@@ -7,6 +7,8 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.debby.mybatis.AbstractDebbyMapperTest;
+import com.debby.mybatis.criteria.EntityCriteria;
+import com.debby.mybatis.criteria.Restrictions;
 
 /**
  * @author rocky.hu
@@ -107,8 +109,19 @@ public class ProductMapperTest extends AbstractDebbyMapperTest<ProductMapper> {
         Product product = mapper.selectById(1);
         Assert.assertEquals(product.getTitle(), "p1");
     }
-
+    
     @Test
+	@Override
+	public void testSelectOne() {
+		EntityCriteria entityCriteria = EntityCriteria.forEntity(Product.class);
+		entityCriteria.createCriteria().addCriterion(Restrictions.eq("title", "p1"));
+		
+		Product product = mapper.selectOne(entityCriteria);
+		Assert.assertNotNull(product);
+		Assert.assertEquals(product.getTitle(), "p1");
+	}
+
+	@Test
     public void testTestVarargs() {
         Product product = mapper.testVarargs(1);
         Assert.assertEquals(product.getTitle(), "p1");

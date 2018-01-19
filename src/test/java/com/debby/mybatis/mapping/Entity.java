@@ -15,14 +15,17 @@
  */
 package com.debby.mybatis.mapping;
 
+import java.io.Serializable;
+
 import com.debby.mybatis.annotation.MappingCompositeId;
+import com.debby.mybatis.annotation.MappingId;
 import com.debby.mybatis.annotation.MappingResult;
 
 /**
  * @author rocky.hu
  * @date 2018-01-14 5:49 PM
  */
-public class EntityMock {
+public class Entity {
 
     @MappingCompositeId
     private EntityCompositeIdMock entityCompositeIdMock;
@@ -52,6 +55,54 @@ public class EntityMock {
 
     public void setAge(int age) {
         this.age = age;
+    }
+    
+    class EntityAssocationMock {
+
+        @MappingId
+        private int id;
+        private String name;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+    }
+    
+    class EntityCompositeIdMock implements Serializable {
+
+        @MappingId
+        private int id;
+        @MappingId(generatedValue = false)
+        private String name;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 
 }

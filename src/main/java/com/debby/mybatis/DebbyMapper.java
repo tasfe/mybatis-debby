@@ -88,9 +88,17 @@ public interface DebbyMapper<ENTITY, ID extends Serializable> {
      * @return
      */
     ENTITY selectById(ID id);
+    
+    /**
+     * Select an entity by criteria.
+     * 
+     * @param criteria
+     * @return
+     */
+    ENTITY selectOne(EntityCriteria criteria);
 
     /**
-     * A enhanced select method that accept different selective conditions.
+     * Select entity collection by criteria.
      *
      * @param criteria
      * @return

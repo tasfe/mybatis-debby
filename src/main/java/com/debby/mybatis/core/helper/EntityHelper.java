@@ -38,7 +38,6 @@ import com.debby.mybatis.annotation.MappingTransient;
 import com.debby.mybatis.annotation.MappingTypeHandler;
 import com.debby.mybatis.core.ResultMapRegistry;
 import com.debby.mybatis.core.bean.XResultMapping;
-import com.debby.mybatis.exception.IdConfigException;
 import com.debby.mybatis.exception.MappingException;
 import com.debby.mybatis.util.BeanUtils;
 import com.debby.mybatis.util.ReflectUtils;
@@ -60,7 +59,7 @@ public class EntityHelper {
     public static boolean hasResultMap(Configuration configuration, String resultMapId) {
         return configuration.getResultMapNames().contains(resultMapId);
     }
-
+    
     /**
      * Get the composite id field in entity.
      * <p>
@@ -105,18 +104,24 @@ public class EntityHelper {
         }
 
         if (generatedValueIdCount > 1) {
-            throw new IdConfigException("Only one field can be set to generated value.");
+            throw new MappingException("Only one field can be set to generated value.");
         }
 
         return appropriateMappindIdField;
     }
 
-    private static boolean validate(Class<?> entityClazz) {
+    /**
+     * Valid the entity to check if the Mapping Annotations are used correctly.
+     * 
+     * @param entityClazz
+     * @return
+     */
+    public static void validate(Class<?> entityClazz) {
 
         // check MappingId field
         List<Field> mappingIdFieldList = BeanUtils.findField(entityClazz, MappingId.class);
         if (mappingIdFieldList.size() > 1) {
-            throw new MappingException("Use composite id for multiple ids.");
+            throw new MappingException("Use MappingCompositeId for multiple ids.");
         }
 
         // check MappingCompositeId field
@@ -124,33 +129,46 @@ public class EntityHelper {
         if (mappingCompositeFieldList.size() > 1) {
             throw new MappingException("Only one field can be annotated with MappingCompositeId annotation.");
         }
-
-        // MappingId and MappingCompositeId cannot coexist.
+        
+        // MappingId and MappingCompositeId must have at least one
+        if (mappingIdFieldList.size() == 0 && mappingCompositeFieldList.size() == 0) {
+        	throw new MappingException("Id field must be specified for [" + entityClazz.getName() + "].");
+        }
+        
+        // MappingId and MappingCompositeId cannot coexist
         if (mappingIdFieldList.size() > 0 && mappingCompositeFieldList.size() > 0) {
             throw new MappingException("Use MappingId or MappingCompositeId, not both.");
         }
-
+        
         if (mappingCompositeFieldList.size() == 1) {
 
             Field mappingCompositeIdField = mappingCompositeFieldList.get(0);
             Class<?> compositeType = mappingCompositeIdField.getType();
 
-            // composite id type must implement the Serializable interface.
+            // composite id type must implement the Serializable interface
             if (!Serializable.class.isAssignableFrom(compositeType)) {
                 throw new MappingException("The composite id type must implement the Serializable interface.");
             }
 
-            // check MappingId field in composite id type.
+            // check MappingId field in composite id type
             List<Field> embbedMappingIdFieldList = BeanUtils.findField(compositeType, MappingId.class);
             if (embbedMappingIdFieldList.size() == 0) {
-                throw new MappingException("No MappingId found in composite typpe [" + compositeType.getName() + "]");
+                throw new MappingException("No MappingId found in composite type [" + compositeType.getName() + "].");
             }
 
-            // check the generated value field
-            getGeneratedValueField(compositeType);
+            // check the generated value id field
+            int generatedValueCount = 0;
+            for (Field field : embbedMappingIdFieldList) {
+            	MappingId mappingId = field.getAnnotation(MappingId.class);
+            	if (mappingId.generatedValue()) {
+            		generatedValueCount++;
+            	}
+            }
+            if (generatedValueCount > 1) {
+            	throw new MappingException("Only one field can be set to generated value.");
+            }
+            
         }
-
-        return true;
     }
 
     public static List<XResultMapping> autoMappingForCompositeIdType(Class<?> compositeIdType, boolean camelToUnderscore) {
@@ -226,7 +244,7 @@ public class EntityHelper {
             boolean isId = false;
             String column = camelToUnderscore ? StringUtils.camelToUnderscore(propertyName, false) : propertyName;
             String jdbcType = null;
-            String javaType = null;
+            // String javaType = null;
             String typeHandler = null;
 
             // MappingId
@@ -257,7 +275,14 @@ public class EntityHelper {
                 }
                 if (mappingResult.association()) {
                     Class<?> assoicationEntityType = field.getType();
-                    Field idField = BeanUtils.findField(assoicationEntityType, MappingId.class);
+                    validate(assoicationEntityType);
+                    Field compositeIdField = getCompositeIdField(assoicationEntityType);
+                    if (compositeIdField != null) {
+                    	throw new MappingException("Can't handle the assoication entity ["+ assoicationEntityType.getName() + "] "
+                    			+ "which have composite id, please define the BASE_RESULT_MAP in mapper xml manually.");
+                    }
+                    
+                    Field idField = BeanUtils.findField(assoicationEntityType, MappingId.class).get(0);
                     if (idField == null) {
                         throw new MappingException("The assoiction entity " + assoicationEntityType + " must define id field");
                     }

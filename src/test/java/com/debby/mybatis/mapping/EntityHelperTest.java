@@ -15,13 +15,10 @@
  */
 package com.debby.mybatis.mapping;
 
-import java.util.List;
-
 import org.testng.annotations.Test;
 
-import com.debby.mybatis.core.bean.XResultMapping;
 import com.debby.mybatis.core.helper.EntityHelper;
-import com.debby.mybatis.key.composite.Member;
+import com.debby.mybatis.exception.MappingException;
 
 /**
  * @author rocky.hu
@@ -31,10 +28,37 @@ public class EntityHelperTest {
 
     @Test
     public void test() {
-        List<XResultMapping> resultMappingList = EntityHelper.getXResultMappingList(Member.class, true);
-        for (XResultMapping resultMapping : resultMappingList) {
-            System.out.println(resultMapping);
-        }
+    	EntityHelper.validate(Entity.class);
+    }
+    
+    @Test(expectedExceptions = {MappingException.class}, expectedExceptionsMessageRegExp = "Use MappingCompositeId for multiple ids.")
+    public void testEntityWithMultipleMappingId() {
+    	EntityHelper.validate(EntityWithMultipleMappingId.class);
+    }
+    
+    @Test(expectedExceptions = {MappingException.class}, expectedExceptionsMessageRegExp = "Only one field can be annotated with MappingCompositeId annotation.")
+    public void testEntityWithMultipleMappingCompositeId() {
+    	EntityHelper.validate(EntityWithMultipleMappingCompositeId.class);
+    }
+    
+    @Test(expectedExceptions = {MappingException.class}, expectedExceptionsMessageRegExp = "Use MappingId or MappingCompositeId, not both.")
+    public void testEntityWithMappingIdAndMappingCompositeId() {
+    	EntityHelper.validate(EntityWithMappingIdAndMappingCompositeId.class);
+    }
+    
+    @Test(expectedExceptions = {MappingException.class}, expectedExceptionsMessageRegExp = "Id field must be specified for \\[com.debby.mybatis.mapping.EntityWithNoId\\].")
+    public void testEntityWithNoId() {
+    	EntityHelper.validate(EntityWithNoId.class);
+    }
+    
+    @Test(expectedExceptions = {MappingException.class}, expectedExceptionsMessageRegExp = "No MappingId found in composite type \\[com.debby.mybatis.mapping.EntityWithMappingCompositeIdAndNoMappingIdIn\\$CompositeId\\].")
+    public void testEntityWithMappingCompositeIdAndNoMappingIdIn() {
+    	EntityHelper.validate(EntityWithMappingCompositeIdAndNoMappingIdIn.class);
+    }
+    
+    @Test(expectedExceptions = {MappingException.class}, expectedExceptionsMessageRegExp = "Only one field can be set to generated value.")
+    public void testEntityWithMappingCompositeIdAndMultipleGeneratedMappingId() {
+    	EntityHelper.validate(EntityWithMappingCompositeIdAndMultipleGeneratedMappingId.class);
     }
 
 }

@@ -113,11 +113,11 @@ public class SqlCriteriaFragmentElementGenerator extends AbstractXmlElementGener
         XmlElement otherwise = new XmlElement("otherwise");
         sb.setLength(0);
         if (valueMode == ValueMode.SINGLE) {
-            sb.append("#{criterion.value, typeHandler = criterion.typeHandler}");
+            sb.append("#{criterion.value, typeHandler = ${criterion.typeHandler}}");
         } else if (valueMode == ValueMode.TWO) {
-            sb.append("#{criterion.value, typeHandler = criterion.typeHandler} and #{criterion.secondValue, typeHandler = criterion.typeHandler}");
+            sb.append("#{criterion.value, typeHandler = ${criterion.typeHandler}} and #{criterion.secondValue, typeHandler = ${criterion.typeHandler}}");
         } else if (valueMode == ValueMode.LIST) {
-            sb.append("#{listItem, typeHandler = criterion.typeHandler}");
+            sb.append("#{listItem, typeHandler = ${criterion.typeHandler}}");
         }
         otherwise.addElement(new TextElement(sb.toString()));
         chooseElement.addElement(otherwise);

@@ -30,6 +30,7 @@ public enum InternalStatements {
     UPDATE(SqlCommandType.UPDATE, "update"),
     UPDATE_SELECTIVE(SqlCommandType.UPDATE, "updateSelective"),
     SELECT_BY_ID(SqlCommandType.SELECT, "selectById"),
+    SELECT_ONE(SqlCommandType.SELECT, "selectOne"),
     SELECT_LIST(SqlCommandType.SELECT, "selectList"),
     SELECT_PAGE(SqlCommandType.SELECT, "selectPage"),
     SELECT_COUNT(SqlCommandType.SELECT, "selectCount"),

@@ -30,8 +30,13 @@ public class SelectListElementGenerator extends AbstractXmlElementGenerator {
 
     @Override
     public void addElements(XmlElement parentElement) {
-        XmlElement answer = new XmlElement("select");
-        answer.addAttribute(new Attribute("id", InternalStatements.SELECT_LIST.getId()));
+    	XmlElement answer = buildSelectElement(InternalStatements.SELECT_LIST.getId());
+        parentElement.addElement(answer);
+    }
+    
+    protected XmlElement buildSelectElement(String id) {
+    	XmlElement answer = new XmlElement("select");
+        answer.addAttribute(new Attribute("id", id));
         answer.addAttribute(new Attribute("parameterType", EntityCriteria.class.getName()));
         answer.addAttribute(new Attribute("resultMap", Constants.BASE_RESULT_MAP_ID));
         
@@ -52,7 +57,7 @@ public class SelectListElementGenerator extends AbstractXmlElementGenerator {
         answer.addElement(getSelectWhereSqlFragment());
         answer.addElement(getOrderBySqlFragment());
         
-        parentElement.addElement(answer);
+        return answer;
     }
 
 }

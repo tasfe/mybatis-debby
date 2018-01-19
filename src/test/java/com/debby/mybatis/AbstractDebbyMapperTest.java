@@ -69,6 +69,7 @@ public abstract class AbstractDebbyMapperTest<MAPPER extends DebbyMapper<?, ?>> 
     public void testUpdate(){};
     public void testUpdateSelective(){};
     public void testSelectById(){};
+    public void testSelectOne(){};
     public void testSelectList(){};
     public void testSelectPage(){};
     public void testSelectCount(){};
