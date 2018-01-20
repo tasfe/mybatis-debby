@@ -26,7 +26,7 @@ public class SelectOneElementGenerator extends SelectListElementGenerator {
 
     @Override
     public void addElements(XmlElement parentElement) {
-    	XmlElement answer = buildSelectElement(InternalStatements.SELECT_ONE.getId());
+    	XmlElement answer = buildSelectElement(InternalStatements.SELECT_ONE.getId(), false);
         parentElement.addElement(answer);
     }
 

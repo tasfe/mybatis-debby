@@ -6,6 +6,10 @@ import java.util.Date;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -23,10 +27,12 @@ public class ProductMapperTest {
 	
 	private DBUnitHelper dbUnitHelper = new DBUnitHelper();
 	private ProductMapper mapper = null;
-	
-	public ProductMapperTest() {
+	private PlatformTransactionManager transactionManager;
+
+    public ProductMapperTest() {
 		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		mapper = (ProductMapper) context.getBean("productMapper");
+        transactionManager = (PlatformTransactionManager) context.getBean("transactionManager");
 		((ConfigurableApplicationContext)context).close();
 	}
 	
@@ -38,6 +44,10 @@ public class ProductMapperTest {
 	
 	@Test
     public void testInsert() {
+
+        TransactionDefinition def = new DefaultTransactionDefinition();
+        TransactionStatus status = transactionManager.getTransaction(def);
+
         ProductCategory productCategory = new ProductCategory();
         productCategory.setId(1);
 
@@ -53,12 +63,15 @@ public class ProductMapperTest {
 
         mapper.insert(product);
 
+        transactionManager.commit(status);
+
         Assert.assertNotNull(product.getId());
         Assert.assertEquals(product.getId().intValue(), 4);
     }
 
 	@Test
     public void testInsertSelective() {
+
         ProductCategory productCategory = new ProductCategory();
         productCategory.setId(1);
 
@@ -97,7 +110,7 @@ public class ProductMapperTest {
 
     @Test
     public void testUpdateByPrimaryKeySelective() {
-    	
+
         Product product = new Product();
         product.setId(1);
         product.setTitle("p1-1");
