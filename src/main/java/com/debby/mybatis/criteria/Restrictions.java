@@ -15,6 +15,13 @@
  */
 package com.debby.mybatis.criteria;
 
+import com.debby.mybatis.criteria.criterion.BetweenCriterion;
+import com.debby.mybatis.criteria.criterion.ComparisonCriterion;
+import com.debby.mybatis.criteria.criterion.Criterion;
+import com.debby.mybatis.criteria.criterion.InCriterion;
+import com.debby.mybatis.criteria.criterion.LikeCriterion;
+import com.debby.mybatis.criteria.criterion.NotNullCriterion;
+import com.debby.mybatis.criteria.criterion.NullCriterion;
 import com.debby.mybatis.sql.SQLComparisonOperator;
 
 import java.util.ArrayList;

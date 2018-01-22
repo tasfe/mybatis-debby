@@ -103,5 +103,4 @@ public class BeanUtils {
         return propertyDescriptors;
     }
 
-
 }

@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 import com.debby.mybatis.AbstractDebbyMapperTest;
 import com.debby.mybatis.bean.Page;
 import com.debby.mybatis.criteria.EntityCriteria;
-import com.debby.mybatis.criteria.Order;
+import com.debby.mybatis.criteria.sort.Order;
 
 /**
  * @author rocky.hu

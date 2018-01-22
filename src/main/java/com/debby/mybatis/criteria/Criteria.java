@@ -21,6 +21,7 @@ import java.util.List;
 import org.apache.ibatis.mapping.ResultMapping;
 
 import com.debby.mybatis.core.ResultMapRegistry;
+import com.debby.mybatis.criteria.criterion.Criterion;
 import com.debby.mybatis.util.StringUtils;
 
 /**
