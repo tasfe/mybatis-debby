@@ -28,7 +28,7 @@ import com.debby.mybatis.core.dialect.SQLServer2005Dialect;
 import com.debby.mybatis.core.dialect.SQLServer2008Dialect;
 import com.debby.mybatis.core.dialect.SQLServer2012Dialect;
 import com.debby.mybatis.core.dialect.SQLServerDialect;
-import com.debby.mybatis.exception.DebbyException;
+import com.debby.mybatis.exception.MyBatisDebbyException;
 
 /**
  * @author rocky.hu
@@ -53,7 +53,7 @@ public class DialectFactory {
 	public static Dialect getDialect(String dialectName) {
 		final Dialect dialect = dialectMap.get(dialectName);
 		if (dialect == null) {
-			throw new DebbyException("Unable to recognize dialect [" + dialectName + "]");
+			throw new MyBatisDebbyException("Unable to recognize dialect [" + dialectName + "]");
 		}
 		return dialect;
 	}

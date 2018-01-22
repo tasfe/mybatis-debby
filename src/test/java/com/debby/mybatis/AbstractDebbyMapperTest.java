@@ -11,7 +11,7 @@ import org.testng.annotations.BeforeMethod;
  * @author rocky.hu
  * @date 2017-12-16 11:59 AM
  */
-public abstract class AbstractDebbyMapperTest<MAPPER extends DebbyMapper<?, ?>> {
+public abstract class AbstractDebbyMapperTest<MAPPER extends MyBatisDebbyMapper<?, ?>> {
 
 	protected MAPPER mapper;
 	private Class<MAPPER> mapperClass;

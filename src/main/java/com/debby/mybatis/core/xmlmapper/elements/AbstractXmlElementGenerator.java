@@ -35,7 +35,6 @@ import com.debby.mybatis.core.dom.xml.XmlElement;
 import com.debby.mybatis.core.helper.EntityHelper;
 import com.debby.mybatis.core.util.FormattingUtilities;
 import com.debby.mybatis.core.xmlmapper.AbstractGenerator;
-import com.debby.mybatis.exception.IdConfigException;
 import com.debby.mybatis.exception.MappingException;
 import com.debby.mybatis.util.ReflectUtils;
 import com.debby.mybatis.util.StringUtils;
@@ -262,7 +261,7 @@ public abstract class AbstractXmlElementGenerator extends AbstractGenerator {
             	String generator = mappingId.generator();
             	KeySequenceGenerator sequenceGenerator = idField.getAnnotation(KeySequenceGenerator.class);
             	if (StringUtils.isNullOrEmpty(generator) || sequenceGenerator == null || !generator.equals(sequenceGenerator.name())) {
-            		throw new IdConfigException("No sequence generator is configed for '" + idProperty + "'");
+            		throw new MappingException("No sequence generator is configed for '" + idProperty + "'");
             	}
             	String sequenceName = sequenceGenerator.sequenceName();
                 selectKeyElement.addAttribute(new Attribute("order", "BEFORE" ));

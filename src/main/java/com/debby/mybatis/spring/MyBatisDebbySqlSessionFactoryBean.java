@@ -20,31 +20,31 @@ import java.io.IOException;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 
-import com.debby.mybatis.DebbyConfiguration;
-import com.debby.mybatis.core.MyBatisBooster;
+import com.debby.mybatis.MyBatisDebbyConfiguration;
+import com.debby.mybatis.core.MyBatisDebbyBooster;
 
 /**
  * @author rocky.hu
  * @date Jan 16, 2018 2:31:41 PM
  */
-public class DebbySqlSessionFactoryBean extends SqlSessionFactoryBean {
+public class MyBatisDebbySqlSessionFactoryBean extends SqlSessionFactoryBean {
 	
-	private DebbyConfiguration debbyConfiguration;
+	private MyBatisDebbyConfiguration myBatisDebbyConfiguration;
 
 	@Override
 	protected SqlSessionFactory buildSqlSessionFactory() throws IOException {
 		SqlSessionFactory sqlSessionFactory = super.buildSqlSessionFactory();
-		MyBatisBooster myBatisBooster = new MyBatisBooster(debbyConfiguration, sqlSessionFactory.getConfiguration());
-		myBatisBooster.execute();
+		MyBatisDebbyBooster myBatisDebbyBooster = new MyBatisDebbyBooster(myBatisDebbyConfiguration, sqlSessionFactory.getConfiguration());
+		myBatisDebbyBooster.execute();
 		return sqlSessionFactory;
 	}
 
-	public DebbyConfiguration getDebbyConfiguration() {
-		return debbyConfiguration;
+	public MyBatisDebbyConfiguration getDebbyConfiguration() {
+		return myBatisDebbyConfiguration;
 	}
 
-	public void setDebbyConfiguration(DebbyConfiguration debbyConfiguration) {
-		this.debbyConfiguration = debbyConfiguration;
+	public void setDebbyConfiguration(MyBatisDebbyConfiguration myBatisDebbyConfiguration) {
+		this.myBatisDebbyConfiguration = myBatisDebbyConfiguration;
 	}
 
 }

@@ -22,7 +22,7 @@ import java.util.Map;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
 
-import com.debby.mybatis.exception.DebbyException;
+import com.debby.mybatis.exception.MyBatisDebbyException;
 import com.debby.mybatis.util.StringUtils;
 
 /**
@@ -40,7 +40,7 @@ public class ResultMapRegistry {
     public static ResultMap getResultMap(String className) {
         ResultMap resultMap = ENTITY_RESULT_MAP_MAP.get(className);
         if (resultMap == null) {
-            throw new DebbyException("No ResultMap is associated with [" + className + "]");
+            throw new MyBatisDebbyException("No ResultMap is associated with [" + className + "]");
         }
         return ENTITY_RESULT_MAP_MAP.get(className);
     }
@@ -62,7 +62,7 @@ public class ResultMapRegistry {
         }
 
         if (resultMapping == null) {
-            throw new DebbyException("No result mapping for property [" + propertyName + "]");
+            throw new MyBatisDebbyException("No result mapping for property [" + propertyName + "]");
         }
 
         return resultMapping;

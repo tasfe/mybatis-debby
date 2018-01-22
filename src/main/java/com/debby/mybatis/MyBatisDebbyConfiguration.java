@@ -17,14 +17,14 @@ package com.debby.mybatis;
 
 import com.debby.mybatis.core.DialectFactory;
 import com.debby.mybatis.core.dialect.Dialect;
-import com.debby.mybatis.exception.DebbyException;
+import com.debby.mybatis.exception.MyBatisDebbyException;
 import com.debby.mybatis.util.StringUtils;
 
 /**
  * @author rocky.hu
  * @date 2017-11-27 10:14 PM
  */
-public class DebbyConfiguration {
+public class MyBatisDebbyConfiguration {
 
 	/** Enable debug mode to view the mapper xml which the framework auto generate */
     private boolean debugEnabled;
@@ -37,10 +37,10 @@ public class DebbyConfiguration {
     /** Set the value to 'true', when use auto mapping, the property will be mapped to under score format */
     private boolean camelToUnderscore;
 
-    public DebbyConfiguration() {
+    public MyBatisDebbyConfiguration() {
     }
 
-    public DebbyConfiguration(String dialect) {
+    public MyBatisDebbyConfiguration(String dialect) {
         this.dialect = dialect;
     }
 
@@ -71,7 +71,7 @@ public class DebbyConfiguration {
 	public Dialect getDialect()
 	{
 		if (StringUtils.isNullOrEmpty(dialect)) {
-			throw new DebbyException("Dialect is required.");
+			throw new MyBatisDebbyException("Dialect is required.");
 		}
 		Dialect instance = DialectFactory.getDialect(dialect);
 		return instance;

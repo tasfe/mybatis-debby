@@ -51,8 +51,6 @@
 		<constructor-arg ref="sqlSessionFactory" />
 	</bean>
 
-
-
 	<!-- <bean id="productMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface" value="com.debby.mybatis.normal.ProductMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />

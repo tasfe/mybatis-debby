@@ -19,7 +19,7 @@ package com.debby.mybatis.exception;
  * @author rocky.hu
  * @date 2017-12-17 12:57 PM
  */
-public class MappingException extends DebbyException {
+public class MappingException extends MyBatisDebbyException {
 
     public MappingException() {
         super();

@@ -27,7 +27,7 @@ import com.debby.mybatis.criteria.EntityCriteria;
  * @author rocky.hu
  * @date Aug 6, 2016 11:03:23 PM
  */
-public interface DebbyMapper<ENTITY, ID extends Serializable> {
+public interface MyBatisDebbyMapper<ENTITY, ID extends Serializable> {
     
     /**
      * Insert an entity.

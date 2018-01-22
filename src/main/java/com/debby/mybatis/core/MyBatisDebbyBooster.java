@@ -34,8 +34,8 @@ import org.apache.ibatis.session.XConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.debby.mybatis.DebbyConfiguration;
-import com.debby.mybatis.DebbyMapper;
+import com.debby.mybatis.MyBatisDebbyConfiguration;
+import com.debby.mybatis.MyBatisDebbyMapper;
 import com.debby.mybatis.core.builder.XXMLMapperBuilder;
 import com.debby.mybatis.core.constant.Constants;
 import com.debby.mybatis.core.helper.EntityHelper;
@@ -51,18 +51,18 @@ import com.debby.mybatis.util.StringUtils;
  * @author rocky.hu
  * @date Nov 22, 2017 11:23:58 AM
  */
-public class MyBatisBooster {
+public class MyBatisDebbyBooster {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(MyBatisBooster.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MyBatisDebbyBooster.class);
     
     private static final String DEBBY_MAPPER_FILE_SUFFIX = "_DEBBY.xml";
 
-    private DebbyConfiguration debbyConfiguration;
+    private MyBatisDebbyConfiguration myBatisDebbyConfiguration;
     private Configuration configuration;
     
-    public MyBatisBooster(DebbyConfiguration debbyConfiguration, Configuration configuration) {
+    public MyBatisDebbyBooster(MyBatisDebbyConfiguration myBatisDebbyConfiguration, Configuration configuration) {
 		super();
-		this.debbyConfiguration = debbyConfiguration;
+		this.myBatisDebbyConfiguration = myBatisDebbyConfiguration;
 		this.configuration = configuration;
 	}
 
@@ -70,7 +70,7 @@ public class MyBatisBooster {
 
         LOGGER.info("Debby-Info ：[Start] debby mapper support...");
 
-        if (debbyConfiguration.isDebugEnabled() && StringUtils.isNullOrEmpty(debbyConfiguration.getMapperXmlOutputPath())) {
+        if (myBatisDebbyConfiguration.isDebugEnabled() && StringUtils.isNullOrEmpty(myBatisDebbyConfiguration.getMapperXmlOutputPath())) {
 			throw new BuilderException("[Exception] 'mapperXmlOutputPath' must be set on debug mode.");
 		} 
         
@@ -87,7 +87,7 @@ public class MyBatisBooster {
 			XMLMapperGenerator mapperGenerator = null;
 			
 			StringBuilder directory = new StringBuilder();
-			directory.append(debbyConfiguration.getMapperXmlOutputPath());
+			directory.append(myBatisDebbyConfiguration.getMapperXmlOutputPath());
 			directory.append(currentTime);
 			directory.append(File.separator);
 
@@ -97,7 +97,7 @@ public class MyBatisBooster {
 			MapperRegistry mapperRegistry = configuration.getMapperRegistry();
 	        for (Class<?> mapperClass : mapperRegistry.getMappers()) {
 
-				if (DebbyMapper.class.isAssignableFrom(mapperClass)) {
+				if (MyBatisDebbyMapper.class.isAssignableFrom(mapperClass)) {
 					String mapperName = mapperClass.getName();
 					String baseResultMapId = mapperName + "." + Constants.BASE_RESULT_MAP_ID;
 
@@ -112,14 +112,14 @@ public class MyBatisBooster {
 
 					// construct the base result map if it's not be predefined in the mapper xml.
 					if (!EntityHelper.hasResultMap(configuration, baseResultMapId)) {
-						introspectedContext = new IntrospectedContext(configuration, debbyConfiguration);
+						introspectedContext = new IntrospectedContext(configuration, myBatisDebbyConfiguration);
 						introspectedContext.setEntityType(entityType);
 
 						baseResultMapGenerator = new BaseResultMapGenerator();
 						baseResultMapGenerator.setIntrospectedContext(introspectedContext);
 
 						String formattedContent = baseResultMapGenerator.getDocument().getFormattedContent();
-						if (debbyConfiguration.isDebugEnabled()) {
+						if (myBatisDebbyConfiguration.isDebugEnabled()) {
 							resultMapBuilder.append(formattedContent);
 							resultMapBuilder.append(System.getProperty("line.separator"));
 						}
@@ -142,7 +142,7 @@ public class MyBatisBooster {
 						}
 					}
 
-					introspectedContext = new IntrospectedContext(configuration, debbyConfiguration);
+					introspectedContext = new IntrospectedContext(configuration, myBatisDebbyConfiguration);
 					introspectedContext.setResultMap(baseResultMap);
 					introspectedContext.setEntityType(entityType);
 					introspectedContext.setAlreadyOwnedInternalStatements(alreadyOwnedInternalStatements);
@@ -152,7 +152,7 @@ public class MyBatisBooster {
 
 					String formattedContent = mapperGenerator.getDocument().getFormattedContent();
 
-					if (debbyConfiguration.isDebugEnabled()) {
+					if (myBatisDebbyConfiguration.isDebugEnabled()) {
 						fileName.setLength(0);
 						fileName.append(mapperName.replace(".", "$"));
 						fileName.append(DEBBY_MAPPER_FILE_SUFFIX);
@@ -165,7 +165,7 @@ public class MyBatisBooster {
 
 	        }
 
-			if (debbyConfiguration.isDebugEnabled() && !StringUtils.isNullOrEmpty(resultMapBuilder.toString())) {
+			if (myBatisDebbyConfiguration.isDebugEnabled() && !StringUtils.isNullOrEmpty(resultMapBuilder.toString())) {
 	        	FileUtils.writeFile(directory.toString(), "BASE_RESULT_MAP_DEBBY.xml", resultMapBuilder.toString());
 			}
 

@@ -18,7 +18,7 @@ package com.debby.mybatis;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import com.debby.mybatis.core.MyBatisBooster;
+import com.debby.mybatis.core.MyBatisDebbyBooster;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -28,12 +28,12 @@ import java.util.Properties;
  * @author rocky.hu
  * @date 2017-11-27 9:39 PM
  */
-public class DebbySqlSessionFactoryBuilder extends SqlSessionFactoryBuilder {
+public class MyBatisDebbySqlSessionFactoryBuilder extends SqlSessionFactoryBuilder {
 
-    private DebbyConfiguration debbyConfiguration;
+    private MyBatisDebbyConfiguration myBatisDebbyConfiguration;
 
-    public DebbySqlSessionFactoryBuilder(DebbyConfiguration debbyConfiguration) {
-        this.debbyConfiguration = debbyConfiguration;
+    public MyBatisDebbySqlSessionFactoryBuilder(MyBatisDebbyConfiguration myBatisDebbyConfiguration) {
+        this.myBatisDebbyConfiguration = myBatisDebbyConfiguration;
     }
 
     @Override
@@ -51,16 +51,16 @@ public class DebbySqlSessionFactoryBuilder extends SqlSessionFactoryBuilder {
     }
 
     private void boost(Configuration configuration) {
-        MyBatisBooster myBatisBooster = new MyBatisBooster(debbyConfiguration, configuration);
-        myBatisBooster.execute();
+        MyBatisDebbyBooster myBatisDebbyBooster = new MyBatisDebbyBooster(myBatisDebbyConfiguration, configuration);
+        myBatisDebbyBooster.execute();
     }
 
-    public DebbyConfiguration getDebbyConfiguration() {
-        return debbyConfiguration;
+    public MyBatisDebbyConfiguration getDebbyConfiguration() {
+        return myBatisDebbyConfiguration;
     }
 
-    public void setDebbyConfiguration(DebbyConfiguration debbyConfiguration) {
-        this.debbyConfiguration = debbyConfiguration;
+    public void setDebbyConfiguration(MyBatisDebbyConfiguration myBatisDebbyConfiguration) {
+        this.myBatisDebbyConfiguration = myBatisDebbyConfiguration;
     }
 
 }

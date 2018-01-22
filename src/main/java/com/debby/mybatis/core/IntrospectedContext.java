@@ -19,7 +19,7 @@ import com.debby.mybatis.annotation.MappingTable;
 import com.debby.mybatis.util.StringUtils;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.session.Configuration;
-import com.debby.mybatis.DebbyConfiguration;
+import com.debby.mybatis.MyBatisDebbyConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +33,12 @@ public class IntrospectedContext {
     private Class<?> entityType;
     private ResultMap resultMap;
     private Configuration configuration;
-    private DebbyConfiguration debbyConfiguration;
+    private MyBatisDebbyConfiguration myBatisDebbyConfiguration;
     private List<InternalStatements> alreadyOwnedInternalStatements;
 
-    public IntrospectedContext(Configuration configuration, DebbyConfiguration debbyConfiguration) {
+    public IntrospectedContext(Configuration configuration, MyBatisDebbyConfiguration myBatisDebbyConfiguration) {
         this.configuration = configuration;
-        this.debbyConfiguration = debbyConfiguration;
+        this.myBatisDebbyConfiguration = myBatisDebbyConfiguration;
     }
 
     public Class<?> getEntityType() {
@@ -61,8 +61,8 @@ public class IntrospectedContext {
         if (mappingTable != null) {
             tableName = mappingTable.name();
         } else {
-            if (!StringUtils.isNullOrEmpty(debbyConfiguration.getTablePrefix())) {
-                tablePrefix = debbyConfiguration.getTablePrefix();
+            if (!StringUtils.isNullOrEmpty(myBatisDebbyConfiguration.getTablePrefix())) {
+                tablePrefix = myBatisDebbyConfiguration.getTablePrefix();
             }
             tableName = tablePrefix + StringUtils.camelToUnderscore(type.getSimpleName(), false);
         }
@@ -86,12 +86,12 @@ public class IntrospectedContext {
         this.configuration = configuration;
     }
 
-    public DebbyConfiguration getDebbyConfiguration() {
-        return debbyConfiguration;
+    public MyBatisDebbyConfiguration getDebbyConfiguration() {
+        return myBatisDebbyConfiguration;
     }
 
-    public void setDebbyConfiguration(DebbyConfiguration debbyConfiguration) {
-        this.debbyConfiguration = debbyConfiguration;
+    public void setDebbyConfiguration(MyBatisDebbyConfiguration myBatisDebbyConfiguration) {
+        this.myBatisDebbyConfiguration = myBatisDebbyConfiguration;
     }
 
     public List<InternalStatements> getAlreadyOwnedInternalStatements() {
