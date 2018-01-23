@@ -26,8 +26,8 @@ import com.debby.mybatis.core.dom.xml.XmlElement;
 import com.debby.mybatis.core.xmlmapper.elements.AbstractXmlElementGenerator;
 
 /**
- * @author Jeff Butler
- * @date Nov 17, 2017 2:33:02 PM
+ * @author rocky.hu
+ * @date Jan 23, 2018 2:43:28 PM
  */
 public class SqlBaseColumnsElementGenerator extends AbstractXmlElementGenerator {
     

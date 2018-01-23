@@ -25,8 +25,7 @@ import java.util.Set;
  */
 public abstract class Criterion implements Serializable {
 
-    /** the content is column && sql operator */
-    private String condition;
+    private String condition;// column && sql operator
     private Object value;
     private Object secondValue;
     private String typeHandler;
@@ -104,7 +103,7 @@ public abstract class Criterion implements Serializable {
         this.typeHandler = typeHandler;
     }
 
-	public boolean isNoValue() {
+	public boolean getNoValue() {
 		return noValue;
 	}
 
@@ -112,7 +111,7 @@ public abstract class Criterion implements Serializable {
 		this.noValue = noValue;
 	}
 
-	public boolean isSingleValue() {
+	public boolean getSingleValue() {
 		return singleValue;
 	}
 
@@ -120,7 +119,7 @@ public abstract class Criterion implements Serializable {
 		this.singleValue = singleValue;
 	}
 
-	public boolean isBetweenValue() {
+	public boolean getBetweenValue() {
 		return betweenValue;
 	}
 
@@ -128,7 +127,7 @@ public abstract class Criterion implements Serializable {
 		this.betweenValue = betweenValue;
 	}
 
-	public boolean isListValue() {
+	public boolean getListValue() {
 		return listValue;
 	}
 

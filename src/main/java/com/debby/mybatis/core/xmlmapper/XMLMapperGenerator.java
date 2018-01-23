@@ -24,15 +24,13 @@ import com.debby.mybatis.core.xmlmapper.elements.sql.SqlCriteriaFragmentElementG
 import com.debby.mybatis.core.xmlmapper.elements.sql.SqlOrderByFragmentElementGenerator;
 import com.debby.mybatis.core.xmlmapper.elements.sql.SqlPaginationPrefixFragmentElementGenerator;
 import com.debby.mybatis.core.xmlmapper.elements.sql.SqlPaginationSuffixFragmentElementGenerator;
-import com.debby.mybatis.core.xmlmapper.elements.sql.SqlSelectWhereFragmentElementGenerator;
+import com.debby.mybatis.core.xmlmapper.elements.sql.SqlWhereFragmentElementGenerator;
 import com.debby.mybatis.core.xmlmapper.elements.sql.SqlUpdateWhereFragmentElementGenerator;
 import com.debby.mybatis.core.xmlmapper.elements.sql.SqlBaseColumnsElementGenerator;
 
 /**
- * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 17, 2017 11:40:50 AM
- * @see 'org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator'
  */
 public class XMLMapperGenerator extends AbstractXmlGenerator {
 
@@ -45,7 +43,7 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
         
         addBaseColumnListElement(answer);
         addCriteriaSqlFragmentElement(answer);
-        addSelectWhereSqlFragmentElement(answer);
+        addWhereSqlFragmentElement(answer);
         addUpdateWhereSqlFragmentElement(answer);
         addOrderBySqlFragmentElement(answer);
         addPaginationPrefixSqlFragmentElement(answer);
@@ -77,8 +75,8 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
         initializeAndExecuteGenerator(elementGenerator, parentElement);
     }
     
-    protected void addSelectWhereSqlFragmentElement(XmlElement parentElement) {
-        AbstractXmlElementGenerator elementGenerator = new SqlSelectWhereFragmentElementGenerator();
+    protected void addWhereSqlFragmentElement(XmlElement parentElement) {
+        AbstractXmlElementGenerator elementGenerator = new SqlWhereFragmentElementGenerator();
         initializeAndExecuteGenerator(elementGenerator, parentElement);
     }
     

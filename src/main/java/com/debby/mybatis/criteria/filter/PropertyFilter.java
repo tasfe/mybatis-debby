@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.debby.mybatis.core.helper.EntityHelper;
 
 /**
- * Filter property when execute quering.
+ * Filter property when execute querying.
  * 
  * @author rocky.hu
  * @date Jan 22, 2018 4:45:53 PM

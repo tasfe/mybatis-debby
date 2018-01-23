@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 import com.debby.mybatis.AbstractDebbyMapperTest;
 import com.debby.mybatis.bean.Page;
 import com.debby.mybatis.criteria.EntityCriteria;
+import com.debby.mybatis.criteria.EntityCriteriaBuilder;
 import com.debby.mybatis.criteria.sort.Order;
 
 /**
@@ -13,7 +14,7 @@ import com.debby.mybatis.criteria.sort.Order;
  * @date Jan 5, 2018 2:30:50 PM
  */
 public class ArticleMapperTest extends AbstractDebbyMapperTest<ArticleMapper> {
-	
+
 	public ArticleMapperTest() {
 		super();
 		this.setDdlPath("/data/ddl/article.ddl");
@@ -23,18 +24,15 @@ public class ArticleMapperTest extends AbstractDebbyMapperTest<ArticleMapper> {
 	@Test
 	@Override
 	public void testSelectPage() {
-		EntityCriteria entityCriteria = EntityCriteria.forEntity(Article.class);
-		entityCriteria.setFirstResult(0);
-		entityCriteria.setMaxResults(10);
-		
-		entityCriteria.addOrder(Order.asc("createTime"));
-		entityCriteria.addOrder(Order.asc("id"));
-		
-		entityCriteria.addFilterProperty("createTime");
-		
+		EntityCriteria entityCriteria = EntityCriteriaBuilder.forEntity(Article.class)
+				.filter(new String[] { "createTime" })
+				.orderBy(Order.asc("createTime"), Order.asc("id"))
+				.limit(0, 10)
+				.bulid();
+
 		Page<Article> page = mapper.selectPage(entityCriteria);
 		Assert.assertEquals(page.getTotalCount(), 50L);
 		Assert.assertEquals(page.getResults().size(), 10);
 	}
-    
+
 }

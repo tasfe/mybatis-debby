@@ -23,7 +23,7 @@ import com.debby.mybatis.sql.SQLComparisonOperator;
  */
 public class ComparisonCriterion extends Criterion {
 
-    protected ComparisonCriterion(String propertyName, Object value, SQLComparisonOperator op) {
+	public ComparisonCriterion(String propertyName, Object value, SQLComparisonOperator op) {
         super(propertyName + "&" + op, value);
     }
 

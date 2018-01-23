@@ -23,11 +23,11 @@ import com.debby.mybatis.sql.SqlLogicalOperator;
  */
 public class BetweenCriterion extends Criterion {
 
-    protected BetweenCriterion(String propertyName, Object low, Object high) {
+    public BetweenCriterion(String propertyName, Object low, Object high) {
         super(propertyName + "&" + SqlLogicalOperator.BETWEEN, low, high);
     }
 
-    protected BetweenCriterion(String propertyName, Object low, Object high, boolean not) {
+    public BetweenCriterion(String propertyName, Object low, Object high, boolean not) {
         super(propertyName + "&" + (not ? SqlLogicalOperator.NOT_BETWEEN : SqlLogicalOperator.BETWEEN) , low, high);
     }
 

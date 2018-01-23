@@ -23,7 +23,7 @@ import com.debby.mybatis.sql.SqlLogicalOperator;
  */
 public class NullCriterion extends Criterion {
 
-    protected NullCriterion(String propertyName) {
+	public NullCriterion(String propertyName) {
         super(propertyName + "&" + SqlLogicalOperator.IS_NULL);
     }
 

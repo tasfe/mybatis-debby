@@ -15,21 +15,15 @@
  */
 package com.debby.mybatis.criteria.criterion;
 
-import com.debby.mybatis.criteria.criterion.like.MatchMode;
-import com.debby.mybatis.sql.SqlLogicalOperator;
-
 /**
  * @author rocky.hu
- * @date 2017-12-09 11:54 AM
+ * @date Jan 23, 2018 5:23:08 PM
  */
-public class LikeCriterion extends Criterion {
+public abstract class AbstractListValueCriterion extends AbstractCriterion {
 
-	public LikeCriterion(String propertyName, String value, MatchMode matchMode) {
-        super(propertyName + "&" + SqlLogicalOperator.LIKE, matchMode.toMatchString(value));
-    }
-
-	public LikeCriterion(String propertyName, String value, MatchMode matchMode, boolean not) {
-        super(propertyName + "&" + (not ? SqlLogicalOperator.NOT_LIKE : SqlLogicalOperator.LIKE), matchMode.toMatchString(value));
-    }
-
+	@Override
+	public void setValueMode(ValueMode valueMode) {
+		super.setValueMode(ValueMode.LIST);
+	}
+	
 }

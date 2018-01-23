@@ -24,7 +24,7 @@ public class Constants {
     public static final String BASE_RESULT_MAP_ID = "BASE_RESULT_MAP";
     public static final String BASE_COLUMNS_ID = "BASE_COLUMNS";
     public static final String CRITERIA_SQL_FRAGMENT_ID = "SQL_CRITERIA";
-    public static final String SELECT_WHERE_SQL_FRAGMENT_ID = "SQL_SELECT_WHERE";
+    public static final String WHERE_SQL_FRAGMENT_ID = "SQL_WHERE";
     public static final String UPDATE_WHERE_SQL_FRAGMENT_ID = "SQL_UPDATE_WHERE";
     public static final String ORDER_BY_SQL_FRAGMENT_ID = "SQL_ORDER_BY";
     public static final String PREFIX_PAGINATION_SQL_FRAGMENT_ID = "SQL_PREFIX_PAGINATION";

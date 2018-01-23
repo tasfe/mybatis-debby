@@ -22,10 +22,8 @@ import com.debby.mybatis.core.dom.xml.XmlElement;
 import com.debby.mybatis.core.xmlmapper.elements.AbstractXmlElementGenerator;
 
 /**
- * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 23, 2017 2:57:56 PM
- * @see 'org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.ExampleWhereClauseElementGenerator'
  */
 public class SqlOrderByFragmentElementGenerator extends AbstractXmlElementGenerator {
 

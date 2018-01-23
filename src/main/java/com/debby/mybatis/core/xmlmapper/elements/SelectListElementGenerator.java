@@ -54,7 +54,7 @@ public class SelectListElementGenerator extends AbstractXmlElementGenerator {
         sb.append(introspectedContext.getTableName());
         answer.addElement(new TextElement(sb.toString()));
 
-        answer.addElement(getSelectWhereSqlFragment());
+        answer.addElement(getWhereSqlFragment());
 
         if (selectList) {
             answer.addElement(getOrderBySqlFragment());

@@ -70,10 +70,10 @@ public abstract class AbstractXmlElementGenerator extends AbstractGenerator {
         return orderByElement;
     }
 
-    protected XmlElement getSelectWhereSqlFragment() {
-        XmlElement selectWhereElement = new XmlElement("include");
-        selectWhereElement.addAttribute(new Attribute("refid", Constants.SELECT_WHERE_SQL_FRAGMENT_ID));
-        return selectWhereElement;
+    protected XmlElement getWhereSqlFragment() {
+        XmlElement whereElement = new XmlElement("include");
+        whereElement.addAttribute(new Attribute("refid", Constants.WHERE_SQL_FRAGMENT_ID));
+        return whereElement;
     }
     
     protected XmlElement getPaginationPrefixSqlFragment() {

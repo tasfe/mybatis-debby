@@ -45,7 +45,7 @@ public class SelectListForPagingElementGenerator extends AbstractXmlElementGener
         sb.append(introspectedContext.getTableName());
         answer.addElement(new TextElement(sb.toString()));
 
-        answer.addElement(getSelectWhereSqlFragment());
+        answer.addElement(getWhereSqlFragment());
         answer.addElement(getOrderBySqlFragment());
         answer.addElement(getPaginationSuffixSqlFragment());
         

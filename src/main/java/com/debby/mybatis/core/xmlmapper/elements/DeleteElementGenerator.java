@@ -38,7 +38,7 @@ public class DeleteElementGenerator extends AbstractXmlElementGenerator {
         sb.append(introspectedContext.getTableName());
         answer.addElement(new TextElement(sb.toString()));
 
-        answer.addElement(getSelectWhereSqlFragment());
+        answer.addElement(getWhereSqlFragment());
 
         parentElement.addElement(answer);
     }

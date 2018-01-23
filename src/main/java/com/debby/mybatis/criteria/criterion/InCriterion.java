@@ -25,11 +25,11 @@ import java.util.Collection;
  */
 public class InCriterion extends Criterion {
 
-    protected InCriterion(String propertyName, Collection<Object> values) {
+	public InCriterion(String propertyName, Collection<Object> values) {
         super(propertyName + "&" + SqlLogicalOperator.IN, values);
     }
 
-    protected InCriterion(String propertyName, Collection<Object> values, boolean not) {
+	public InCriterion(String propertyName, Collection<Object> values, boolean not) {
         super(propertyName + "&" + (not ? SqlLogicalOperator.NOT_IN : SqlLogicalOperator.IN), values);
     }
 

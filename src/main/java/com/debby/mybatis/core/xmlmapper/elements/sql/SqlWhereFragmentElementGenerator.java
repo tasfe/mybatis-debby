@@ -21,17 +21,15 @@ import com.debby.mybatis.core.dom.xml.XmlElement;
 import com.debby.mybatis.core.xmlmapper.elements.AbstractXmlElementGenerator;
 
 /**
- * @author Jeff Butler
  * @author rocky.hu
  * @date Nov 23, 2017 2:57:56 PM
- * @see 'org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.ExampleWhereClauseElementGenerator'
  */
-public class SqlSelectWhereFragmentElementGenerator extends AbstractXmlElementGenerator {
+public class SqlWhereFragmentElementGenerator extends AbstractXmlElementGenerator {
 
     @Override
     public void addElements(XmlElement parentElement) {
         XmlElement answer = new XmlElement("sql");
-        answer.addAttribute(new Attribute("id", Constants.SELECT_WHERE_SQL_FRAGMENT_ID));
+        answer.addAttribute(new Attribute("id", Constants.WHERE_SQL_FRAGMENT_ID));
 
         XmlElement ifElement = new XmlElement("if");
         ifElement.addAttribute(new Attribute("test", "_parameter != null and _parameter.criteriaList != null and _parameter.criteriaList.size() > 0"));
