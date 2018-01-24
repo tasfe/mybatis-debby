@@ -43,7 +43,7 @@ public class InsertSelectiveElementGenerator extends AbstractXmlElementGenerator
         addSelectKey(resultMap, answer);
 
         StringBuilder sb = new StringBuilder();
-        sb.append("insert into ");
+        sb.append("INSERT INTO ");
         sb.append(introspectedContext.getTableName());
         answer.addElement(new TextElement(sb.toString()));
 
@@ -54,7 +54,7 @@ public class InsertSelectiveElementGenerator extends AbstractXmlElementGenerator
         answer.addElement(insertTrimElement);
 
         XmlElement valuesTrimElement = new XmlElement("trim");
-        valuesTrimElement.addAttribute(new Attribute("prefix", "values ("));
+        valuesTrimElement.addAttribute(new Attribute("prefix", "VALUES ("));
         valuesTrimElement.addAttribute(new Attribute("suffix", ")"));
         valuesTrimElement.addAttribute(new Attribute("suffixOverrides", ","));
         answer.addElement(valuesTrimElement);

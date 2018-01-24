@@ -44,10 +44,10 @@ public class SQLServer2005Dialect extends SQLServerDialect {
 		whenElement.addElement(new TextElement(sb.toString()));
 		
 		sb.setLength(0);
-		sb.append("SELECT inner_query.*, ROW_NUMBER() OVER (ORDER BY CURRENT_TIMESTAMP) as __row_nr__ FROM ( ");
+		sb.append("SELECT inner_query.*, ROW_NUMBER() OVER (ORDER BY CURRENT_TIMESTAMP) AS __row_nr__ FROM ( ");
 		whenElement.addElement(new TextElement(sb.toString()));
 		
-		whenElement.addElement(new TextElement("select"));
+		whenElement.addElement(new TextElement("SELECT"));
 		
 		XmlElement distinctIfElement = new XmlElement("if");
 		distinctIfElement.addAttribute(new Attribute("test", "distinct"));

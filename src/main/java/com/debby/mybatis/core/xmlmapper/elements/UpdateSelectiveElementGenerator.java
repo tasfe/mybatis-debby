@@ -38,7 +38,7 @@ public class UpdateSelectiveElementGenerator extends AbstractXmlElementGenerator
         answer.addAttribute(new Attribute("parameterType", "map"));
         
         StringBuilder sb = new StringBuilder();
-        sb.append("update ");
+        sb.append("UPDATE ");
         sb.append(introspectedContext.getTableName());
         answer.addElement(new TextElement(sb.toString()));
         

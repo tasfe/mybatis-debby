@@ -15,12 +15,17 @@
  */
 package com.debby.mybatis.criteria.criterion;
 
+import com.debby.mybatis.criteria.criterion.mode.MatchMode;
+import com.debby.mybatis.sql.SqlLogicalOperator;
+
 /**
  * @author rocky.hu
- * @date Jan 23, 2018 5:36:32 PM
+ * @date 2017-12-09 11:54 AM
  */
-public enum ValueMode {
-	
-	NO, SINGLE, TWO, LIST;
+public class NotLikeCriterion extends AbstractSingleValueCriterion {
+
+	public NotLikeCriterion(String property, String value, MatchMode matchMode) {
+        super(property,  matchMode.toMatchString(value), SqlLogicalOperator.NOT_LIKE);
+    }
 
 }

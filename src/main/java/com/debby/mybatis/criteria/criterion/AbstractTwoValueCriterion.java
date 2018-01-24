@@ -15,15 +15,32 @@
  */
 package com.debby.mybatis.criteria.criterion;
 
+import java.util.Collection;
+import java.util.Map;
+
+import com.debby.mybatis.criteria.criterion.mode.ValueMode;
+import com.debby.mybatis.exception.MyBatisDebbyException;
+import com.debby.mybatis.sql.SqlOperator;
+
 /**
  * @author rocky.hu
  * @date Jan 23, 2018 5:25:41 PM
  */
 public class AbstractTwoValueCriterion extends AbstractCriterion {
-
+	
+	protected AbstractTwoValueCriterion(String property, Object firstValue, Object secondValue, SqlOperator sqlOperator) {
+		super(property, new Object[] {firstValue, secondValue}, sqlOperator);
+		if (firstValue instanceof Collection || secondValue instanceof Map) {
+			throw new MyBatisDebbyException("The firstValue cann't be a Collecation or Map.");
+		}
+		if (secondValue instanceof Collection || secondValue instanceof Map) {
+			throw new MyBatisDebbyException("The secondValue cann't be a Collecation or Map.");
+		}
+	}
+	
 	@Override
-	public void setValueMode(ValueMode valueMode) {
-		super.setValueMode(ValueMode.TWO);
+	public ValueMode getValueMode() {
+		return ValueMode.TWO;
 	}
 	
 }

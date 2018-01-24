@@ -15,7 +15,9 @@
  */
 package com.debby.mybatis.criteria.criterion;
 
+import com.debby.mybatis.criteria.criterion.mode.ValueMode;
 import com.debby.mybatis.sql.SqlOperator;
+import com.debby.mybatis.util.Asserts;
 
 /**
  * @author rocky.hu
@@ -23,12 +25,37 @@ import com.debby.mybatis.sql.SqlOperator;
  */
 public abstract class AbstractCriterion {
 	
+	private String column;
 	private String property;
 	private SqlOperator sqlOperator;
 	private String typeHandler;
 	private Object value;
 	private ValueMode valueMode;
 	
+	protected AbstractCriterion(String property, SqlOperator sqlOperator) {
+		Asserts.notEmpty(property);
+		Asserts.notNull(sqlOperator);
+		this.property = property;
+		this.sqlOperator = sqlOperator;
+	}
+	
+	protected AbstractCriterion(String property, Object value, SqlOperator sqlOperator) {
+		Asserts.notEmpty(property);
+		Asserts.notNull(value);
+		Asserts.notNull(sqlOperator);
+		this.property = property;
+		this.value = value;
+		this.sqlOperator = sqlOperator;
+	}
+	
+	public String getColumn() {
+		return column;
+	}
+
+	public void setColumn(String column) {
+		this.column = column;
+	}
+
 	public String getProperty() {
 		return property;
 	}
@@ -36,7 +63,6 @@ public abstract class AbstractCriterion {
 	public void setProperty(String property) {
 		this.property = property;
 	}
-	
 	
 	public SqlOperator getSqlOperator() {
 		return sqlOperator;

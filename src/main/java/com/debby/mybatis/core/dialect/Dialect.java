@@ -38,7 +38,7 @@ public abstract class Dialect {
     
     public void processLimitPrefixSqlFragment(XmlElement parentElement) {
     	
-    	parentElement.addElement(new TextElement("select"));
+    	parentElement.addElement(new TextElement("SELECT"));
     	
     	XmlElement ifElement = new XmlElement("if");
     	ifElement.addAttribute(new Attribute("test", "distinct"));

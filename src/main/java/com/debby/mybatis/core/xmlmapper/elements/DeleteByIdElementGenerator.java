@@ -40,9 +40,9 @@ public class DeleteByIdElementGenerator extends AbstractXmlElementGenerator {
         }
         
         StringBuilder sb = new StringBuilder();
-        sb.append(" delete from ");
+        sb.append(" DELETE FROM ");
         sb.append(introspectedContext.getTableName());
-        sb.append(" where ");
+        sb.append(" WHERE ");
         sb.append(getPrimaryKeyParameterClause(resultMap));
 
         answer.addElement(new TextElement(sb.toString()));

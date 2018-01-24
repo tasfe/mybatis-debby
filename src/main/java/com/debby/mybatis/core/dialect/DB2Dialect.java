@@ -46,7 +46,7 @@ public class DB2Dialect extends Dialect {
 		
 		XmlElement whenElement = new XmlElement("when");
 		whenElement.addAttribute(new Attribute("test", "firstResult != null and firstResult > 0"));
-		sb.append("select * from ( select inner2_.*, rownumber() over(order by order of inner2_) as rownumber_ from ( ");
+		sb.append("SELECT * FROM ( SELECT inner2_.*, rownumber() over(order by order of inner2_) AS rownumber_ FROM ( ");
 		whenElement.addElement(new TextElement(sb.toString()));
 		
 		chooseElement.addElement(whenElement);
@@ -65,9 +65,9 @@ public class DB2Dialect extends Dialect {
 		whenElement.addAttribute(new Attribute("test", "firstResult != null and firstResult > 0"));
 		sb.append(" fetch first ");
 		sb.append("(#{maxResults}+#{firstResult})");
-		sb.append(" rows only ) as inner2_ ) as inner1_ where rownumber_ > ");
+		sb.append(" rows only ) AS inner2_ ) AS inner1_ WHERE rownumber_ > ");
 		sb.append("#{firstResult}");
-		sb.append(" order by rownumber_");
+		sb.append(" ORDER BY rownumber_");
 		whenElement.addElement(new TextElement(sb.toString()));
 
 		XmlElement otherwiseElement = new XmlElement("otherwise");

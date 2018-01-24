@@ -47,6 +47,7 @@ public enum SqlLogicalOperator implements SqlOperator {
         this.notation = notation;
     }
 
+    @Override
     public String getNotation()
     {
         return notation;

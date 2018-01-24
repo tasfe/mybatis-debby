@@ -47,12 +47,12 @@ public class UpdateByIdElementGenerator extends AbstractXmlElementGenerator {
         }
 
 		StringBuilder sb = new StringBuilder();
-        sb.append("update ");
+        sb.append("UPDATE ");
         sb.append(introspectedContext.getTableName());
         answer.addElement(new TextElement(sb.toString()));
 
         sb.setLength(0);
-        sb.append("set ");
+        sb.append("SET ");
 
         Iterator<ResultMapping> iter = getPropertyResultMappings(resultMap).iterator();
         while (iter.hasNext()) {
@@ -80,7 +80,7 @@ public class UpdateByIdElementGenerator extends AbstractXmlElementGenerator {
         }
 
         sb.setLength(0);
-        sb.append(" where ");
+        sb.append(" WHERE ");
         sb.append(getPrimaryKeyParameterClauseForUpdate(resultMap));
         answer.addElement(new TextElement(sb.toString()));
 

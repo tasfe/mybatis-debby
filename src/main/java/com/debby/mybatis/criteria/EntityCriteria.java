@@ -25,7 +25,7 @@ import com.debby.mybatis.criteria.sort.Order;
  * @date 2017-12-09 3:40 PM
  */
 public class EntityCriteria {
-
+	
 	private Integer firstResult;
 	private Integer maxResults;
 	private Boolean distinct;
@@ -79,6 +79,10 @@ public class EntityCriteria {
 
 	public void setOrderList(List<Order> orderList) {
 		this.orderList = orderList;
+	}
+	
+	public static EntityCriteriaBuilder forEntity(final Class<?> entityType) {
+		return new EntityCriteriaBuilder(entityType);
 	}
 
 }

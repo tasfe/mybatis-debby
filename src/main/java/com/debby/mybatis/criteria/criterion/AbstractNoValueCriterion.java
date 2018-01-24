@@ -15,15 +15,24 @@
  */
 package com.debby.mybatis.criteria.criterion;
 
+import com.debby.mybatis.criteria.criterion.mode.ValueMode;
+import com.debby.mybatis.sql.SqlOperator;
+
 /**
  * @author rocky.hu
  * @date Jan 23, 2018 5:23:54 PM
  */
 public abstract class AbstractNoValueCriterion extends AbstractCriterion {
+	
+	protected AbstractNoValueCriterion(String property, SqlOperator sqlOperator) {
+		super(property, sqlOperator);
+	}
 
 	@Override
-	public void setValueMode(ValueMode valueMode) {
-		super.setValueMode(ValueMode.NO);
+	public ValueMode getValueMode() {
+		return ValueMode.NO;
 	}
+	
+	
 	
 }

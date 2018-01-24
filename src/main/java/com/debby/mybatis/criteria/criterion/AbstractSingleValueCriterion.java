@@ -15,15 +15,29 @@
  */
 package com.debby.mybatis.criteria.criterion;
 
+import java.util.Collection;
+import java.util.Map;
+
+import com.debby.mybatis.criteria.criterion.mode.ValueMode;
+import com.debby.mybatis.exception.MyBatisDebbyException;
+import com.debby.mybatis.sql.SqlOperator;
+
 /**
  * @author rocky.hu
  * @date Jan 23, 2018 5:24:46 PM
  */
 public abstract class AbstractSingleValueCriterion extends AbstractCriterion {
+	
+	protected AbstractSingleValueCriterion(String property, Object value, SqlOperator sqlOperator) {
+		super(property, value, sqlOperator);
+		if (value instanceof Collection || value instanceof Map) {
+			throw new MyBatisDebbyException("The value cann't be a Collecation or Map.");
+		}
+	}
 
 	@Override
-	public void setValueMode(ValueMode valueMode) {
-		super.setValueMode(ValueMode.SINGLE);
+	public ValueMode getValueMode() {
+		return ValueMode.SINGLE;
 	}
 	
 }

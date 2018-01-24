@@ -58,29 +58,29 @@ public class SqlCriteriaFragmentElementGenerator extends AbstractXmlElementGener
         middleForEachElement.addElement(chooseElement);
 
         XmlElement when = new XmlElement("when");
-        when.addAttribute(new Attribute("test", "criterion.noValue"));
-        when.addElement(new TextElement("and ${criterion.condition}"));
+        when.addAttribute(new Attribute("test", "criterion.valueMode.name() == 'NO'"));
+        when.addElement(new TextElement("AND ${criterion.column} ${criterion.sqlOperator.notation}"));
         chooseElement.addElement(when);
 
         when = new XmlElement("when");
-        when.addAttribute(new Attribute("test", "criterion.singleValue"));
+        when.addAttribute(new Attribute("test", "criterion.valueMode.name() == 'SINGLE'"));
         sb.setLength(0);
-        sb.append("and ${criterion.condition} ");
+        sb.append("AND ${criterion.column} ${criterion.sqlOperator.notation}");
         when.addElement(new TextElement(sb.toString()));
         when.addElement(getParameterClauseElement(ValueMode.SINGLE));
         chooseElement.addElement(when);
 
         when = new XmlElement("when");
-        when.addAttribute(new Attribute("test", "criterion.betweenValue"));
+        when.addAttribute(new Attribute("test", "criterion.valueMode.name() == 'TWO'"));
         sb.setLength(0);
-        sb.append("and ${criterion.condition} ");
+        sb.append("AND ${criterion.column} ${criterion.sqlOperator.notation}");
         when.addElement(new TextElement(sb.toString()));
         when.addElement(getParameterClauseElement(ValueMode.TWO));
         chooseElement.addElement(when);
 
         when = new XmlElement("when");
-        when.addAttribute(new Attribute("test", "criterion.listValue"));
-        when.addElement(new TextElement("and ${criterion.condition}"));
+        when.addAttribute(new Attribute("test", "criterion.valueMode.name() == 'LIST'"));
+        when.addElement(new TextElement("AND ${criterion.column} ${criterion.sqlOperator.notation}"));
         XmlElement innerForEach = new XmlElement("foreach");
         innerForEach.addAttribute(new Attribute("collection", "criterion.value"));
         innerForEach.addAttribute(new Attribute("item", "listItem"));
@@ -96,14 +96,14 @@ public class SqlCriteriaFragmentElementGenerator extends AbstractXmlElementGener
 
     private XmlElement getParameterClauseElement(ValueMode valueMode) {
         StringBuilder sb = new StringBuilder();
-        XmlElement chooseElement = new XmlElement("choose");
 
+        XmlElement chooseElement = new XmlElement("choose");
         XmlElement when = new XmlElement("when");
         when.addAttribute(new Attribute("test", "criterion.typeHandler == null"));
         if (valueMode == ValueMode.SINGLE) {
             sb.append("#{criterion.value}");
         } else if (valueMode == ValueMode.TWO) {
-            sb.append("#{criterion.value} and #{criterion.secondValue}");
+            sb.append("#{criterion.value[0]} AND #{criterion.value[1]}");
         } else if (valueMode == ValueMode.LIST) {
             sb.append("#{listItem}");
         }
@@ -115,7 +115,7 @@ public class SqlCriteriaFragmentElementGenerator extends AbstractXmlElementGener
         if (valueMode == ValueMode.SINGLE) {
             sb.append("#{criterion.value, typeHandler = ${criterion.typeHandler}}");
         } else if (valueMode == ValueMode.TWO) {
-            sb.append("#{criterion.value, typeHandler = ${criterion.typeHandler}} and #{criterion.secondValue, typeHandler = ${criterion.typeHandler}}");
+            sb.append("#{criterion.value[0], typeHandler = ${criterion.typeHandler}} AND #{criterion.value[1], typeHandler = ${criterion.typeHandler}}");
         } else if (valueMode == ValueMode.LIST) {
             sb.append("#{listItem, typeHandler = ${criterion.typeHandler}}");
         }

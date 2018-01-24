@@ -36,7 +36,7 @@ public class SelectCountElementGenerator extends AbstractXmlElementGenerator {
         
         StringBuilder sb = new StringBuilder();
         
-        sb.append(" select count(*) from ");
+        sb.append(" SELECT count(*) FROM ");
         sb.append(introspectedContext.getTableName());
         answer.addElement(new TextElement(sb.toString()));
 

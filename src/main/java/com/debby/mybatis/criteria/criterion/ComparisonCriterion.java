@@ -21,10 +21,10 @@ import com.debby.mybatis.sql.SQLComparisonOperator;
  * @author rocky.hu
  * @date 2017-12-09 3:36 PM
  */
-public class ComparisonCriterion extends Criterion {
+public class ComparisonCriterion extends AbstractSingleValueCriterion {
 
-	public ComparisonCriterion(String propertyName, Object value, SQLComparisonOperator op) {
-        super(propertyName + "&" + op, value);
+	public ComparisonCriterion(String property, Object value, SQLComparisonOperator operator) {
+        super(property, value, operator);
     }
 
 }

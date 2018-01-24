@@ -21,14 +21,10 @@ import com.debby.mybatis.sql.SqlLogicalOperator;
  * @author rocky.hu
  * @date 2017-12-09 4:55 PM
  */
-public class BetweenCriterion extends Criterion {
+public class BetweenCriterion extends AbstractTwoValueCriterion {
 
-    public BetweenCriterion(String propertyName, Object low, Object high) {
-        super(propertyName + "&" + SqlLogicalOperator.BETWEEN, low, high);
-    }
-
-    public BetweenCriterion(String propertyName, Object low, Object high, boolean not) {
-        super(propertyName + "&" + (not ? SqlLogicalOperator.NOT_BETWEEN : SqlLogicalOperator.BETWEEN) , low, high);
+    public BetweenCriterion(String property, Object low, Object high) {
+        super(property, low, high, SqlLogicalOperator.BETWEEN);
     }
 
 }

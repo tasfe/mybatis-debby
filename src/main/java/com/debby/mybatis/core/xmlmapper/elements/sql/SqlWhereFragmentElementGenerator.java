@@ -38,7 +38,7 @@ public class SqlWhereFragmentElementGenerator extends AbstractXmlElementGenerato
         XmlElement forEachElement = new XmlElement("foreach");
         forEachElement.addAttribute(new Attribute("collection", "criteriaList"));
         forEachElement.addAttribute(new Attribute("item", "criteria"));
-        forEachElement.addAttribute(new Attribute("separator", "or"));
+        forEachElement.addAttribute(new Attribute("separator", "OR"));
         XmlElement includeElement = new XmlElement("include");
         includeElement.addAttribute(new Attribute("refid", Constants.CRITERIA_SQL_FRAGMENT_ID));
         

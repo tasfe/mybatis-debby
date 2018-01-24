@@ -34,7 +34,7 @@ public class DeleteElementGenerator extends AbstractXmlElementGenerator {
         answer.addAttribute(new Attribute("parameterType", EntityCriteria.class.getName()));
         
         StringBuilder sb = new StringBuilder();
-        sb.append(" delete from ");
+        sb.append(" DELETE FROM ");
         sb.append(introspectedContext.getTableName());
         answer.addElement(new TextElement(sb.toString()));
 

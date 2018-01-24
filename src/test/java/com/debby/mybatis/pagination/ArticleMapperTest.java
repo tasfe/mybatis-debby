@@ -6,7 +6,6 @@ import org.testng.annotations.Test;
 import com.debby.mybatis.AbstractDebbyMapperTest;
 import com.debby.mybatis.bean.Page;
 import com.debby.mybatis.criteria.EntityCriteria;
-import com.debby.mybatis.criteria.EntityCriteriaBuilder;
 import com.debby.mybatis.criteria.sort.Order;
 
 /**
@@ -24,7 +23,7 @@ public class ArticleMapperTest extends AbstractDebbyMapperTest<ArticleMapper> {
 	@Test
 	@Override
 	public void testSelectPage() {
-		EntityCriteria entityCriteria = EntityCriteriaBuilder.forEntity(Article.class)
+		EntityCriteria entityCriteria = EntityCriteria.forEntity(Article.class)
 				.filter(new String[] { "createTime" })
 				.orderBy(Order.asc("createTime"), Order.asc("id"))
 				.limit(0, 10)

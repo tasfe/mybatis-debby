@@ -16,22 +16,23 @@
 package com.debby.mybatis.criteria;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.ibatis.mapping.ResultMapping;
-
-import com.debby.mybatis.core.ResultMapRegistry;
+import com.debby.mybatis.criteria.criterion.AbstractCriterion;
 import com.debby.mybatis.criteria.criterion.BetweenCriterion;
 import com.debby.mybatis.criteria.criterion.ComparisonCriterion;
-import com.debby.mybatis.criteria.criterion.Criterion;
 import com.debby.mybatis.criteria.criterion.InCriterion;
 import com.debby.mybatis.criteria.criterion.LikeCriterion;
+import com.debby.mybatis.criteria.criterion.NotBetweenCriterion;
+import com.debby.mybatis.criteria.criterion.NotInCriterion;
+import com.debby.mybatis.criteria.criterion.NotLikeCriterion;
 import com.debby.mybatis.criteria.criterion.NotNullCriterion;
 import com.debby.mybatis.criteria.criterion.NullCriterion;
-import com.debby.mybatis.criteria.criterion.like.MatchMode;
+import com.debby.mybatis.criteria.criterion.mode.MatchMode;
 import com.debby.mybatis.sql.SQLComparisonOperator;
-import com.debby.mybatis.util.StringUtils;
+import com.debby.mybatis.util.Asserts;
 
 /**
  * @author rocky.hu
@@ -39,14 +40,12 @@ import com.debby.mybatis.util.StringUtils;
  */
 public class Criteria {
 
-	private final Class<?> entityType;
-	private List<Criterion> criterions = new ArrayList<Criterion>();
+	private List<AbstractCriterion> criterions = new ArrayList<AbstractCriterion>();
 
-	public Criteria(Class<?> entityType) {
-		this.entityType = entityType;
+	public Criteria() {
 	}
 
-	public List<Criterion> getCriterions() {
+	public List<AbstractCriterion> getCriterions() {
 		return criterions;
 	}
 
@@ -91,17 +90,17 @@ public class Criteria {
     public Criteria like(String propertyName, String value) {
         return addCriterion(new LikeCriterion(propertyName, String.valueOf(value), MatchMode.EXACT));
     }
-
-    public Criteria notLike(String propertyName, String value) {
-        return addCriterion(new LikeCriterion(propertyName, String.valueOf(value), MatchMode.EXACT, true));
-    }
-
+    
     public Criteria like(String propertyName, String value, MatchMode matchMode) {
         return addCriterion(new LikeCriterion(propertyName, value, matchMode));
     }
 
+    public Criteria notLike(String propertyName, String value) {
+        return addCriterion(new NotLikeCriterion(propertyName, String.valueOf(value), MatchMode.EXACT));
+    }
+
     public Criteria notLike(String propertyName, String value, MatchMode matchMode) {
-        return addCriterion(new LikeCriterion(propertyName, value, matchMode, true));
+        return addCriterion(new NotLikeCriterion(propertyName, value, matchMode));
     }
 
     public Criteria between(String propertyName, Object low, Object high) {
@@ -109,25 +108,27 @@ public class Criteria {
     }
 
     public Criteria notBetween(String propertyName, Object low, Object high) {
-        return addCriterion(new BetweenCriterion(propertyName, low, high, true));
+        return addCriterion(new NotBetweenCriterion(propertyName, low, high));
     }
 
     public Criteria in(String propertyName, Object... values) {
-        if (values == null || values.length == 0) {
-            throw new IllegalArgumentException("Values passed to in cannot be null or empty.");
-        }
-        List<Object> valueList = new ArrayList<Object>(values.length);
-        for (Object value : values) {
-            valueList.add(value);
-        }
-        return addCriterion(new InCriterion(propertyName, valueList));
+    	Asserts.notEmpty(values);
+        return addCriterion(new InCriterion(propertyName, Arrays.asList(values)));
     }
 
     public Criteria in(String propertyName, Collection<Object> valueList) {
-        if (valueList == null || valueList.size() == 0) {
-            throw new IllegalArgumentException("Values passed to in cannot be null or empty.");
-        }
+        Asserts.notEmpty(valueList);
         return addCriterion(new InCriterion(propertyName, valueList));
+    }
+    
+    public Criteria notIn(String propertyName, Object... values) {
+    	Asserts.notEmpty(values);
+        return addCriterion(new NotInCriterion(propertyName, Arrays.asList(values)));
+    }
+
+    public Criteria notIn(String propertyName, Collection<Object> valueList) {
+    	Asserts.notEmpty(valueList);
+        return addCriterion(new NotInCriterion(propertyName, valueList));
     }
 
     public Criteria isNull(String propertyName) {
@@ -138,44 +139,9 @@ public class Criteria {
         return addCriterion(new NotNullCriterion(propertyName));
     }
     
-    private Criteria addCriterion(Criterion criterion) {
-		if (criterion == null) {
-			throw new IllegalArgumentException("Criterion cannot be null.");
-		}
-
-		// convert the property name to column name
-		String condition = criterion.getCondition();
-		if (StringUtils.isNullOrEmpty(condition)) {
-			throw new IllegalArgumentException("condition is required for " + criterion.getClass().getName());
-		}
-		String[] segment = condition.split("&");
-		if (segment == null || segment.length != 2) {
-			throw new IllegalArgumentException("Illegal format for " + criterion.getClass().getName());
-		}
-		if (StringUtils.isNullOrEmpty(segment[0])) {
-			throw new IllegalArgumentException("Property name is required for " + criterion.getClass().getName());
-		}
-		if (StringUtils.isNullOrEmpty(segment[1])) {
-			throw new IllegalArgumentException("Sql operator is required for " + condition.getClass().getName());
-		}
-
-		String propertyName = segment[0];
-		String sqlOperator = segment[1];
-
-		ResultMapping resultMapping = ResultMapRegistry.getResultMapping(entityType.getName(), propertyName);
-		String column = resultMapping.getColumn();
-		String typeHandler = resultMapping.getTypeHandler().getClass().getName();
-
-		StringBuilder sb = new StringBuilder();
-		sb.append(column);
-		sb.append(" ");
-		sb.append(sqlOperator);
-		criterion.setCondition(sb.toString());
-
-		criterion.setTypeHandler(typeHandler);
-
+    private Criteria addCriterion(AbstractCriterion criterion) {
+    	Asserts.notNull(criterion, "Criterion cannot be null.");
 		criterions.add(criterion);
-
 		return this;
 	}
 

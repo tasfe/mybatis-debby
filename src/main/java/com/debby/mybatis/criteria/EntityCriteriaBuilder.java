@@ -18,11 +18,16 @@ package com.debby.mybatis.criteria;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ibatis.mapping.ResultMapping;
+
+import com.debby.mybatis.core.ResultMapRegistry;
+import com.debby.mybatis.criteria.criterion.AbstractCriterion;
 import com.debby.mybatis.criteria.filter.PropertyFilter;
 import com.debby.mybatis.criteria.filter.PropertyFilterMode;
 import com.debby.mybatis.criteria.limit.RowLimiter;
 import com.debby.mybatis.criteria.sort.Order;
 import com.debby.mybatis.criteria.sort.OrderBy;
+import com.debby.mybatis.util.StringUtils;
 
 /**
  * @author rocky.hu
@@ -30,23 +35,20 @@ import com.debby.mybatis.criteria.sort.OrderBy;
  */
 public class EntityCriteriaBuilder {
 	
+	private final Class<?> entityType;
+	
 	private PropertyFilter propertyFilter;
 	private OrderBy orderBy;
 	private RowLimiter rowLimiter;
-	private CriteriaBuilder criteriaBuilder;
 
 	private Boolean distinct;
 	private List<Criteria> criteriaList = new ArrayList<Criteria>();
 
 	public EntityCriteriaBuilder(Class<?> entityType) {
+		this.entityType = entityType;
 		this.propertyFilter = new PropertyFilter(entityType);
 		this.orderBy = new OrderBy(entityType);
 		this.rowLimiter = new RowLimiter();
-		this.criteriaBuilder = new CriteriaBuilder(entityType);
-	}
-
-	public static EntityCriteriaBuilder forEntity(Class<?> entityType) {
-		return new EntityCriteriaBuilder(entityType);
 	}
 
 	/**
@@ -90,18 +92,6 @@ public class EntityCriteriaBuilder {
 		return this;
 	}
 	
-	public EntityCriteriaBuilder where() {
-		return this;
-	}
-	
-	public EntityCriteriaBuilder and() {
-		
-	}
-	
-	public EntityCriteriaBuilder or() {
-		
-	}
-
 	/**
 	 * Set distinct query.
 	 * 
@@ -154,11 +144,26 @@ public class EntityCriteriaBuilder {
 	public EntityCriteria bulid() {
 		EntityCriteria entityCriteria = new EntityCriteria();
 		entityCriteria.setColumns(propertyFilter.getColumns());
-		entityCriteria.setCriteriaList(this.criteriaList);
 		entityCriteria.setDistinct(distinct);
 		entityCriteria.setFirstResult(rowLimiter.getFirstResult());
 		entityCriteria.setMaxResults(rowLimiter.getMaxResults());
 		entityCriteria.setOrderList(orderBy.getOrderList());
+		
+		// Mapping property to column and set TypeHandler
+		for (Criteria criteria : this.criteriaList) {
+			for (AbstractCriterion criterion : criteria.getCriterions()) {
+				ResultMapping resultMapping = ResultMapRegistry.getResultMapping(entityType.getName(), criterion.getProperty());
+				String column = resultMapping.getColumn();
+				String typeHandler = resultMapping.getTypeHandler().getClass().getName();
+				
+				criterion.setColumn(column);
+				
+				if (!StringUtils.isNullOrEmpty(typeHandler)) {
+					criterion.setTypeHandler(typeHandler);
+				}
+			}
+		}
+		entityCriteria.setCriteriaList(this.criteriaList);
 		
 		return entityCriteria;
 	}

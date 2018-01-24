@@ -33,6 +33,7 @@ public enum SQLComparisonOperator implements SqlOperator {
         this.notation = notation;
     }
 
+    @Override
     public String getNotation()
     {
         return notation;

@@ -41,7 +41,7 @@ public class SelectListForPagingElementGenerator extends AbstractXmlElementGener
         
         StringBuilder sb = new StringBuilder();
         sb.setLength(0);
-        sb.append("from ");
+        sb.append("FROM ");
         sb.append(introspectedContext.getTableName());
         answer.addElement(new TextElement(sb.toString()));
 

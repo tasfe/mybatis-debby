@@ -15,26 +15,16 @@
  */
 package com.debby.mybatis.criteria.criterion;
 
-import java.util.Collection;
-
-import com.debby.mybatis.criteria.criterion.mode.ValueMode;
-import com.debby.mybatis.sql.SqlOperator;
+import com.debby.mybatis.sql.SqlLogicalOperator;
 
 /**
  * @author rocky.hu
- * @date Jan 23, 2018 5:23:08 PM
+ * @date 2017-12-09 4:55 PM
  */
-public abstract class AbstractListValueCriterion extends AbstractCriterion {
-	
-	protected AbstractListValueCriterion(String property, Collection<?> value, SqlOperator sqlOperator) {
-		super(property, value, sqlOperator);
-	}
+public class NotBetweenCriterion extends AbstractTwoValueCriterion {
 
-	@Override
-	public ValueMode getValueMode() {
-		return ValueMode.LIST;
-	}
-	
-	
-	
+    public NotBetweenCriterion(String property, Object low, Object high) {
+        super(property, low, high, SqlLogicalOperator.NOT_BETWEEN);
+    }
+
 }

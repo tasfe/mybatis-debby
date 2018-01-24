@@ -42,17 +42,17 @@ public class SelectByIdElementGenerator extends AbstractXmlElementGenerator {
         }
         
         StringBuilder sb = new StringBuilder();
-        sb.append("select ");
+        sb.append("SELECT ");
         answer.addElement(new TextElement(sb.toString()));
         answer.addElement(getBaseColumnListElement());
 
         sb.setLength(0);
-        sb.append("from ");
+        sb.append("FROM ");
         sb.append(introspectedContext.getTableName());
         answer.addElement(new TextElement(sb.toString()));
         
         sb.setLength(0);
-        sb.append(" where ");
+        sb.append(" WHERE ");
         sb.append(getPrimaryKeyParameterClause(resultMap));
 
         answer.addElement(new TextElement(sb.toString()));

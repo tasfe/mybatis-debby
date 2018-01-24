@@ -36,7 +36,7 @@ public class SQLServer2012Dialect extends SQLServer2008Dialect {
 		 */
 		XmlElement whenElement = new XmlElement("when");
 		whenElement.addAttribute(new Attribute("test", "_parameter != null and orderList != null and orderList.size() > 0"));
-		whenElement.addElement(new TextElement("select"));
+		whenElement.addElement(new TextElement("SELECT"));
     	XmlElement ifElement = new XmlElement("if");
     	ifElement.addAttribute(new Attribute("test", "distinct"));
     	ifElement.addElement(new TextElement("distinct"));

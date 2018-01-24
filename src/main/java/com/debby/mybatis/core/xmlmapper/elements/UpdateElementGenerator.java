@@ -39,12 +39,12 @@ public class UpdateElementGenerator extends AbstractXmlElementGenerator {
         answer.addAttribute(new Attribute("parameterType", "map"));
         
         StringBuilder sb = new StringBuilder();
-        sb.append("update ");
+        sb.append("UPDATE ");
         sb.append(introspectedContext.getTableName());
         answer.addElement(new TextElement(sb.toString()));
 
         sb.setLength(0);
-        sb.append("set ");
+        sb.append("SET ");
 
         Iterator<ResultMapping> iter = getPropertyResultMappings(introspectedContext.getResultMap()).iterator();
         while (iter.hasNext()) {

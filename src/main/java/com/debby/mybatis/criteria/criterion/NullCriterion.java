@@ -21,10 +21,10 @@ import com.debby.mybatis.sql.SqlLogicalOperator;
  * @author rocky.hu
  * @date 2017-12-09 10:11 PM
  */
-public class NullCriterion extends Criterion {
+public class NullCriterion extends AbstractNoValueCriterion {
 
-	public NullCriterion(String propertyName) {
-        super(propertyName + "&" + SqlLogicalOperator.IS_NULL);
+	public NullCriterion(String property) {
+        super(property, SqlLogicalOperator.IS_NULL);
     }
 
 }

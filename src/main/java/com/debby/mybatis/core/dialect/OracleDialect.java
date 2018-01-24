@@ -28,7 +28,7 @@ public class OracleDialect extends Dialect {
 
 	@Override
 	public String getSequenceNextValString(String sequenceName) throws MappingException {
-		return "select " + sequenceName + ".nextval" + " from dual";
+		return "SELECT " + sequenceName + ".nextval" + " FROM dual";
 	}
 
 	@Override
@@ -39,12 +39,12 @@ public class OracleDialect extends Dialect {
 
 		XmlElement whenElement = new XmlElement("when");
 		whenElement.addAttribute(new Attribute("test", "firstResult != null and firstResult > 0"));
-		sb.append("select * from ( select row_.*, rownum rownum_ from ( ");
+		sb.append("SELECT * FROM ( SELECT row_.*, rownum rownum_ FROM ( ");
 		whenElement.addElement(new TextElement(sb.toString()));
 
 		XmlElement otherwiseElement = new XmlElement("otherwise");
 		sb.setLength(0);
-		sb.append("select * from ( ");
+		sb.append("SELECT * FROM ( ");
 		otherwiseElement.addElement(new TextElement(sb.toString()));
 
 		chooseElement.addElement(whenElement);
@@ -63,12 +63,12 @@ public class OracleDialect extends Dialect {
 
 		XmlElement whenElement = new XmlElement("when");
 		whenElement.addAttribute(new Attribute("test", "firstResult != null and firstResult > 0"));
-		sb.append(" ) row_ where rownum <= (#{maxResults}+#{firstResult})) where rownum_ > #{firstResult}");
+		sb.append(" ) row_ WHERE rownum <= (#{maxResults}+#{firstResult})) WHERE rownum_ > #{firstResult}");
 		whenElement.addElement(new TextElement(sb.toString()));
 
 		XmlElement otherwiseElement = new XmlElement("otherwise");
 		sb.setLength(0);
-		sb.append(" ) where rownum <= #{maxResults}");
+		sb.append(" ) WHERE rownum <= #{maxResults}");
 		otherwiseElement.addElement(new TextElement(sb.toString()));
 
 		chooseElement.addElement(whenElement);

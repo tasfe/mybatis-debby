@@ -40,17 +40,20 @@ public class SelectListElementGenerator extends AbstractXmlElementGenerator {
         answer.addAttribute(new Attribute("parameterType", EntityCriteria.class.getName()));
         answer.addAttribute(new Attribute("resultMap", Constants.BASE_RESULT_MAP_ID));
         
-        answer.addElement(new TextElement("select"));
-        XmlElement ifElement = new XmlElement("if"); 
-        ifElement.addAttribute(new Attribute("test", "distinct")); 
-        ifElement.addElement(new TextElement("distinct"));
-        answer.addElement(ifElement);
+        answer.addElement(new TextElement("SELECT"));
+        
+        if (selectList) {
+        	XmlElement ifElement = new XmlElement("if"); 
+            ifElement.addAttribute(new Attribute("test", "distinct")); 
+            ifElement.addElement(new TextElement("distinct"));
+            answer.addElement(ifElement);
+        }
         
         answer.addElement(new TextElement("${columns}"));
         
         StringBuilder sb = new StringBuilder();
         sb.setLength(0);
-        sb.append("from ");
+        sb.append("FROM ");
         sb.append(introspectedContext.getTableName());
         answer.addElement(new TextElement(sb.toString()));
 

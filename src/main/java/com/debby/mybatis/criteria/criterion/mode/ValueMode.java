@@ -13,22 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.debby.mybatis.criteria;
+package com.debby.mybatis.criteria.criterion.mode;
 
 /**
  * @author rocky.hu
- * @date Jan 23, 2018 2:55:05 PM
+ * @date Jan 23, 2018 5:36:32 PM
  */
-public class CriteriaBuilder {
+public enum ValueMode {
 	
-	private final Class<?> entityType;
-	
-	public CriteriaBuilder(Class<?> entityType) {
-		this.entityType = entityType;
-	}
-	
-	public Criteria build() {
-		return new Criteria(entityType);
-	}
+	NO, SINGLE, TWO, LIST;
 
 }

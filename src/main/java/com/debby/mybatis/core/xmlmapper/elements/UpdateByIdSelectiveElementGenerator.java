@@ -47,7 +47,7 @@ public class UpdateByIdSelectiveElementGenerator extends AbstractXmlElementGener
         }
 
 		StringBuilder sb = new StringBuilder();
-        sb.append("update ");
+        sb.append("UPDATE ");
         sb.append(introspectedContext.getTableName());
         answer.addElement(new TextElement(sb.toString()));
         
@@ -78,7 +78,7 @@ public class UpdateByIdSelectiveElementGenerator extends AbstractXmlElementGener
         }
 
         sb.setLength(0);
-        sb.append(" where ");
+        sb.append(" WHERE ");
         sb.append(getPrimaryKeyParameterClauseForUpdate(resultMap));
         answer.addElement(new TextElement(sb.toString()));
         

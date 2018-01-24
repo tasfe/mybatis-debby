@@ -113,12 +113,11 @@ public class ProductMapperTest extends AbstractDebbyMapperTest<ProductMapper> {
     @Test
 	@Override
 	public void testSelectOne() {
-		EntityCriteria entityCriteria = EntityCriteria.forEntity(Product.class);
 		
-		Criteria criteria = entityCriteria.getCriteriaBuilder().build();
+		Criteria criteria = new Criteria();
 		criteria.eq("title", "p1");
 		
-		entityCriteria.where(criteria);
+		EntityCriteria entityCriteria = EntityCriteria.forEntity(Product.class).where(criteria).bulid();
 		
 		Product product = mapper.selectOne(entityCriteria);
 		Assert.assertNotNull(product);

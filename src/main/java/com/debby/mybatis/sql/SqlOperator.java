@@ -23,4 +23,7 @@ package com.debby.mybatis.sql;
  * @date Sep 08, 2016, 09:53:18 PM
  */
 public interface SqlOperator {
+	
+	String getNotation();
+	
 }

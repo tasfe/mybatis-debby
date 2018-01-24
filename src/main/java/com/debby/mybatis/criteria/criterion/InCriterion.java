@@ -15,22 +15,18 @@
  */
 package com.debby.mybatis.criteria.criterion;
 
-import com.debby.mybatis.sql.SqlLogicalOperator;
-
 import java.util.Collection;
+
+import com.debby.mybatis.sql.SqlLogicalOperator;
 
 /**
  * @author rocky.hu
  * @date 2017-12-09 5:13 PM
  */
-public class InCriterion extends Criterion {
+public class InCriterion extends AbstractListValueCriterion {
 
-	public InCriterion(String propertyName, Collection<Object> values) {
-        super(propertyName + "&" + SqlLogicalOperator.IN, values);
-    }
-
-	public InCriterion(String propertyName, Collection<Object> values, boolean not) {
-        super(propertyName + "&" + (not ? SqlLogicalOperator.NOT_IN : SqlLogicalOperator.IN), values);
+	public InCriterion(String property, Collection<Object> values) {
+        super(property, values, SqlLogicalOperator.IN);
     }
 
 }

@@ -48,11 +48,11 @@ public class InsertElementGenerator extends AbstractXmlElementGenerator {
         StringBuilder insertClause = new StringBuilder();
         StringBuilder valuesClause = new StringBuilder();
         
-        insertClause.append(" insert into ");
+        insertClause.append(" INSERT INTO ");
         insertClause.append(introspectedContext.getTableName());
         insertClause.append(" (");
         
-        valuesClause.append(" values(");
+        valuesClause.append(" VALUES(");
         
         List<String> valuesClauses = new ArrayList<String>();
         Iterator<ResultMapping> iter = getPropertyResultMappings(resultMap).iterator();
