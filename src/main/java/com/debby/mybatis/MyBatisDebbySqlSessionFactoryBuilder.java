@@ -15,14 +15,14 @@
  */
 package com.debby.mybatis;
 
-import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import com.debby.mybatis.core.MyBatisDebbyBooster;
-
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.Properties;
+
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+import com.debby.mybatis.core.MyBatisDebbyBooster;
 
 /**
  * @author rocky.hu
@@ -39,20 +39,15 @@ public class MyBatisDebbySqlSessionFactoryBuilder extends SqlSessionFactoryBuild
     @Override
     public SqlSessionFactory build(Reader reader, String environment, Properties properties) {
         SqlSessionFactory sqlSessionFactory = super.build(reader, environment, properties);
-        boost(sqlSessionFactory.getConfiguration());
+        MyBatisDebbyBooster.boost(myBatisDebbyConfiguration, sqlSessionFactory.getConfiguration());
         return sqlSessionFactory;
     }
 
     @Override
     public SqlSessionFactory build(InputStream inputStream, String environment, Properties properties) {
         SqlSessionFactory sqlSessionFactory = super.build(inputStream, environment, properties);
-        boost(sqlSessionFactory.getConfiguration());
+        MyBatisDebbyBooster.boost(myBatisDebbyConfiguration, sqlSessionFactory.getConfiguration());
         return sqlSessionFactory;
-    }
-
-    private void boost(Configuration configuration) {
-        MyBatisDebbyBooster myBatisDebbyBooster = new MyBatisDebbyBooster(myBatisDebbyConfiguration, configuration);
-        myBatisDebbyBooster.execute();
     }
 
     public MyBatisDebbyConfiguration getDebbyConfiguration() {

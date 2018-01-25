@@ -13,18 +13,20 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.debby.mybatis.criteria.criterion;
+package com.debby.mybatis.criteria.criterion.simple;
 
 import com.debby.mybatis.sql.SqlLogicalOperator;
 
+import java.util.Collection;
+
 /**
  * @author rocky.hu
- * @date 2017-12-09 4:55 PM
+ * @date 2017-12-09 5:13 PM
  */
-public class NotBetweenCriterion extends AbstractTwoValueCriterion {
+public class NotInCriterion extends AbstractListValueCriterion {
 
-    public NotBetweenCriterion(String property, Object low, Object high) {
-        super(property, low, high, SqlLogicalOperator.NOT_BETWEEN);
+	public NotInCriterion(String property, Collection<Object> values) {
+        super(property, values, SqlLogicalOperator.NOT_IN);
     }
 
 }

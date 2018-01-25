@@ -13,17 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.debby.mybatis.criteria.criterion;
+package com.debby.mybatis.criteria.criterion.simple;
 
-import com.debby.mybatis.criteria.criterion.mode.ValueMode;
+import com.debby.mybatis.criteria.criterion.Criterion;
+import com.debby.mybatis.criteria.criterion.simple.mode.ValueMode;
 import com.debby.mybatis.sql.SqlOperator;
 import com.debby.mybatis.util.Asserts;
+import com.debby.mybatis.util.StringUtils;
 
 /**
  * @author rocky.hu
  * @date Jan 23, 2018 5:21:37 PM
  */
-public abstract class AbstractCriterion {
+public abstract class SimpleCriterion implements Criterion {
 	
 	private String column;
 	private String property;
@@ -32,14 +34,14 @@ public abstract class AbstractCriterion {
 	private Object value;
 	private ValueMode valueMode;
 	
-	protected AbstractCriterion(String property, SqlOperator sqlOperator) {
+	protected SimpleCriterion(String property, SqlOperator sqlOperator) {
 		Asserts.notEmpty(property);
 		Asserts.notNull(sqlOperator);
 		this.property = property;
 		this.sqlOperator = sqlOperator;
 	}
 	
-	protected AbstractCriterion(String property, Object value, SqlOperator sqlOperator) {
+	protected SimpleCriterion(String property, Object value, SqlOperator sqlOperator) {
 		Asserts.notEmpty(property);
 		Asserts.notNull(value);
 		Asserts.notNull(sqlOperator);
@@ -49,6 +51,9 @@ public abstract class AbstractCriterion {
 	}
 	
 	public String getColumn() {
+		if (StringUtils.isNullOrEmpty(column)) {
+			column = this.getProperty();
+		}
 		return column;
 	}
 

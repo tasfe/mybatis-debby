@@ -13,18 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.debby.mybatis.criteria.criterion;
+package com.debby.mybatis.criteria.criterion.simple;
 
-import com.debby.mybatis.sql.SqlLogicalOperator;
+import com.debby.mybatis.sql.SQLComparisonOperator;
 
 /**
  * @author rocky.hu
- * @date 2017-12-09 10:15 PM
+ * @date 2017-12-09 3:36 PM
  */
-public class NotNullCriterion extends AbstractNoValueCriterion {
+public class ComparisonCriterion extends AbstractSingleValueCriterion {
 
-	public NotNullCriterion(String property) {
-        super(property, SqlLogicalOperator.IS_NOT_NULL);
+	public ComparisonCriterion(String property, Object value, SQLComparisonOperator operator) {
+        super(property, value, operator);
     }
 
 }

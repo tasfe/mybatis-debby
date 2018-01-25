@@ -16,12 +16,14 @@
 package com.debby.mybatis.criteria;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.ibatis.mapping.ResultMapping;
 
 import com.debby.mybatis.core.ResultMapRegistry;
-import com.debby.mybatis.criteria.criterion.AbstractCriterion;
+import com.debby.mybatis.criteria.criterion.Criterion;
+import com.debby.mybatis.criteria.criterion.simple.SimpleCriterion;
 import com.debby.mybatis.criteria.filter.PropertyFilter;
 import com.debby.mybatis.criteria.filter.PropertyFilterMode;
 import com.debby.mybatis.criteria.limit.RowLimiter;
@@ -42,7 +44,7 @@ public class EntityCriteriaBuilder {
 	private RowLimiter rowLimiter;
 
 	private Boolean distinct;
-	private List<Criteria> criteriaList = new ArrayList<Criteria>();
+	private List<Criterion> criterionList = new ArrayList<Criterion>();
 
 	public EntityCriteriaBuilder(Class<?> entityType) {
 		this.entityType = entityType;
@@ -77,18 +79,8 @@ public class EntityCriteriaBuilder {
 		return this;
 	}
 
-	/**
-	 * Multiple Criterias will be finally associated by SQL "OR" operator.
-	 * 
-	 * @param criterias
-	 * @return
-	 */
-	public EntityCriteriaBuilder where(Criteria... criterias) {
-		if (criterias != null && criterias.length > 0) {
-			for (Criteria criteria : criterias) {
-				criteriaList.add(criteria);
-			}
-		}
+	public EntityCriteriaBuilder where(Criterion... criterions) {
+		criterionList.addAll(Arrays.asList(criterions));
 		return this;
 	}
 	
@@ -147,11 +139,16 @@ public class EntityCriteriaBuilder {
 		entityCriteria.setDistinct(distinct);
 		entityCriteria.setFirstResult(rowLimiter.getFirstResult());
 		entityCriteria.setMaxResults(rowLimiter.getMaxResults());
-		entityCriteria.setOrderList(orderBy.getOrderList());
+		entityCriteria.setOrders(orderBy.getOrderList());
+		
+		int index = 0;
+		for (Criterion criterion : criterionList) {
+			
+		}
 		
 		// Mapping property to column and set TypeHandler
-		for (Criteria criteria : this.criteriaList) {
-			for (AbstractCriterion criterion : criteria.getCriterions()) {
+		for (Criteria1 criteria1 : this.criteriaList) {
+			for (SimpleCriterion criterion : criteria1.getCriterions()) {
 				ResultMapping resultMapping = ResultMapRegistry.getResultMapping(entityType.getName(), criterion.getProperty());
 				String column = resultMapping.getColumn();
 				String typeHandler = resultMapping.getTypeHandler().getClass().getName();
@@ -166,6 +163,24 @@ public class EntityCriteriaBuilder {
 		entityCriteria.setCriteriaList(this.criteriaList);
 		
 		return entityCriteria;
+	}
+	
+	private void tidy(SimpleCriterion criterion) {
+		ResultMapping resultMapping = ResultMapRegistry.getResultMapping(entityType.getName(), criterion.getProperty());
+		String column = resultMapping.getColumn();
+		String typeHandler = resultMapping.getTypeHandler().getClass().getName();
+		
+		criterion.setColumn(column);
+		
+		if (!StringUtils.isNullOrEmpty(typeHandler)) {
+			criterion.setTypeHandler(typeHandler);
+		}
+	}
+	
+	private void tidy(SimpleCriterion[] criterions) {
+		for (SimpleCriterion criterion : criterions) {
+			tidy(criterion);
+		}
 	}
 
 }

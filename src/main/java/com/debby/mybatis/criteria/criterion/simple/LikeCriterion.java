@@ -13,28 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.debby.mybatis.criteria.criterion;
+package com.debby.mybatis.criteria.criterion.simple;
 
-import java.util.Collection;
-
-import com.debby.mybatis.criteria.criterion.mode.ValueMode;
-import com.debby.mybatis.sql.SqlOperator;
+import com.debby.mybatis.criteria.criterion.simple.mode.MatchMode;
+import com.debby.mybatis.sql.SqlLogicalOperator;
 
 /**
  * @author rocky.hu
- * @date Jan 23, 2018 5:23:08 PM
+ * @date 2017-12-09 11:54 AM
  */
-public abstract class AbstractListValueCriterion extends AbstractCriterion {
-	
-	protected AbstractListValueCriterion(String property, Collection<?> value, SqlOperator sqlOperator) {
-		super(property, value, sqlOperator);
-	}
+public class LikeCriterion extends AbstractSingleValueCriterion {
 
-	@Override
-	public ValueMode getValueMode() {
-		return ValueMode.LIST;
-	}
-	
-	
+	public LikeCriterion(String property, String value, MatchMode matchMode) {
+        super(property, matchMode.toMatchString(value), SqlLogicalOperator.LIKE);
+    }
 	
 }

@@ -15,9 +15,9 @@
  */
 package com.debby.mybatis.criteria;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import com.debby.mybatis.criteria.criterion.simple.SimpleCriterion;
 import com.debby.mybatis.criteria.sort.Order;
 
 /**
@@ -30,8 +30,8 @@ public class EntityCriteria {
 	private Integer maxResults;
 	private Boolean distinct;
 	private String columns;
-	private List<Criteria> criteriaList = new ArrayList<Criteria>();
-	private List<Order> orderList = new ArrayList<Order>();
+	private SimpleCriterion[] criterions;
+	private List<Order> orders;
 
 	public Integer getFirstResult() {
 		return firstResult;
@@ -65,22 +65,22 @@ public class EntityCriteria {
 		this.columns = columns;
 	}
 
-	public List<Criteria> getCriteriaList() {
-		return criteriaList;
+	public SimpleCriterion[] getCriterions() {
+		return criterions;
 	}
 
-	public void setCriteriaList(List<Criteria> criteriaList) {
-		this.criteriaList = criteriaList;
+	public void setCriterions(SimpleCriterion[] criterions) {
+		this.criterions = criterions;
 	}
 
-	public List<Order> getOrderList() {
-		return orderList;
+	public List<Order> getOrders() {
+		return orders;
 	}
 
-	public void setOrderList(List<Order> orderList) {
-		this.orderList = orderList;
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
 	}
-	
+
 	public static EntityCriteriaBuilder forEntity(final Class<?> entityType) {
 		return new EntityCriteriaBuilder(entityType);
 	}

@@ -57,16 +57,7 @@ public class MyBatisDebbyBooster {
     
     private static final String DEBBY_MAPPER_FILE_SUFFIX = "_DEBBY.xml";
 
-    private MyBatisDebbyConfiguration myBatisDebbyConfiguration;
-    private Configuration configuration;
-    
-    public MyBatisDebbyBooster(MyBatisDebbyConfiguration myBatisDebbyConfiguration, Configuration configuration) {
-		super();
-		this.myBatisDebbyConfiguration = myBatisDebbyConfiguration;
-		this.configuration = configuration;
-	}
-
-	public void execute() {
+	public static void boost(MyBatisDebbyConfiguration myBatisDebbyConfiguration, Configuration configuration) {
 
         LOGGER.info("Debby-Info ：[Start] debby mapper support...");
 
@@ -124,7 +115,7 @@ public class MyBatisDebbyBooster {
 							resultMapBuilder.append(System.getProperty("line.separator"));
 						}
 
-						parse(formattedContent, mapperName);
+						parse(formattedContent, mapperName, configuration);
 					}
 
 					ResultMap baseResultMap = configuration.getResultMap(baseResultMapId);
@@ -160,7 +151,7 @@ public class MyBatisDebbyBooster {
 						FileUtils.writeFile(directory.toString(), fileName.toString(), formattedContent);
 					}
 
-					parse(formattedContent, mapperName);
+					parse(formattedContent, mapperName, configuration);
 				}
 
 	        }
@@ -180,7 +171,7 @@ public class MyBatisDebbyBooster {
         LOGGER.info("Debby-Info ：[END] debby mapper support...");
     }
 
-	private void parse(String content, String mapperName) throws UnsupportedEncodingException {
+	private static void parse(String content, String mapperName, Configuration configuration) throws UnsupportedEncodingException {
 		InputStream inputStream = new ByteArrayInputStream(content.getBytes("UTF-8"));
 		XXMLMapperBuilder builder = new XXMLMapperBuilder(inputStream, configuration, null, configuration.getSqlFragments(), mapperName);
 		builder.parse();

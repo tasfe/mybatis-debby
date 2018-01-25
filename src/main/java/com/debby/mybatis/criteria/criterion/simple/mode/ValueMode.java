@@ -13,26 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.debby.mybatis.criteria.criterion;
-
-import com.debby.mybatis.criteria.criterion.mode.ValueMode;
-import com.debby.mybatis.sql.SqlOperator;
+package com.debby.mybatis.criteria.criterion.simple.mode;
 
 /**
  * @author rocky.hu
- * @date Jan 23, 2018 5:23:54 PM
+ * @date Jan 23, 2018 5:36:32 PM
  */
-public abstract class AbstractNoValueCriterion extends AbstractCriterion {
+public enum ValueMode {
 	
-	protected AbstractNoValueCriterion(String property, SqlOperator sqlOperator) {
-		super(property, sqlOperator);
-	}
+	NO, SINGLE, TWO, LIST;
 
-	@Override
-	public ValueMode getValueMode() {
-		return ValueMode.NO;
-	}
-	
-	
-	
 }

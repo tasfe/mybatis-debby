@@ -18,17 +18,20 @@ package com.debby.mybatis.criteria;
 import java.util.Arrays;
 import java.util.Collection;
 
-import com.debby.mybatis.criteria.criterion.AbstractCriterion;
-import com.debby.mybatis.criteria.criterion.BetweenCriterion;
-import com.debby.mybatis.criteria.criterion.ComparisonCriterion;
-import com.debby.mybatis.criteria.criterion.InCriterion;
-import com.debby.mybatis.criteria.criterion.LikeCriterion;
-import com.debby.mybatis.criteria.criterion.NotBetweenCriterion;
-import com.debby.mybatis.criteria.criterion.NotInCriterion;
-import com.debby.mybatis.criteria.criterion.NotLikeCriterion;
-import com.debby.mybatis.criteria.criterion.NotNullCriterion;
-import com.debby.mybatis.criteria.criterion.NullCriterion;
-import com.debby.mybatis.criteria.criterion.mode.MatchMode;
+import com.debby.mybatis.criteria.criterion.Criterion;
+import com.debby.mybatis.criteria.criterion.combined.CombinedCriterion;
+import com.debby.mybatis.criteria.criterion.combined.CombinedCriterionConnector;
+import com.debby.mybatis.criteria.criterion.simple.BetweenCriterion;
+import com.debby.mybatis.criteria.criterion.simple.ComparisonCriterion;
+import com.debby.mybatis.criteria.criterion.simple.InCriterion;
+import com.debby.mybatis.criteria.criterion.simple.LikeCriterion;
+import com.debby.mybatis.criteria.criterion.simple.NotBetweenCriterion;
+import com.debby.mybatis.criteria.criterion.simple.NotInCriterion;
+import com.debby.mybatis.criteria.criterion.simple.NotLikeCriterion;
+import com.debby.mybatis.criteria.criterion.simple.NotNullCriterion;
+import com.debby.mybatis.criteria.criterion.simple.NullCriterion;
+import com.debby.mybatis.criteria.criterion.simple.SimpleCriterion;
+import com.debby.mybatis.criteria.criterion.simple.mode.MatchMode;
 import com.debby.mybatis.sql.SQLComparisonOperator;
 import com.debby.mybatis.util.Asserts;
 
@@ -38,92 +41,100 @@ import com.debby.mybatis.util.Asserts;
  */
 public class Restrictions {
 
-    public static AbstractCriterion eq(String property, Object value) {
+    public static SimpleCriterion eq(String property, Object value) {
         return new ComparisonCriterion(property, value, SQLComparisonOperator.eq);
     }
 
-    public static AbstractCriterion eqOrIsNull(String property, Object value) {
+    public static SimpleCriterion eqOrIsNull(String property, Object value) {
         return value == null
                 ? isNull(property)
                 : eq(property, value);
     }
 
-    public static AbstractCriterion ne(String property, Object value) {
+    public static SimpleCriterion ne(String property, Object value) {
         return new ComparisonCriterion(property, value, SQLComparisonOperator.ne);
     }
 
-    public static AbstractCriterion neOrIsNotNull(String property, Object value) {
+    public static SimpleCriterion neOrIsNotNull(String property, Object value) {
         return value == null
                 ? isNotNull(property)
                 : ne(property, value);
     }
 
-    public static AbstractCriterion gt(String property, Object value) {
+    public static SimpleCriterion gt(String property, Object value) {
         return new ComparisonCriterion(property, value, SQLComparisonOperator.gt);
     }
 
-    public static AbstractCriterion lt(String property, Object value) {
+    public static SimpleCriterion lt(String property, Object value) {
         return new ComparisonCriterion(property, value, SQLComparisonOperator.lt);
     }
 
-    public static AbstractCriterion le(String property, Object value) {
+    public static SimpleCriterion le(String property, Object value) {
         return new ComparisonCriterion(property, value, SQLComparisonOperator.le);
     }
 
-    public static AbstractCriterion ge(String property, Object value) {
+    public static SimpleCriterion ge(String property, Object value) {
         return new ComparisonCriterion(property, value, SQLComparisonOperator.ge);
     }
 
-    public static AbstractCriterion like(String property, String value) {
+    public static SimpleCriterion like(String property, String value) {
         return new LikeCriterion(property, String.valueOf(value), MatchMode.EXACT);
     }
     
-    public static AbstractCriterion like(String property, String value, MatchMode matchMode) {
+    public static SimpleCriterion like(String property, String value, MatchMode matchMode) {
         return new LikeCriterion(property, value, matchMode);
     }
 
-    public static AbstractCriterion notLike(String property, String value) {
+    public static SimpleCriterion notLike(String property, String value) {
         return new NotLikeCriterion(property, String.valueOf(value), MatchMode.EXACT);
     }
 
-    public static AbstractCriterion notLike(String property, String value, MatchMode matchMode) {
+    public static SimpleCriterion notLike(String property, String value, MatchMode matchMode) {
         return new NotLikeCriterion(property, value, matchMode);
     }
 
-    public static AbstractCriterion between(String property, Object low, Object high) {
+    public static SimpleCriterion between(String property, Object low, Object high) {
         return new BetweenCriterion(property, low, high);
     }
 
-    public static AbstractCriterion notBetween(String property, Object low, Object high) {
+    public static SimpleCriterion notBetween(String property, Object low, Object high) {
         return new NotBetweenCriterion(property, low, high);
     }
 
-    public static AbstractCriterion in(String property, Object... values) {
+    public static SimpleCriterion in(String property, Object... values) {
     	Asserts.notEmpty(values);
         return new InCriterion(property, Arrays.asList(values));
     }
     
-    public static AbstractCriterion in(String property, Collection<Object> valueList) {
+    public static SimpleCriterion in(String property, Collection<Object> valueList) {
     	Asserts.notEmpty(valueList);
         return new InCriterion(property, valueList);
     }
     
-    public static AbstractCriterion notIn(String property, Object... values) {
+    public static SimpleCriterion notIn(String property, Object... values) {
     	Asserts.notEmpty(values);
         return new NotInCriterion(property, Arrays.asList(values));
     }
 
-    public static AbstractCriterion notIn(String property, Collection<Object> valueList) {
+    public static SimpleCriterion notIn(String property, Collection<Object> valueList) {
     	Asserts.notEmpty(valueList);
         return new NotInCriterion(property, valueList);
     }
 
-    public static AbstractCriterion isNull(String property) {
+    public static SimpleCriterion isNull(String property) {
         return new NullCriterion(property);
     }
 
-    public static AbstractCriterion isNotNull(String property) {
+    public static SimpleCriterion isNotNull(String property) {
         return new NotNullCriterion(property);
+    }
+    
+    public static CombinedCriterion and(Criterion... criterions) {
+    	return new CombinedCriterion(CombinedCriterionConnector.AND, criterions);
+    }
+    
+    public static CombinedCriterion or(Criterion... criterions) {
+    	return new CombinedCriterion(CombinedCriterionConnector.OR, criterions);
     }
 
 }

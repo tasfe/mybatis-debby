@@ -13,20 +13,21 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.debby.mybatis.criteria.criterion;
+package com.debby.mybatis.criteria.criterion.simple;
 
 import java.util.Collection;
 import java.util.Map;
 
-import com.debby.mybatis.criteria.criterion.mode.ValueMode;
+import com.debby.mybatis.criteria.criterion.simple.mode.ValueMode;
 import com.debby.mybatis.exception.MyBatisDebbyException;
+import com.debby.mybatis.sql.SqlLogicalOperator;
 import com.debby.mybatis.sql.SqlOperator;
 
 /**
  * @author rocky.hu
  * @date Jan 23, 2018 5:25:41 PM
  */
-public class AbstractTwoValueCriterion extends AbstractCriterion {
+public abstract class AbstractTwoValueCriterion extends SimpleCriterion {
 	
 	protected AbstractTwoValueCriterion(String property, Object firstValue, Object secondValue, SqlOperator sqlOperator) {
 		super(property, new Object[] {firstValue, secondValue}, sqlOperator);
@@ -41,6 +42,20 @@ public class AbstractTwoValueCriterion extends AbstractCriterion {
 	@Override
 	public ValueMode getValueMode() {
 		return ValueMode.TWO;
+	}
+	
+	@Override
+	public String toSqlString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(getColumn());
+		sb.append(" ");
+		sb.append(getSqlOperator().getNotation());
+		sb.append(" ");
+		sb.append("#{{}.value[0]}");
+		sb.append(" ");
+		sb.append(SqlLogicalOperator.AND);
+		sb.append("#{{}.value[1]}");
+		return sb.toString();
 	}
 	
 }

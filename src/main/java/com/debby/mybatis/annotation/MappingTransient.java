@@ -21,7 +21,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * No mapping node notation.
+ * Ignore the property when do mapping.
  * 
  * @author rocky.hu
  * @date Jan 11, 2018 11:35:34 AM

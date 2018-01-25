@@ -13,20 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.debby.mybatis.criteria.criterion;
+package com.debby.mybatis.criteria.criterion.simple;
 
+import com.debby.mybatis.criteria.criterion.simple.mode.MatchMode;
 import com.debby.mybatis.sql.SqlLogicalOperator;
-
-import java.util.Collection;
 
 /**
  * @author rocky.hu
- * @date 2017-12-09 5:13 PM
+ * @date 2017-12-09 11:54 AM
  */
-public class NotInCriterion extends AbstractListValueCriterion {
+public class NotLikeCriterion extends AbstractSingleValueCriterion {
 
-	public NotInCriterion(String property, Collection<Object> values) {
-        super(property, values, SqlLogicalOperator.NOT_IN);
+	public NotLikeCriterion(String property, String value, MatchMode matchMode) {
+        super(property,  matchMode.toMatchString(value), SqlLogicalOperator.NOT_LIKE);
     }
 
 }

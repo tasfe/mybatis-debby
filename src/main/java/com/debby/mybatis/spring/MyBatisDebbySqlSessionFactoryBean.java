@@ -34,8 +34,7 @@ public class MyBatisDebbySqlSessionFactoryBean extends SqlSessionFactoryBean {
 	@Override
 	protected SqlSessionFactory buildSqlSessionFactory() throws IOException {
 		SqlSessionFactory sqlSessionFactory = super.buildSqlSessionFactory();
-		MyBatisDebbyBooster myBatisDebbyBooster = new MyBatisDebbyBooster(myBatisDebbyConfiguration, sqlSessionFactory.getConfiguration());
-		myBatisDebbyBooster.execute();
+		MyBatisDebbyBooster.boost(myBatisDebbyConfiguration, sqlSessionFactory.getConfiguration());
 		return sqlSessionFactory;
 	}
 

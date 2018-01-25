@@ -13,14 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.debby.mybatis.criteria.criterion.mode;
+package com.debby.mybatis.criteria.criterion.combined;
 
 /**
  * @author rocky.hu
- * @date Jan 23, 2018 5:36:32 PM
+ * @date Jan 25, 2018 2:28:00 PM
  */
-public enum ValueMode {
-	
-	NO, SINGLE, TWO, LIST;
-
+public enum CombinedCriterionConnector {
+	AND, OR
 }
