@@ -39,24 +39,24 @@ public abstract class AbstractListValueCriterion extends SimpleCriterion {
 	@Override
 	public String toSqlString() {
 		StringBuilder sb = new StringBuilder();
+		sb.append("(");
 		sb.append(getColumn());
 		sb.append(" ");
 		sb.append(getSqlOperator().getNotation());
 		sb.append(" ");
 		sb.append("(");
-		
-		Iterator<?> iter = ((Collection<?>)getValue()).iterator();
-		int index = 0;
-		while (iter.hasNext()) {
-			sb.append("#{{}.value.get("+ index + ")}");
-			
-			if (iter.hasNext()) {
+
+		int size = ((Collection<?>)getValue()).size();
+
+		for (int i=0; i<size; i++) {
+			sb.append("#{criterions[" + getIndex() + "].value.get("+ i + ")}");
+			if (i+1 < size) {
 				sb.append(",");
+				sb.append(" ");
 			}
-			
-			index++;
 		}
-			
+
+		sb.append(")");
 		sb.append(")");
 		return sb.toString();
 	}

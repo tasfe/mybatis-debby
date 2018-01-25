@@ -25,7 +25,7 @@ import java.util.Collection;
  */
 public class NotInCriterion extends AbstractListValueCriterion {
 
-	public NotInCriterion(String property, Collection<Object> values) {
+	public NotInCriterion(String property, Collection<?> values) {
         super(property, values, SqlLogicalOperator.NOT_IN);
     }
 

@@ -146,21 +146,21 @@ public class EntityCriteriaBuilder {
 			
 		}
 		
-		// Mapping property to column and set TypeHandler
-		for (Criteria1 criteria1 : this.criteriaList) {
-			for (SimpleCriterion criterion : criteria1.getCriterions()) {
-				ResultMapping resultMapping = ResultMapRegistry.getResultMapping(entityType.getName(), criterion.getProperty());
-				String column = resultMapping.getColumn();
-				String typeHandler = resultMapping.getTypeHandler().getClass().getName();
-				
-				criterion.setColumn(column);
-				
-				if (!StringUtils.isNullOrEmpty(typeHandler)) {
-					criterion.setTypeHandler(typeHandler);
-				}
-			}
-		}
-		entityCriteria.setCriteriaList(this.criteriaList);
+//		// Mapping property to column and set TypeHandler
+//		for (Criteria1 criteria1 : this.criteriaList) {
+//			for (SimpleCriterion criterion : criteria1.getCriterions()) {
+//				ResultMapping resultMapping = ResultMapRegistry.getResultMapping(entityType.getName(), criterion.getProperty());
+//				String column = resultMapping.getColumn();
+//				String typeHandler = resultMapping.getTypeHandler().getClass().getName();
+//
+//				criterion.setColumn(column);
+//
+//				if (!StringUtils.isNullOrEmpty(typeHandler)) {
+//					criterion.setTypeHandler(typeHandler);
+//				}
+//			}
+//		}
+//		entityCriteria.setCriteriaList(this.criteriaList);
 		
 		return entityCriteria;
 	}

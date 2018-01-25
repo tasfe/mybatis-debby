@@ -25,7 +25,7 @@ import com.debby.mybatis.sql.SqlLogicalOperator;
  */
 public class InCriterion extends AbstractListValueCriterion {
 
-	public InCriterion(String property, Collection<Object> values) {
+	public InCriterion(String property, Collection<?> values) {
         super(property, values, SqlLogicalOperator.IN);
     }
 

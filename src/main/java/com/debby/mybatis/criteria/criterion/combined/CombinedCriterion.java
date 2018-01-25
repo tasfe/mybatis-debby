@@ -60,18 +60,21 @@ public class CombinedCriterion implements Criterion {
 	}
 	
 	private void recursive(CombinedCriterion combinedCriterion, StringBuilder sb) {
-		if (combinedCriterion.getCriterions().size() > 0) {
-			sb.append("(");
-			sb.append(combinedCriterion.getConnector().name());
-			sb.append(" ");
-			for (Criterion criterion : combinedCriterion.getCriterions()) {
+		int criterionSize = combinedCriterion.getCriterions().size();
+		if (criterionSize > 0) {
+			sb = criterionSize > 1 ? sb.append("(") : sb.append("");
+			for (int i=0; i<combinedCriterion.getCriterions().size(); i++) {
+				Criterion criterion = combinedCriterion.getCriterions().get(i);
 				if (criterion instanceof SimpleCriterion) {
+					sb.append(" ");
+					sb.append(combinedCriterion.getConnector());
+					sb.append(" ");
 					sb.append(criterion.toSqlString());
 				} else {
 					recursive((CombinedCriterion) criterion, sb);
 				}
 			}
-			sb.append(")");
+			sb = criterionSize > 1 ? sb.append(")") : sb.append("");
 		}
 	}
 

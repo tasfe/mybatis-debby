@@ -47,7 +47,7 @@ public abstract class AbstractSingleValueCriterion extends SimpleCriterion {
 		sb.append(" ");
 		sb.append(getSqlOperator().getNotation());
 		sb.append(" ");
-		sb.append("#{{}.value}");
+		sb.append("#{criterions[" + getIndex() + "].value}");
 		return sb.toString();
 	}
 	

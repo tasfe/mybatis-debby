@@ -47,14 +47,17 @@ public abstract class AbstractTwoValueCriterion extends SimpleCriterion {
 	@Override
 	public String toSqlString() {
 		StringBuilder sb = new StringBuilder();
+		sb.append("(");
 		sb.append(getColumn());
 		sb.append(" ");
 		sb.append(getSqlOperator().getNotation());
 		sb.append(" ");
-		sb.append("#{{}.value[0]}");
+		sb.append("#{criterions[" + getIndex() + "].value[0]}");
 		sb.append(" ");
 		sb.append(SqlLogicalOperator.AND);
-		sb.append("#{{}.value[1]}");
+		sb.append(" ");
+		sb.append("#{criterions[" + getIndex() + "].value[1]}");
+		sb.append(")");
 		return sb.toString();
 	}
 	
