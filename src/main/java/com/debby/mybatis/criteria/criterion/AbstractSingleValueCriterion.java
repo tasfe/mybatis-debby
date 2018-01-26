@@ -13,52 +13,46 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.debby.mybatis.criteria.criterion.simple;
+package com.debby.mybatis.criteria.criterion;
 
-import java.util.Collection;
-import java.util.Iterator;
-
-import com.debby.mybatis.criteria.criterion.simple.mode.ValueMode;
 import com.debby.mybatis.sql.SqlOperator;
+import com.debby.mybatis.util.StringUtils;
 
 /**
  * @author rocky.hu
- * @date Jan 23, 2018 5:23:08 PM
+ * @date Jan 23, 2018 5:24:46 PM
  */
-public abstract class AbstractListValueCriterion extends SimpleCriterion {
+public abstract class AbstractSingleValueCriterion extends SimpleCriterion {
 	
-	protected AbstractListValueCriterion(String property, Collection<?> value, SqlOperator sqlOperator) {
+	protected AbstractSingleValueCriterion(String property, Object value, SqlOperator sqlOperator) {
 		super(property, value, sqlOperator);
 	}
 
 	@Override
 	public ValueMode getValueMode() {
-		return ValueMode.LIST;
+		return ValueMode.SINGLE;
+	}
+	
+	@Override
+	public String toSqlString(Class<?> entityType) {
+		String typeHandler = getTypeHandler(entityType);
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(getColumn(entityType));
+		sb.append(" ");
+		sb.append(getSqlOperator());
+		sb.append(" ");
+		if (StringUtils.isNullOrEmpty(typeHandler)) {
+			sb.append("#{criterions[" + getIndex() + "].value}");
+		} else {
+			sb.append("#{criterions[" + getIndex() + "].value, typeHandler=" + typeHandler + "}");
+		}
+		return sb.toString();
 	}
 
 	@Override
-	public String toSqlString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("(");
-		sb.append(getColumn());
-		sb.append(" ");
-		sb.append(getSqlOperator().getNotation());
-		sb.append(" ");
-		sb.append("(");
-
-		int size = ((Collection<?>)getValue()).size();
-
-		for (int i=0; i<size; i++) {
-			sb.append("#{criterions[" + getIndex() + "].value.get("+ i + ")}");
-			if (i+1 < size) {
-				sb.append(",");
-				sb.append(" ");
-			}
-		}
-
-		sb.append(")");
-		sb.append(")");
-		return sb.toString();
+	public String toString() {
+		return getProperty() + " " + getSqlOperator() + getValue();
 	}
 	
 }

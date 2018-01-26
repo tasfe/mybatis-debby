@@ -13,14 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.debby.mybatis.criteria.criterion.simple.mode;
+package com.debby.mybatis.criteria.criterion;
+
+import com.debby.mybatis.sql.SqlLogicalOperator;
 
 /**
  * @author rocky.hu
- * @date Jan 23, 2018 5:36:32 PM
+ * @date 2017-12-09 11:54 AM
  */
-public enum ValueMode {
-	
-	NO, SINGLE, TWO, LIST;
+public class LikeCriterion extends AbstractSingleValueCriterion {
 
+	public LikeCriterion(String property, String value, MatchMode matchMode) {
+        super(property, matchMode.toMatchString(value), SqlLogicalOperator.LIKE);
+    }
+	
 }

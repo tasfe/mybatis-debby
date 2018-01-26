@@ -1,13 +1,22 @@
 package com.debby.mybatis.criteria;
 
-import com.debby.mybatis.criteria.criterion.simple.*;
-import com.debby.mybatis.criteria.criterion.simple.mode.MatchMode;
-import com.debby.mybatis.sql.SQLComparisonOperator;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.debby.mybatis.core.ResultMapRegistry;
+import com.debby.mybatis.criteria.criterion.BetweenCriterion;
+import com.debby.mybatis.criteria.criterion.ComparisonCriterion;
+import com.debby.mybatis.criteria.criterion.InCriterion;
+import com.debby.mybatis.criteria.criterion.LikeCriterion;
+import com.debby.mybatis.criteria.criterion.MatchMode;
+import com.debby.mybatis.criteria.criterion.NotBetweenCriterion;
+import com.debby.mybatis.criteria.criterion.NotInCriterion;
+import com.debby.mybatis.criteria.criterion.NotLikeCriterion;
+import com.debby.mybatis.criteria.criterion.NotNullCriterion;
+import com.debby.mybatis.criteria.criterion.NullCriterion;
+import com.debby.mybatis.sql.SQLComparisonOperator;
+
+import mockit.Expectations;
 
 /**
  * @author rocky.hu
@@ -17,94 +26,88 @@ public class SimpleCriterionTest {
 
 	@Test
 	public void testBetweenCriterion() {
-		BetweenCriterion betweenCriterion = new BetweenCriterion("a", 1, 2);
-		Assert.assertEquals(betweenCriterion.toSqlString(), "(a BETWEEN #{criterions[0].value[0]} AND #{criterions[0].value[1]})");
+		new Expectations(ResultMapRegistry.class) {  
+		};
+		BetweenCriterion betweenCriterion = new BetweenCriterion("id", 1, 2);
+		Assert.assertEquals(betweenCriterion.toSqlString(Book.class), "(id BETWEEN #{criterions[0].value[0]} AND #{criterions[0].value[1]})");
 	}
 
 	@Test
 	public void testNotBetweenCriterion() {
-		NotBetweenCriterion notBetweenCriterion = new NotBetweenCriterion("a", 1, 2);
-		Assert.assertEquals(notBetweenCriterion.toSqlString(), "(a NOT BETWEEN #{criterions[0].value[0]} AND #{criterions[0].value[1]})");
+		NotBetweenCriterion notBetweenCriterion = new NotBetweenCriterion("id", 1, 2);
+		Assert.assertEquals(notBetweenCriterion.toSqlString(Book.class), "(id NOT BETWEEN #{criterions[0].value[0]} AND #{criterions[0].value[1]})");
 	}
 
 	@Test
 	public void testComparisonCriterion_eq() {
-		ComparisonCriterion eq = new ComparisonCriterion("a", "1", SQLComparisonOperator.eq);
-		Assert.assertEquals(eq.toSqlString(),"a = #{criterions[0].value}");
+		ComparisonCriterion eq = new ComparisonCriterion("id", "1", SQLComparisonOperator.eq);
+		Assert.assertEquals(eq.toSqlString(Book.class),"id = #{criterions[0].value}");
 	}
 
 	@Test
 	public void testComparisonCriterion_ne() {
-		ComparisonCriterion ne = new ComparisonCriterion("a", "1", SQLComparisonOperator.ne);
-		Assert.assertEquals(ne.toSqlString(),"a <> #{criterions[0].value}");
+		ComparisonCriterion ne = new ComparisonCriterion("id", "1", SQLComparisonOperator.ne);
+		Assert.assertEquals(ne.toSqlString(Book.class),"id <> #{criterions[0].value}");
 	}
 
 	@Test
 	public void testComparisonCriterion_gt() {
-		ComparisonCriterion gt = new ComparisonCriterion("a", "1", SQLComparisonOperator.gt);
-		Assert.assertEquals(gt.toSqlString(),"a > #{criterions[0].value}");
+		ComparisonCriterion gt = new ComparisonCriterion("id", "1", SQLComparisonOperator.gt);
+		Assert.assertEquals(gt.toSqlString(Book.class),"id > #{criterions[0].value}");
 	}
 
 	@Test
 	public void testComparisonCriterion_lt() {
-		ComparisonCriterion lt = new ComparisonCriterion("a", "1", SQLComparisonOperator.lt);
-		Assert.assertEquals(lt.toSqlString(),"a < #{criterions[0].value}");
+		ComparisonCriterion lt = new ComparisonCriterion("id", "1", SQLComparisonOperator.lt);
+		Assert.assertEquals(lt.toSqlString(Book.class),"id < #{criterions[0].value}");
 	}
 
 	@Test
 	public void testComparisonCriterion_le() {
-		ComparisonCriterion le = new ComparisonCriterion("a", "1", SQLComparisonOperator.le);
-		Assert.assertEquals(le.toSqlString(),"a <= #{criterions[0].value}");
+		ComparisonCriterion le = new ComparisonCriterion("id", "1", SQLComparisonOperator.le);
+		Assert.assertEquals(le.toSqlString(Book.class),"id <= #{criterions[0].value}");
 	}
 
 	@Test
 	public void testComparisonCriterion_ge() {
-		ComparisonCriterion ge = new ComparisonCriterion("a", "1", SQLComparisonOperator.ge);
-		Assert.assertEquals(ge.toSqlString(),"a >= #{criterions[0].value}");
+		ComparisonCriterion ge = new ComparisonCriterion("id", "1", SQLComparisonOperator.ge);
+		Assert.assertEquals(ge.toSqlString(Book.class),"id >= #{criterions[0].value}");
 	}
 
 	@Test
 	public void testInCriterion() {
-		List<String> values = new ArrayList<String>();
-		values.add("a");
-		values.add("b");
-		values.add("c");
-		InCriterion inCriterion = new InCriterion("a", values);
-		Assert.assertEquals(inCriterion.toSqlString(),"(a IN (#{criterions[0].value.get(0)}, #{criterions[0].value.get(1)}, #{criterions[0].value.get(2)}))");
+		InCriterion inCriterion = new InCriterion("id", new String[] {"a","b","c"});
+		Assert.assertEquals(inCriterion.toSqlString(Book.class),"(id IN (#{criterions[0].value.get(0)}, #{criterions[0].value.get(1)}, #{criterions[0].value.get(2)}))");
 	}
 
 	@Test
 	public void testNotInCriterion() {
-		List<String> values = new ArrayList<String>();
-		values.add("a");
-		values.add("b");
-		values.add("c");
-		NotInCriterion notInCriterion = new NotInCriterion("a", values);
-		Assert.assertEquals(notInCriterion.toSqlString(),"(a NOT IN (#{criterions[0].value.get(0)}, #{criterions[0].value.get(1)}, #{criterions[0].value.get(2)}))");
+		NotInCriterion notInCriterion = new NotInCriterion("id", new String[] {"a","b","c"});
+		Assert.assertEquals(notInCriterion.toSqlString(Book.class),"(id NOT IN (#{criterions[0].value.get(0)}, #{criterions[0].value.get(1)}, #{criterions[0].value.get(2)}))");
 	}
 
 	@Test
 	public void testLikeCriterion() {
-		LikeCriterion likeCriterion = new LikeCriterion("a", "a", MatchMode.ANYWHERE);
-		Assert.assertEquals(likeCriterion.toSqlString(),"a LIKE #{criterions[0].value}");
+		LikeCriterion likeCriterion = new LikeCriterion("id", "a", MatchMode.ANYWHERE);
+		Assert.assertEquals(likeCriterion.toSqlString(Book.class),"id LIKE #{criterions[0].value}");
 	}
 
 	@Test
 	public void testNotLikeCriterion() {
-		NotLikeCriterion notLikeCriterion = new NotLikeCriterion("a", "a", MatchMode.ANYWHERE);
-		Assert.assertEquals(notLikeCriterion.toSqlString(),"a NOT LIKE #{criterions[0].value}");
+		NotLikeCriterion notLikeCriterion = new NotLikeCriterion("id", "a", MatchMode.ANYWHERE);
+		Assert.assertEquals(notLikeCriterion.toSqlString(Book.class),"id NOT LIKE #{criterions[0].value}");
 	}
 	
 	@Test
 	public void testNullCriterion() {
-		NullCriterion nullCriterion = new NullCriterion("a");
-		Assert.assertEquals(nullCriterion.toSqlString(),"a IS NULL");
+		NullCriterion nullCriterion = new NullCriterion("id");
+		Assert.assertEquals(nullCriterion.toSqlString(Book.class),"id IS NULL");
 	}
 
 	@Test
 	public void testNotNullCriterion() {
-		NotNullCriterion notNullCriterion = new NotNullCriterion("a");
-		Assert.assertEquals(notNullCriterion.toSqlString(),"a IS NOT NULL");
+		NotNullCriterion notNullCriterion = new NotNullCriterion("id");
+		Assert.assertEquals(notNullCriterion.toSqlString(Book.class),"id IS NOT NULL");
 	}
 
 }

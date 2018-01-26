@@ -1,5 +1,5 @@
 /**
- *    Copyright 2016-2017 the original author or authors.
+ *    Copyright 2017-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,20 +13,20 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.debby.mybatis.criteria.criterion.simple;
-
-import java.util.Collection;
-
-import com.debby.mybatis.sql.SqlLogicalOperator;
+package com.debby.mybatis.criteria.criterion;
 
 /**
  * @author rocky.hu
- * @date 2017-12-09 5:13 PM
+ * @date Jan 26, 2018 2:47:21 PM
  */
-public class InCriterion extends AbstractListValueCriterion {
+public class Conjunction extends Junction {
+	
+	public Conjunction() {
+		super( Nature.AND );
+	}
 
-	public InCriterion(String property, Collection<?> values) {
-        super(property, values, SqlLogicalOperator.IN);
-    }
+	protected Conjunction(Criterion... criterion) {
+		super( Nature.AND, criterion );
+	}
 
 }

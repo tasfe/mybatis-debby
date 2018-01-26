@@ -20,5 +20,7 @@ package com.debby.mybatis.annotation;
  * @date Jan 11, 2018 11:42:22 AM
  */
 public enum KeyGenerationStrategy {
+	
 	SEQUENCE, IDENTITY;
+	
 }

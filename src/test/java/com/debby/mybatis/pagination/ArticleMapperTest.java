@@ -23,13 +23,14 @@ public class ArticleMapperTest extends AbstractDebbyMapperTest<ArticleMapper> {
 	@Test
 	@Override
 	public void testSelectPage() {
-		EntityCriteria entityCriteria = EntityCriteria.forEntity(Article.class)
+		EntityCriteria entityCriteria1 = EntityCriteria.forEntity(Article.class)
 				.filter(new String[] { "createTime" })
+				.filter(criterion)
 				.orderBy(Order.asc("createTime"), Order.asc("id"))
 				.limit(0, 10)
 				.bulid();
 
-		Page<Article> page = mapper.selectPage(entityCriteria);
+		Page<Article> page = mapper.selectPage(entityCriteria1);
 		Assert.assertEquals(page.getTotalCount(), 50L);
 		Assert.assertEquals(page.getResults().size(), 10);
 	}

@@ -19,35 +19,31 @@ package com.debby.mybatis.sql;
  * Here is a list of all the comparison operators available in SQL.
  *
  * @author rocky.hu
- * @date Sep 08, 2016, 09:12:26 PM
- * @see <a href="http://www.tutorialspoint.com/sql/sql-operators.htm">SQL Comparison Operators</a>
+ * @date Sep 08, 2017, 09:12:26 PM
+ * @see <a href="http://www.tutorialspoint.com/sql/sql-operators.htm">SQL
+ *      Comparison Operators</a>
  */
 public enum SQLComparisonOperator implements SqlOperator {
 
-    eq("="), ne("<>"), gt(">"), lt("<"), ge(">="), le("<=");
+	eq("="), ne("<>"), gt(">"), lt("<"), ge(">="), le("<=");
 
-    private String notation;
+	private String notation;
 
-    private SQLComparisonOperator(String notation)
-    {
-        this.notation = notation;
-    }
+	private SQLComparisonOperator(String notation) {
+		this.notation = notation;
+	}
 
-    @Override
-    public String getNotation()
-    {
-        return notation;
-    }
+	@Override
+	public String getNotation() {
+		return notation;
+	}
 
-    public void setNotation(String notation)
-    {
-        this.notation = notation;
-    }
+	public void setNotation(String notation) {
+		this.notation = notation;
+	}
 
-
-    @Override
-    public String toString()
-    {
-        return this.getNotation();
-    }
+	@Override
+	public String toString() {
+		return this.getNotation();
+	}
 }

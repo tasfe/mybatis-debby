@@ -13,42 +13,37 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.debby.mybatis.criteria.criterion.simple;
+package com.debby.mybatis.criteria.criterion;
 
-import java.util.Collection;
-import java.util.Map;
-
-import com.debby.mybatis.criteria.criterion.simple.mode.ValueMode;
-import com.debby.mybatis.exception.MyBatisDebbyException;
 import com.debby.mybatis.sql.SqlOperator;
 
 /**
  * @author rocky.hu
- * @date Jan 23, 2018 5:24:46 PM
+ * @date Jan 23, 2018 5:23:54 PM
  */
-public abstract class AbstractSingleValueCriterion extends SimpleCriterion {
+public abstract class AbstractNoValueCriterion extends SimpleCriterion {
 	
-	protected AbstractSingleValueCriterion(String property, Object value, SqlOperator sqlOperator) {
-		super(property, value, sqlOperator);
-		if (value instanceof Collection || value instanceof Map) {
-			throw new MyBatisDebbyException("The value cann't be a Collecation or Map.");
-		}
+	protected AbstractNoValueCriterion(String property, SqlOperator sqlOperator) {
+		super(property, sqlOperator);
 	}
 
 	@Override
 	public ValueMode getValueMode() {
-		return ValueMode.SINGLE;
+		return ValueMode.NO;
 	}
-	
+
 	@Override
-	public String toSqlString() {
+	public String toSqlString(Class<?> entityType) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(getColumn());
+		sb.append(getColumn(entityType));
 		sb.append(" ");
-		sb.append(getSqlOperator().getNotation());
-		sb.append(" ");
-		sb.append("#{criterions[" + getIndex() + "].value}");
+		sb.append(getSqlOperator());
 		return sb.toString();
+	}
+
+	@Override
+	public String toString() {
+		return getProperty() + " " + getSqlOperator();
 	}
 	
 }

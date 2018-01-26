@@ -19,6 +19,7 @@
 		<testng.version>6.10</testng.version>
 		<dbunit.version>2.5.4</dbunit.version>
 		<h2.version>1.4.196</h2.version>
+		<jmockit.version>1.38</jmockit.version>
 	</properties>
 
 	<dependencies>
@@ -88,6 +89,13 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${h2.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jmockit</groupId>
+			<artifactId>jmockit</artifactId>
+			<version>${jmockit.version}</version>
 			<scope>test</scope>
 		</dependency>
 

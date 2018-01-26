@@ -13,12 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.debby.mybatis.criteria.criterion.combined;
+package com.debby.mybatis.criteria.criterion;
+
+import com.debby.mybatis.sql.SqlLogicalOperator;
 
 /**
  * @author rocky.hu
- * @date Jan 25, 2018 2:28:00 PM
+ * @date 2017-12-09 5:13 PM
  */
-public enum CombinedCriterionConnector {
-	AND, OR
+public class InCriterion extends AbstractArrayValueCriterion {
+
+	public InCriterion(String property, Object[] values) {
+        super(property, values, SqlLogicalOperator.IN);
+    }
+
 }

@@ -13,33 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.debby.mybatis.criteria.criterion.simple;
+package com.debby.mybatis.criteria.criterion;
 
-import com.debby.mybatis.criteria.criterion.simple.mode.ValueMode;
-import com.debby.mybatis.sql.SqlOperator;
+import com.debby.mybatis.sql.SQLComparisonOperator;
 
 /**
  * @author rocky.hu
- * @date Jan 23, 2018 5:23:54 PM
+ * @date 2017-12-09 3:36 PM
  */
-public abstract class AbstractNoValueCriterion extends SimpleCriterion {
-	
-	protected AbstractNoValueCriterion(String property, SqlOperator sqlOperator) {
-		super(property, sqlOperator);
-	}
+public class ComparisonCriterion extends AbstractSingleValueCriterion {
 
-	@Override
-	public ValueMode getValueMode() {
-		return ValueMode.NO;
-	}
+	public ComparisonCriterion(String property, Object value, SQLComparisonOperator operator) {
+        super(property, value, operator);
+    }
 
-	@Override
-	public String toSqlString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(getColumn());
-		sb.append(" ");
-		sb.append(getSqlOperator().getNotation());
-		return sb.toString();
-	}
-	
 }

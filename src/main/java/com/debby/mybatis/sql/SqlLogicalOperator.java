@@ -19,7 +19,7 @@ package com.debby.mybatis.sql;
  * Here is a list of all the logical operators available in SQL.
  *
  * @author rocky.hu
- * @date Sep 08, 2016, 08:59:54 PM
+ * @date Sep 08, 2017, 08:59:54 PM
  * @see <a href="http://www.tutorialspoint.com/sql/sql-operators.htm">SQL Logical Operators</a>
  */
 public enum SqlLogicalOperator implements SqlOperator {
@@ -42,26 +42,22 @@ public enum SqlLogicalOperator implements SqlOperator {
 
     private String notation;
 
-    private SqlLogicalOperator(String notation)
-    {
-        this.notation = notation;
-    }
+	private SqlLogicalOperator(String notation) {
+		this.notation = notation;
+	}
 
-    @Override
-    public String getNotation()
-    {
-        return notation;
-    }
+	@Override
+	public String getNotation() {
+		return notation;
+	}
 
-    public void setNotation(String notation)
-    {
-        this.notation = notation;
-    }
+	public void setNotation(String notation) {
+		this.notation = notation;
+	}
 
-    @Override
-    public String toString()
-    {
-        return this.getNotation();
-    }
+	@Override
+	public String toString() {
+		return this.getNotation();
+	}
 
 }

@@ -13,22 +13,21 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.debby.mybatis.criteria.criterion.simple;
+package com.debby.mybatis.criteria.criterion;
 
-import com.debby.mybatis.criteria.criterion.Criterion;
-import com.debby.mybatis.criteria.criterion.simple.mode.ValueMode;
+import org.apache.ibatis.mapping.ResultMapping;
+
+import com.debby.mybatis.core.ResultMapRegistry;
 import com.debby.mybatis.sql.SqlOperator;
 import com.debby.mybatis.util.Asserts;
-import com.debby.mybatis.util.StringUtils;
 
 /**
  * @author rocky.hu
  * @date Jan 23, 2018 5:21:37 PM
  */
 public abstract class SimpleCriterion implements Criterion {
-
+	
 	private int index;
-	private String column;
 	private String property;
 	private SqlOperator sqlOperator;
 	private String typeHandler;
@@ -57,17 +56,6 @@ public abstract class SimpleCriterion implements Criterion {
 
 	public void setIndex(int index) {
 		this.index = index;
-	}
-
-	public String getColumn() {
-		if (StringUtils.isNullOrEmpty(column)) {
-			column = this.getProperty();
-		}
-		return column;
-	}
-
-	public void setColumn(String column) {
-		this.column = column;
 	}
 
 	public String getProperty() {
@@ -108,6 +96,17 @@ public abstract class SimpleCriterion implements Criterion {
 
 	public void setValueMode(ValueMode valueMode) {
 		this.valueMode = valueMode;
+	}
+	
+	public String getColumn(Class<?> entityType) {
+		ResultMapping resultMapping = ResultMapRegistry.getResultMapping(entityType.getName(), getProperty());
+		return resultMapping.getColumn();
+	}
+	
+	public String getTypeHandler(Class<?> entityType) {
+		ResultMapping resultMapping = ResultMapRegistry.getResultMapping(entityType.getName(), getProperty());
+		this.typeHandler = resultMapping.getTypeHandler().getClass().getName();
+		return this.typeHandler;
 	}
 
 }

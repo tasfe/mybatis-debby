@@ -13,26 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.debby.mybatis.criteria;
+package com.debby.mybatis.criteria.criterion;
 
-import java.util.Arrays;
 import java.util.Collection;
 
-import com.debby.mybatis.criteria.criterion.Criterion;
-import com.debby.mybatis.criteria.criterion.combined.CombinedCriterion;
-import com.debby.mybatis.criteria.criterion.combined.CombinedCriterionConnector;
-import com.debby.mybatis.criteria.criterion.simple.BetweenCriterion;
-import com.debby.mybatis.criteria.criterion.simple.ComparisonCriterion;
-import com.debby.mybatis.criteria.criterion.simple.InCriterion;
-import com.debby.mybatis.criteria.criterion.simple.LikeCriterion;
-import com.debby.mybatis.criteria.criterion.simple.NotBetweenCriterion;
-import com.debby.mybatis.criteria.criterion.simple.NotInCriterion;
-import com.debby.mybatis.criteria.criterion.simple.NotLikeCriterion;
-import com.debby.mybatis.criteria.criterion.simple.NotNullCriterion;
-import com.debby.mybatis.criteria.criterion.simple.NullCriterion;
-import com.debby.mybatis.criteria.criterion.simple.SimpleCriterion;
-import com.debby.mybatis.criteria.criterion.simple.mode.MatchMode;
 import com.debby.mybatis.sql.SQLComparisonOperator;
+import com.debby.mybatis.sql.SqlLogicalOperator;
 import com.debby.mybatis.util.Asserts;
 
 /**
@@ -103,22 +89,22 @@ public class Restrictions {
 
     public static SimpleCriterion in(String property, Object... values) {
     	Asserts.notEmpty(values);
-        return new InCriterion(property, Arrays.asList(values));
+        return new InCriterion(property, values);
     }
     
-    public static SimpleCriterion in(String property, Collection<Object> valueList) {
-    	Asserts.notEmpty(valueList);
-        return new InCriterion(property, valueList);
+    public static SimpleCriterion in(String property, Collection values) {
+    	Asserts.notEmpty(values);
+        return new InCriterion(property, values.toArray());
     }
     
     public static SimpleCriterion notIn(String property, Object... values) {
     	Asserts.notEmpty(values);
-        return new NotInCriterion(property, Arrays.asList(values));
+        return new NotInCriterion(property, values);
     }
 
-    public static SimpleCriterion notIn(String property, Collection<Object> valueList) {
-    	Asserts.notEmpty(valueList);
-        return new NotInCriterion(property, valueList);
+    public static SimpleCriterion notIn(String property, Collection values) {
+    	Asserts.notEmpty(values);
+        return new NotInCriterion(property, values.toArray());
     }
 
     public static SimpleCriterion isNull(String property) {
@@ -129,12 +115,39 @@ public class Restrictions {
         return new NotNullCriterion(property);
     }
     
-    public static CombinedCriterion and(Criterion... criterions) {
-    	return new CombinedCriterion(CombinedCriterionConnector.AND, criterions);
+    public static LogicalCriterion and(Criterion lhs, Criterion rhs) {
+    	return new LogicalCriterion(lhs, rhs, SqlLogicalOperator.AND.getNotation());
     }
     
-    public static CombinedCriterion or(Criterion... criterions) {
-    	return new CombinedCriterion(CombinedCriterionConnector.OR, criterions);
+    public static Conjunction and(Criterion... predicates) {
+		return conjunction( predicates );
+	}
+    
+    public static LogicalCriterion or(Criterion lhs, Criterion rhs) {
+    	return new LogicalCriterion(lhs, rhs, SqlLogicalOperator.OR.getNotation());
     }
+    
+    public static Disjunction or(Criterion... predicates) {
+		return disjunction( predicates );
+	}
+    
+    public static Conjunction conjunction() {
+		return new Conjunction();
+	}
+    
+    public static Conjunction conjunction(Criterion... conditions) {
+		return new Conjunction( conditions );
+	}
+    
+    public static Disjunction disjunction() {
+		return new Disjunction();
+	}
+    
+    public static Disjunction disjunction(Criterion... conditions) {
+		return new Disjunction( conditions );
+	}
+    
+    protected Restrictions() {
+	}
 
 }

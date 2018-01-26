@@ -15,12 +15,14 @@
  */
 package com.debby.mybatis.criteria.criterion;
 
+import java.io.Serializable;
+
 /**
  * @author rocky.hu
  * @date Jan 25, 2018 1:59:07 PM
  */
-public interface Criterion {
+public interface Criterion extends Serializable {
 	
-	String toSqlString();
+	public String toSqlString(Class<?> entityType);
 	
 }

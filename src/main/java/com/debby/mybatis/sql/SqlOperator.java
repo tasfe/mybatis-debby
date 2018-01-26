@@ -20,7 +20,7 @@ package com.debby.mybatis.sql;
  * multiple conditions in a statement.
  *
  * @author rocky.hu
- * @date Sep 08, 2016, 09:53:18 PM
+ * @date Sep 08, 2017, 09:53:18 PM
  */
 public interface SqlOperator {
 	

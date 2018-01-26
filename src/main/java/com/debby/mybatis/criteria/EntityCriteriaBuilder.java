@@ -17,19 +17,21 @@ package com.debby.mybatis.criteria;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
-import org.apache.ibatis.mapping.ResultMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.debby.mybatis.core.ResultMapRegistry;
 import com.debby.mybatis.criteria.criterion.Criterion;
-import com.debby.mybatis.criteria.criterion.simple.SimpleCriterion;
+import com.debby.mybatis.criteria.criterion.Junction;
+import com.debby.mybatis.criteria.criterion.LogicalCriterion;
+import com.debby.mybatis.criteria.criterion.SimpleCriterion;
 import com.debby.mybatis.criteria.filter.PropertyFilter;
-import com.debby.mybatis.criteria.filter.PropertyFilterMode;
 import com.debby.mybatis.criteria.limit.RowLimiter;
 import com.debby.mybatis.criteria.sort.Order;
 import com.debby.mybatis.criteria.sort.OrderBy;
-import com.debby.mybatis.util.StringUtils;
+import com.debby.mybatis.util.Asserts;
 
 /**
  * @author rocky.hu
@@ -37,15 +39,15 @@ import com.debby.mybatis.util.StringUtils;
  */
 public class EntityCriteriaBuilder {
 	
-	private final Class<?> entityType;
+	private final Logger LOGGER = LoggerFactory.getLogger(EntityCriteriaBuilder.class);
 	
+	private final Class<?> entityType;
+	private Boolean distinct;
 	private PropertyFilter propertyFilter;
 	private OrderBy orderBy;
 	private RowLimiter rowLimiter;
-
-	private Boolean distinct;
 	private List<Criterion> criterionList = new ArrayList<Criterion>();
-
+	
 	public EntityCriteriaBuilder(Class<?> entityType) {
 		this.entityType = entityType;
 		this.propertyFilter = new PropertyFilter(entityType);
@@ -56,31 +58,38 @@ public class EntityCriteriaBuilder {
 	/**
 	 * Filter properties.
 	 * 
+	 * @param exclude
 	 * @param properties
 	 * @return
 	 */
-	public EntityCriteriaBuilder filter(String[] properties) {
+	public EntityCriteriaBuilder filter(boolean exclude, String[] properties) {
+		propertyFilter.setExclude(exclude);
 		propertyFilter.add(properties);
 		return this;
 	}
 
 	/**
-	 * Filter properties with filter mode.
+	 * Filter by a restriction.
 	 * 
-	 * @param propertyFilterMode
-	 * @param properties
+	 * @param criterions
 	 * @return
 	 */
-	public EntityCriteriaBuilder filter(PropertyFilterMode propertyFilterMode, String[] properties) {
-		if (propertyFilterMode != null) {
-			propertyFilter.setFilterMode(propertyFilterMode);
-		}
-		propertyFilter.add(properties);
+	public EntityCriteriaBuilder where(Criterion... criterions) {
+		Asserts.notNull(criterions);
+		criterionList.addAll(Arrays.asList(criterions));
 		return this;
 	}
-
-	public EntityCriteriaBuilder where(Criterion... criterions) {
-		criterionList.addAll(Arrays.asList(criterions));
+	
+	
+	/**
+	 * Add a restriction.
+	 * 
+	 * @param criterion
+	 * @return
+	 */
+	public EntityCriteriaBuilder add(Criterion criterion) {
+		Asserts.notNull(criterion);
+		criterionList.add(criterion);
 		return this;
 	}
 	
@@ -101,11 +110,22 @@ public class EntityCriteriaBuilder {
 	 * @return
 	 */
 	public EntityCriteriaBuilder orderBy(Order... orders) {
-		if (orders != null && orders.length > 0) {
-			for (int i = 0; i < orders.length; i++) {
-				orderBy.addOrder(orders[i]);
-			}
+		Asserts.notEmpty(orders);
+		for (int i = 0; i < orders.length; i++) {
+			orderBy.addOrder(orders[i]);
 		}
+		return this;
+	}
+	
+	/**
+	 * Add order by element.
+	 * 
+	 * @param order
+	 * @return
+	 */
+	public EntityCriteriaBuilder addOrder(Order order) {
+		Asserts.notNull(order);
+		orderBy.addOrder(order);
 		return this;
 	}
 
@@ -133,53 +153,110 @@ public class EntityCriteriaBuilder {
 		return this;
 	}
 	
-	public EntityCriteria bulid() {
+	public PropertyFilter getPropertyFilter() {
+		return propertyFilter;
+	}
+
+	public OrderBy getOrderBy() {
+		return orderBy;
+	}
+
+	public RowLimiter getRowLimiter() {
+		return rowLimiter;
+	}
+
+	public List<Criterion> getCriterionList() {
+		return criterionList;
+	}
+
+	public Integer getFirstResult() {
+		return rowLimiter.getFirstResult();
+	}
+	
+	public void setFirstResult(Integer firstResult) {
+		rowLimiter.setFirstResult(firstResult);
+	}
+	
+	public Integer getMaxResults() {
+		return rowLimiter.getMaxResults();
+	}
+	
+	public void setMaxResults(Integer maxResults) {
+		rowLimiter.setMaxResults(maxResults);
+	}
+	
+	public Boolean getDistinct() {
+		return distinct;
+	}
+	
+	public void setDistinct(Boolean distinct) {
+		this.distinct = distinct;
+	}
+
+	public List<Order> getOrders() {
+		return orderBy.getOrderList();
+	}
+	
+	public String getColumns() {
+		return propertyFilter.getColumns();
+	}
+	
+	public Class<?> getEntityType() {
+		return entityType;
+	}
+
+	public EntityCriteria build() {
+		
 		EntityCriteria entityCriteria = new EntityCriteria();
 		entityCriteria.setColumns(propertyFilter.getColumns());
-		entityCriteria.setDistinct(distinct);
+		entityCriteria.setDistinct(getDistinct());
 		entityCriteria.setFirstResult(rowLimiter.getFirstResult());
 		entityCriteria.setMaxResults(rowLimiter.getMaxResults());
 		entityCriteria.setOrders(orderBy.getOrderList());
 		
-		int index = 0;
-		for (Criterion criterion : criterionList) {
-			
+		// build where sql
+		StringBuilder whereSQL = new StringBuilder();
+		Iterator<Criterion> iter = criterionList.iterator();
+		while (iter.hasNext()) {
+			Criterion criterion = iter.next();
+			whereSQL.append(criterion.toSqlString(entityType));
+			if (iter.hasNext()) {
+				whereSQL.append(" AND ");
+			}
 		}
+		entityCriteria.setWhereSql(whereSQL.toString());
 		
-//		// Mapping property to column and set TypeHandler
-//		for (Criteria1 criteria1 : this.criteriaList) {
-//			for (SimpleCriterion criterion : criteria1.getCriterions()) {
-//				ResultMapping resultMapping = ResultMapRegistry.getResultMapping(entityType.getName(), criterion.getProperty());
-//				String column = resultMapping.getColumn();
-//				String typeHandler = resultMapping.getTypeHandler().getClass().getName();
-//
-//				criterion.setColumn(column);
-//
-//				if (!StringUtils.isNullOrEmpty(typeHandler)) {
-//					criterion.setTypeHandler(typeHandler);
-//				}
-//			}
-//		}
-//		entityCriteria.setCriteriaList(this.criteriaList);
+		// build SimpleCriterion array
+		List<SimpleCriterion> simpleCriterionList = new ArrayList<SimpleCriterion>();
+		for (Criterion criterion : criterionList) {
+			recurive(simpleCriterionList, criterion);
+		}
+		if (simpleCriterionList.size() > 0) {
+			SimpleCriterion[] simpleCriterions = new SimpleCriterion[simpleCriterionList.size()];
+			for (int i=0; i<simpleCriterionList.size();i++) {
+				SimpleCriterion simpleCriterion = simpleCriterionList.get(i);
+				simpleCriterion.setIndex(i);
+				simpleCriterions[i] = simpleCriterion;
+			}
+			entityCriteria.setCriterions(simpleCriterions);
+		} 
 		
 		return entityCriteria;
 	}
 	
-	private void tidy(SimpleCriterion criterion) {
-		ResultMapping resultMapping = ResultMapRegistry.getResultMapping(entityType.getName(), criterion.getProperty());
-		String column = resultMapping.getColumn();
-		String typeHandler = resultMapping.getTypeHandler().getClass().getName();
-		
-		criterion.setColumn(column);
-		
-		if (!StringUtils.isNullOrEmpty(typeHandler)) {
-			criterion.setTypeHandler(typeHandler);
-		}
-	}
-	
-	private void tidy(SimpleCriterion[] criterions) {
-		for (SimpleCriterion criterion : criterions) {
-			tidy(criterion);
+	private void recurive(List<SimpleCriterion> simpleCriterions, Criterion criterion) {
+		if (criterion instanceof SimpleCriterion) {
+			simpleCriterions.add((SimpleCriterion)criterion);
+		} else if (criterion instanceof LogicalCriterion){
+			Criterion lhs = ((LogicalCriterion)criterion).getLhs();
+			Criterion rhs = ((LogicalCriterion)criterion).getRhs();
+			recurive(simpleCriterions, lhs);
+			recurive(simpleCriterions, rhs);
+		} else {
+			Iterator<Criterion> iter = ((Junction) criterion).criterions().iterator();
+			while (iter.hasNext()) {
+				recurive(simpleCriterions, iter.next());
+			}
 		}
 	}
 

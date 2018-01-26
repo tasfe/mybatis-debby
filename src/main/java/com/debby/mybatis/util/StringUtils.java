@@ -15,6 +15,7 @@
  */
 package com.debby.mybatis.util;
 
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,6 +40,17 @@ public class StringUtils {
 		matcher.appendTail(sb);
 		
 		return upperCase ? sb.toString().toUpperCase() : sb.toString().toLowerCase();
+	}
+	
+	public static String join(String seperator, Iterator objects) {
+		StringBuilder buf = new StringBuilder();
+		if ( objects.hasNext() ) {
+			buf.append( objects.next() );
+		}
+		while ( objects.hasNext() ) {
+			buf.append( seperator ).append( objects.next() );
+		}
+		return buf.toString();
 	}
 	
 }

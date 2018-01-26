@@ -15,38 +15,38 @@
  */
 package com.debby.mybatis.criteria;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.debby.mybatis.criteria.criterion.simple.SimpleCriterion;
+import com.debby.mybatis.criteria.criterion.SimpleCriterion;
 import com.debby.mybatis.criteria.sort.Order;
 
 /**
  * @author rocky.hu
- * @date 2017-12-09 3:40 PM
+ * @date Jan 23, 2018 4:48:15 PM
  */
 public class EntityCriteria {
-	
-	private Integer firstResult;
-	private Integer maxResults;
+
+	/** Distinct the record - just for SELECT */
 	private Boolean distinct;
+	/** The columns that to select - just for SELECT */
 	private String columns;
+	/** First result index for paging - just for SELECT */
+	private Integer firstResult;
+	/** Max result count for paging - just for SELECT */
+	private Integer maxResults;
+	/** Order by elements - just for SELECT */
+	private List<Order> orders = new ArrayList<Order>();
+	/** Where SQL */
+	private String whereSql;
+	/** Where conditions */
 	private SimpleCriterion[] criterions;
-	private List<Order> orders;
 
-	public Integer getFirstResult() {
-		return firstResult;
+	EntityCriteria() {
 	}
 
-	public void setFirstResult(Integer firstResult) {
-		this.firstResult = firstResult;
-	}
-
-	public Integer getMaxResults() {
-		return maxResults;
-	}
-
-	public void setMaxResults(Integer maxResults) {
-		this.maxResults = maxResults;
+	public static EntityCriteriaBuilder forEntity(Class<?> entityType) {
+		return new EntityCriteriaBuilder(entityType);
 	}
 
 	public Boolean getDistinct() {
@@ -64,13 +64,21 @@ public class EntityCriteria {
 	public void setColumns(String columns) {
 		this.columns = columns;
 	}
-
-	public SimpleCriterion[] getCriterions() {
-		return criterions;
+	
+	public Integer getFirstResult() {
+		return firstResult;
 	}
 
-	public void setCriterions(SimpleCriterion[] criterions) {
-		this.criterions = criterions;
+	public void setFirstResult(Integer firstResult) {
+		this.firstResult = firstResult;
+	}
+
+	public Integer getMaxResults() {
+		return maxResults;
+	}
+
+	public void setMaxResults(Integer maxResults) {
+		this.maxResults = maxResults;
 	}
 
 	public List<Order> getOrders() {
@@ -81,8 +89,20 @@ public class EntityCriteria {
 		this.orders = orders;
 	}
 
-	public static EntityCriteriaBuilder forEntity(final Class<?> entityType) {
-		return new EntityCriteriaBuilder(entityType);
+	public String getWhereSql() {
+		return whereSql;
+	}
+
+	public void setWhereSql(String whereSql) {
+		this.whereSql = whereSql;
+	}
+
+	public SimpleCriterion[] getCriterions() {
+		return criterions;
+	}
+
+	public void setCriterions(SimpleCriterion[] criterions) {
+		this.criterions = criterions;
 	}
 
 }

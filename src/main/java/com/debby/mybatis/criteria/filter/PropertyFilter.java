@@ -37,21 +37,21 @@ public class PropertyFilter {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PropertyFilter.class);
 
 	private final Class<?> entityType;
-	private PropertyFilterMode filterMode = PropertyFilterMode.EXCLUDE;
+	private boolean exclude;
 	private List<String> propertyList = new ArrayList<String>();
 
 	public PropertyFilter(Class<?> entityType) {
 		this.entityType = entityType;
 	}
-
-	public PropertyFilterMode getFilterMode() {
-		return filterMode;
-	}
-
-	public void setFilterMode(PropertyFilterMode filterMode) {
-		this.filterMode = filterMode;
-	}
 	
+	public boolean getExclude() {
+		return exclude;
+	}
+
+	public void setExclude(boolean exclude) {
+		this.exclude = exclude;
+	}
+
 	public List<String> getPropertyList() {
 		return propertyList;
 	}
@@ -79,7 +79,7 @@ public class PropertyFilter {
 				propertyName = propertyName.substring(0, propertyName.indexOf("."));
 			}
 
-			if (filterMode == PropertyFilterMode.EXCLUDE) {
+			if (exclude) {
 				if (propertyList.contains(propertyName)) {
 					continue;
 				}

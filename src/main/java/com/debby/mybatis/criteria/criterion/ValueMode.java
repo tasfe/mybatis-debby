@@ -13,14 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.debby.mybatis.criteria.filter;
+package com.debby.mybatis.criteria.criterion;
 
 /**
  * @author rocky.hu
- * @date Jan 15, 2018 4:15:16 PM
+ * @date Jan 23, 2018 5:36:32 PM
  */
-public enum PropertyFilterMode {
+public enum ValueMode {
 	
-	INCLUDE, EXCLUDE;
+	NO, SINGLE, TWO, ARRAY;
 
 }

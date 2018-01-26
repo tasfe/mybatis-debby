@@ -73,7 +73,7 @@ public interface MyBatisDebbyMapper<ENTITY, ID extends Serializable> {
     /**
      * Update an entity selective by updated conditions.
      *
-     * Unlike {@link #update(Object, EntityCriteria)}, the method just update the property which the value is not null.
+     * Unlike {@link #update(Object, EntityCriteria1)}, the method just update the property which the value is not null.
      *
      * @param record
      * @param updatedCriteria

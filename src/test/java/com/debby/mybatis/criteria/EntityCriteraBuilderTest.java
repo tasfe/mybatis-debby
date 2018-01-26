@@ -3,6 +3,7 @@ package com.debby.mybatis.criteria;
 import org.testng.annotations.Test;
 
 import com.debby.mybatis.association.Product;
+import com.debby.mybatis.criteria.criterion.Restrictions;
 
 /**
  * @author rocky.hu
@@ -12,7 +13,9 @@ public class EntityCriteraBuilderTest {
 
 	@Test
 	public void test() {
-		EntityCriteriaBuilder entityCriteraBuilder = EntityCriteria.forEntity(Product.class);
+		EntityCriteria entityCriteria = EntityCriteria.forEntity(Product.class)
+				.where(Restrictions.eq("id", 1)).build();
+		System.out.println(entityCriteria.getWhereSql());
 	}
 
 }
