@@ -1,5 +1,5 @@
 /**
- *    Copyright 2016-2017 the original author or authors.
+ *    Copyright 2017-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,16 +15,13 @@
  */
 package com.debby.mybatis.criteria.filter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.ibatis.mapping.ResultMapping;
+import com.debby.mybatis.core.helper.EntityHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.debby.mybatis.core.helper.EntityHelper;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Filter property when execute querying.
@@ -67,41 +64,7 @@ public class PropertyFilter {
 	}
 
 	public String getColumns() {
-		StringBuilder sb = new StringBuilder();
-		List<ResultMapping> resultMappingList = EntityHelper.getPropertyResultMappings(entityType);
-		List<String> columnList = new ArrayList<String>();
-		for (int i = 0; i < resultMappingList.size(); i++) {
-			ResultMapping resultMapping = resultMappingList.get(i);
-			String propertyName = resultMapping.getProperty();
-			String column = resultMapping.getColumn();
-
-			if (propertyName.contains(".")) {
-				propertyName = propertyName.substring(0, propertyName.indexOf("."));
-			}
-
-			if (exclude) {
-				if (propertyList.contains(propertyName)) {
-					continue;
-				}
-			} else {
-				if (!propertyList.contains(propertyName)) {
-					continue;
-				}
-			}
-
-			columnList.add(column);
-		}
-
-		Iterator<String> iter = columnList.iterator();
-		while (iter.hasNext()) {
-			sb.append(iter.next());
-			if (iter.hasNext()) {
-				sb.append(", ");
-			}
-		}
-
-		LOGGER.debug("[{}][COLUMNS]: [{}]", entityType.getName(), sb.toString());
-		return sb.toString();
+		return EntityHelper.getColumns(entityType, exclude, propertyList);
 	}
 
 }

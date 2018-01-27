@@ -1,5 +1,5 @@
 /**
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2017-2018 the original author or authors.
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,39 +15,31 @@
  */
 package com.debby.mybatis.core.helper;
 
-import java.beans.PropertyDescriptor;
-import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.ibatis.mapping.ResultMap;
-import org.apache.ibatis.mapping.ResultMapping;
-import org.apache.ibatis.session.Configuration;
-
-import com.debby.mybatis.annotation.MappingCompositeId;
-import com.debby.mybatis.annotation.MappingId;
-import com.debby.mybatis.annotation.MappingJdbcType;
-import com.debby.mybatis.annotation.MappingResult;
-import com.debby.mybatis.annotation.MappingTransient;
-import com.debby.mybatis.annotation.MappingTypeHandler;
+import com.debby.mybatis.annotation.*;
 import com.debby.mybatis.core.ResultMapRegistry;
 import com.debby.mybatis.core.bean.XResultMapping;
 import com.debby.mybatis.exception.MappingException;
 import com.debby.mybatis.util.BeanUtils;
 import com.debby.mybatis.util.ReflectUtils;
 import com.debby.mybatis.util.StringUtils;
+import org.apache.ibatis.mapping.ResultMap;
+import org.apache.ibatis.mapping.ResultMapping;
+import org.apache.ibatis.session.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.beans.PropertyDescriptor;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * @author rocky.hu
  * @date 2018-01-13 5:16 PM
  */
 public class EntityHelper {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EntityHelper.class);
 
     /**
      * Check if has the specified result map.
@@ -361,6 +353,57 @@ public class EntityHelper {
         }
 
         return propertyResultMappings;
+    }
+
+    public static String getColumn(Class<?> entityType, String property) {
+        ResultMapping resultMapping = ResultMapRegistry.getResultMapping(entityType.getName(), property);
+        return resultMapping.getColumn();
+    }
+
+    public static String getColumns(Class<?> entityType, boolean exclude, List<String> properties) {
+        StringBuilder sb = new StringBuilder();
+        List<ResultMapping> resultMappingList = getPropertyResultMappings(entityType);
+        List<String> columnList = new ArrayList<String>();
+        for (int i = 0; i < resultMappingList.size(); i++) {
+            ResultMapping resultMapping = resultMappingList.get(i);
+            String propertyName = resultMapping.getProperty();
+            String column = resultMapping.getColumn();
+
+            if (propertyName.contains(".")) {
+                propertyName = propertyName.substring(0, propertyName.indexOf("."));
+            }
+
+            if (exclude) {
+                if (properties.contains(propertyName)) {
+                    continue;
+                }
+            } else {
+                if (properties.size() > 0 && !properties.contains(propertyName)) {
+                    continue;
+                }
+            }
+
+            columnList.add(column);
+        }
+
+        Iterator<String> iter = columnList.iterator();
+        while (iter.hasNext()) {
+            sb.append(iter.next());
+            if (iter.hasNext()) {
+                sb.append(", ");
+            }
+        }
+
+        LOGGER.debug("[{}][COLUMNS]: [{}]", entityType.getName(), sb.toString());
+        return sb.toString();
+    }
+
+    public static String getTypeHandler(Class<?> entityType, String property) {
+        ResultMapping resultMapping = ResultMapRegistry.getResultMapping(entityType.getName(), property);
+        if (resultMapping.getTypeHandler() != null) {
+            return resultMapping.getTypeHandler().getClass().getName();
+        }
+        return null;
     }
 
 }

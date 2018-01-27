@@ -1,9 +1,12 @@
 package com.debby.mybatis.criteria;
 
+import com.debby.mybatis.core.helper.EntityHelper;
+import mockit.Mock;
+import mockit.MockUp;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.debby.mybatis.core.ResultMapRegistry;
 import com.debby.mybatis.criteria.criterion.BetweenCriterion;
 import com.debby.mybatis.criteria.criterion.ComparisonCriterion;
 import com.debby.mybatis.criteria.criterion.InCriterion;
@@ -16,18 +19,33 @@ import com.debby.mybatis.criteria.criterion.NotNullCriterion;
 import com.debby.mybatis.criteria.criterion.NullCriterion;
 import com.debby.mybatis.sql.SQLComparisonOperator;
 
-import mockit.Expectations;
-
 /**
  * @author rocky.hu
  * @date Jan 25, 2018 5:55:40 PM
  */
 public class SimpleCriterionTest {
 
+	@BeforeMethod
+	public void init() {
+
+		new MockUp<EntityHelper>() {
+
+			@Mock
+			public String getColumn(Class<?> entityType, String property) {
+				return "id";
+			}
+
+			@Mock
+			public String getTypeHandler(Class<?> entityType, String property) {
+				return null;
+			}
+
+		};
+
+	}
+
 	@Test
 	public void testBetweenCriterion() {
-		new Expectations(ResultMapRegistry.class) {  
-		};
 		BetweenCriterion betweenCriterion = new BetweenCriterion("id", 1, 2);
 		Assert.assertEquals(betweenCriterion.toSqlString(Book.class), "(id BETWEEN #{criterions[0].value[0]} AND #{criterions[0].value[1]})");
 	}
@@ -77,13 +95,13 @@ public class SimpleCriterionTest {
 	@Test
 	public void testInCriterion() {
 		InCriterion inCriterion = new InCriterion("id", new String[] {"a","b","c"});
-		Assert.assertEquals(inCriterion.toSqlString(Book.class),"(id IN (#{criterions[0].value.get(0)}, #{criterions[0].value.get(1)}, #{criterions[0].value.get(2)}))");
+		Assert.assertEquals(inCriterion.toSqlString(Book.class),"(id IN (#{criterions[0].value[0]}, #{criterions[0].value[1]}, #{criterions[0].value[2]}))");
 	}
 
 	@Test
 	public void testNotInCriterion() {
 		NotInCriterion notInCriterion = new NotInCriterion("id", new String[] {"a","b","c"});
-		Assert.assertEquals(notInCriterion.toSqlString(Book.class),"(id NOT IN (#{criterions[0].value.get(0)}, #{criterions[0].value.get(1)}, #{criterions[0].value.get(2)}))");
+		Assert.assertEquals(notInCriterion.toSqlString(Book.class),"(id NOT IN (#{criterions[0].value[0]}, #{criterions[0].value[1]}, #{criterions[0].value[2]}))");
 	}
 
 	@Test

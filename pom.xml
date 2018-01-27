@@ -20,6 +20,7 @@
 		<dbunit.version>2.5.4</dbunit.version>
 		<h2.version>1.4.196</h2.version>
 		<jmockit.version>1.38</jmockit.version>
+		<p6spy.version>3.6.0</p6spy.version>
 	</properties>
 
 	<dependencies>
@@ -96,6 +97,13 @@
 			<groupId>org.jmockit</groupId>
 			<artifactId>jmockit</artifactId>
 			<version>${jmockit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>p6spy</groupId>
+			<artifactId>p6spy</artifactId>
+			<version>${p6spy.version}</version>
 			<scope>test</scope>
 		</dependency>
 

@@ -1,5 +1,5 @@
 /**
- *    Copyright 2016-2017 the original author or authors.
+ *    Copyright 2017-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,13 +15,12 @@
  */
 package com.debby.mybatis.spring;
 
-import java.io.IOException;
-
+import com.debby.mybatis.MyBatisDebbyConfiguration;
+import com.debby.mybatis.core.MyBatisDebbyBooster;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 
-import com.debby.mybatis.MyBatisDebbyConfiguration;
-import com.debby.mybatis.core.MyBatisDebbyBooster;
+import java.io.IOException;
 
 /**
  * @author rocky.hu
@@ -29,21 +28,21 @@ import com.debby.mybatis.core.MyBatisDebbyBooster;
  */
 public class MyBatisDebbySqlSessionFactoryBean extends SqlSessionFactoryBean {
 	
-	private MyBatisDebbyConfiguration myBatisDebbyConfiguration;
+	private MyBatisDebbyConfiguration debbyConfiguration;
 
 	@Override
 	protected SqlSessionFactory buildSqlSessionFactory() throws IOException {
 		SqlSessionFactory sqlSessionFactory = super.buildSqlSessionFactory();
-		MyBatisDebbyBooster.boost(myBatisDebbyConfiguration, sqlSessionFactory.getConfiguration());
+		MyBatisDebbyBooster.boost(debbyConfiguration, sqlSessionFactory.getConfiguration());
 		return sqlSessionFactory;
 	}
 
 	public MyBatisDebbyConfiguration getDebbyConfiguration() {
-		return myBatisDebbyConfiguration;
+		return debbyConfiguration;
 	}
 
-	public void setDebbyConfiguration(MyBatisDebbyConfiguration myBatisDebbyConfiguration) {
-		this.myBatisDebbyConfiguration = myBatisDebbyConfiguration;
+	public void setDebbyConfiguration(MyBatisDebbyConfiguration debbyConfiguration) {
+		this.debbyConfiguration = debbyConfiguration;
 	}
 
 }

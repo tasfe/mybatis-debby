@@ -1,13 +1,17 @@
 package com.debby.mybatis.association;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
+import com.debby.mybatis.AbstractDebbyMapperTest;
+import com.debby.mybatis.criteria.EntityCriteria;
+import com.debby.mybatis.criteria.criterion.Conjunction;
+import com.debby.mybatis.criteria.criterion.Disjunction;
+import com.debby.mybatis.criteria.criterion.MatchMode;
+import com.debby.mybatis.criteria.criterion.Restrictions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.debby.mybatis.AbstractDebbyMapperTest;
-import com.debby.mybatis.criteria.Criteria;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author rocky.hu
@@ -112,18 +116,38 @@ public class ProductMapperTest extends AbstractDebbyMapperTest<ProductMapper> {
     @Test
 	@Override
 	public void testSelectOne() {
+
+        EntityCriteria entityCriteria = EntityCriteria.forEntity(Product.class)
+                .where(Restrictions.eq("title", "p1")).build();
 		
-		Criteria criteria = new Criteria();
-		criteria.eq("title", "p1");
-		
-		//EntityCriteria entityCriteria = EntityCriteria.forEntity(Product.class).where(criteria1).bulid();
-		
-		//Product product = mapper.selectOne(entityCriteria);
-		//Assert.assertNotNull(product);
-		//Assert.assertEquals(product.getTitle(), "p1");
+		Product product = mapper.selectOne(entityCriteria);
+		Assert.assertNotNull(product);
+		Assert.assertEquals(product.getTitle(), "p1");
 	}
 
-	@Test
+    @Test
+    @Override
+    public void testSelectList() {
+        Disjunction disjunction = Restrictions.disjunction();
+        disjunction.add(Restrictions.eq("id", 2));
+        disjunction.add(Restrictions.like("title", "a", MatchMode.ANYWHERE));
+        disjunction.add(Restrictions.between("id", 1, 3));
+
+        Conjunction conjunction = Restrictions.conjunction();
+        conjunction.add(Restrictions.le("id", 4));
+        conjunction.add(Restrictions.like("title", "a", MatchMode.START));
+        conjunction.add(Restrictions.in("id", 5, 6, 7));
+
+        disjunction.add(conjunction);
+
+        EntityCriteria entityCriteria = EntityCriteria.forEntity(Product.class)
+                .where(disjunction).build();
+
+        List<Product> result = mapper.selectList(entityCriteria);
+
+    }
+
+    @Test
     public void testTestVarargs() {
         Product product = mapper.testVarargs(1);
         Assert.assertEquals(product.getTitle(), "p1");

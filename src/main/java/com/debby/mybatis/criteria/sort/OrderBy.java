@@ -1,5 +1,5 @@
 /**
- *    Copyright 2016-2017 the original author or authors.
+ *    Copyright 2017-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,9 +18,7 @@ package com.debby.mybatis.criteria.sort;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.ibatis.mapping.ResultMapping;
-
-import com.debby.mybatis.core.ResultMapRegistry;
+import com.debby.mybatis.core.helper.EntityHelper;
 
 /**
  * @author rocky.hu
@@ -40,10 +38,7 @@ public class OrderBy {
 	}
 	
 	public void addOrder(Order order) {
-		String propertyName = order.getPropertyName();
-		ResultMapping resultMapping = ResultMapRegistry.getResultMapping(entityType.getName(), propertyName);
-		String column = resultMapping.getColumn();
-		order.setPropertyName(column);
+		order.setPropertyName(EntityHelper.getColumn(entityType, order.getPropertyName()));
 		orderList.add(order);
 	}
 	

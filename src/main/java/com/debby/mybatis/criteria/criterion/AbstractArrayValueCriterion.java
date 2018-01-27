@@ -1,5 +1,5 @@
 /**
- *    Copyright 2016-2017 the original author or authors.
+ *    Copyright 2017-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 package com.debby.mybatis.criteria.criterion;
 
-import java.util.List;
-
 import com.debby.mybatis.sql.SqlOperator;
 import com.debby.mybatis.util.StringUtils;
+
+import java.util.List;
 
 /**
  * @author rocky.hu
@@ -37,9 +37,6 @@ public abstract class AbstractArrayValueCriterion extends SimpleCriterion {
 
 	@Override
 	public String toSqlString(Class<?> entityType) {
-		
-		String typeHandler = getTypeHandler(entityType);
-		
 		StringBuilder sb = new StringBuilder();
 		sb.append("(");
 		sb.append(getColumn(entityType));
@@ -50,10 +47,10 @@ public abstract class AbstractArrayValueCriterion extends SimpleCriterion {
 
 		int length = ((Object[])getValue()).length;
 		for (int i=0; i<length; i++) {
-			if (StringUtils.isNullOrEmpty(typeHandler)) {
+			if (StringUtils.isNullOrEmpty(getTypeHandler(entityType))) {
 				sb.append("#{criterions[" + getIndex() + "].value[" + i + "]}");
 			} else {
-				sb.append("#{criterions[" + getIndex() + "].value[" + i + "], typeHandler=" + typeHandler + "}");
+				sb.append("#{criterions[" + getIndex() + "].value[" + i + "], typeHandler=" + getTypeHandler(entityType) + "}");
 			}
 			
 			if (i+1 < length) {

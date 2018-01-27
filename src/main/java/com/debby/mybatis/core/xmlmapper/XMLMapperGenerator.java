@@ -1,5 +1,5 @@
 /**
- *    Copyright 2016-2017 the original author or authors.
+ *    Copyright 2017-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import com.debby.mybatis.core.dom.XmlConstants;
 import com.debby.mybatis.core.dom.xml.Document;
 import com.debby.mybatis.core.dom.xml.XmlElement;
 import com.debby.mybatis.core.xmlmapper.elements.*;
-import com.debby.mybatis.core.xmlmapper.elements.sql.SqlCriteriaFragmentElementGenerator;
 import com.debby.mybatis.core.xmlmapper.elements.sql.SqlOrderByFragmentElementGenerator;
 import com.debby.mybatis.core.xmlmapper.elements.sql.SqlPaginationPrefixFragmentElementGenerator;
 import com.debby.mybatis.core.xmlmapper.elements.sql.SqlPaginationSuffixFragmentElementGenerator;
@@ -42,7 +41,6 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
         XmlElement answer = new XmlElement("mapper");
         
         addBaseColumnListElement(answer);
-        addCriteriaSqlFragmentElement(answer);
         addWhereSqlFragmentElement(answer);
         addUpdateWhereSqlFragmentElement(answer);
         addOrderBySqlFragmentElement(answer);
@@ -67,11 +65,6 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
     
     protected void addBaseColumnListElement(XmlElement parentElement) {
         AbstractXmlElementGenerator elementGenerator = new SqlBaseColumnsElementGenerator();
-        initializeAndExecuteGenerator(elementGenerator, parentElement);
-    }
-    
-    protected void addCriteriaSqlFragmentElement(XmlElement parentElement) {
-        AbstractXmlElementGenerator elementGenerator = new SqlCriteriaFragmentElementGenerator();
         initializeAndExecuteGenerator(elementGenerator, parentElement);
     }
     

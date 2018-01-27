@@ -1,5 +1,5 @@
 /**
- *    Copyright 2016-2017 the original author or authors.
+ *    Copyright 2017-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -35,17 +35,15 @@ public abstract class AbstractSingleValueCriterion extends SimpleCriterion {
 	
 	@Override
 	public String toSqlString(Class<?> entityType) {
-		String typeHandler = getTypeHandler(entityType);
-		
 		StringBuilder sb = new StringBuilder();
 		sb.append(getColumn(entityType));
 		sb.append(" ");
 		sb.append(getSqlOperator());
 		sb.append(" ");
-		if (StringUtils.isNullOrEmpty(typeHandler)) {
+		if (StringUtils.isNullOrEmpty(getTypeHandler(entityType))) {
 			sb.append("#{criterions[" + getIndex() + "].value}");
 		} else {
-			sb.append("#{criterions[" + getIndex() + "].value, typeHandler=" + typeHandler + "}");
+			sb.append("#{criterions[" + getIndex() + "].value, typeHandler=" + getTypeHandler(entityType) + "}");
 		}
 		return sb.toString();
 	}

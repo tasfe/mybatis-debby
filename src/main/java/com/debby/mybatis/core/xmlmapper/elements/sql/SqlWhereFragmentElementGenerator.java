@@ -1,5 +1,5 @@
 /**
- *    Copyright 2016-2017 the original author or authors.
+ *    Copyright 2017-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package com.debby.mybatis.core.xmlmapper.elements.sql;
 
 import com.debby.mybatis.core.constant.Constants;
 import com.debby.mybatis.core.dom.xml.Attribute;
+import com.debby.mybatis.core.dom.xml.TextElement;
 import com.debby.mybatis.core.dom.xml.XmlElement;
 import com.debby.mybatis.core.xmlmapper.elements.AbstractXmlElementGenerator;
 
@@ -32,19 +33,11 @@ public class SqlWhereFragmentElementGenerator extends AbstractXmlElementGenerato
         answer.addAttribute(new Attribute("id", Constants.WHERE_SQL_FRAGMENT_ID));
 
         XmlElement ifElement = new XmlElement("if");
-        ifElement.addAttribute(new Attribute("test", "_parameter != null and _parameter.criteriaList != null and _parameter.criteriaList.size() > 0"));
+        ifElement.addAttribute(new Attribute("test", "_parameter != null and _parameter.criterions != null and _parameter.criterions.length > 0"));
         
         XmlElement whereElement = new XmlElement("where");
-        XmlElement forEachElement = new XmlElement("foreach");
-        forEachElement.addAttribute(new Attribute("collection", "criteriaList"));
-        forEachElement.addAttribute(new Attribute("item", "criteria"));
-        forEachElement.addAttribute(new Attribute("separator", "OR"));
-        XmlElement includeElement = new XmlElement("include");
-        includeElement.addAttribute(new Attribute("refid", Constants.CRITERIA_SQL_FRAGMENT_ID));
+        whereElement.addElement(new TextElement("${whereSql}"));
         
-        forEachElement.addElement(includeElement);
-        whereElement.addElement(forEachElement);
-
         ifElement.addElement(whereElement);
         answer.addElement(ifElement);
         

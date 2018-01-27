@@ -1,5 +1,5 @@
 /**
- *    Copyright 2016-2017 the original author or authors.
+ *    Copyright 2017-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,9 +15,7 @@
  */
 package com.debby.mybatis.criteria.criterion;
 
-import org.apache.ibatis.mapping.ResultMapping;
-
-import com.debby.mybatis.core.ResultMapRegistry;
+import com.debby.mybatis.core.helper.EntityHelper;
 import com.debby.mybatis.sql.SqlOperator;
 import com.debby.mybatis.util.Asserts;
 
@@ -97,15 +95,13 @@ public abstract class SimpleCriterion implements Criterion {
 	public void setValueMode(ValueMode valueMode) {
 		this.valueMode = valueMode;
 	}
-	
+
 	public String getColumn(Class<?> entityType) {
-		ResultMapping resultMapping = ResultMapRegistry.getResultMapping(entityType.getName(), getProperty());
-		return resultMapping.getColumn();
+		return EntityHelper.getColumn(entityType, property);
 	}
-	
+
 	public String getTypeHandler(Class<?> entityType) {
-		ResultMapping resultMapping = ResultMapRegistry.getResultMapping(entityType.getName(), getProperty());
-		this.typeHandler = resultMapping.getTypeHandler().getClass().getName();
+		this.typeHandler = EntityHelper.getTypeHandler(entityType, property);
 		return this.typeHandler;
 	}
 

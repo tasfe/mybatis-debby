@@ -1,10 +1,10 @@
 package com.debby.mybatis;
 
-import java.io.File;
-import java.io.InputStream;
-
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
+
+import java.io.File;
+import java.io.InputStream;
 
 /**
  * @author rocky.hu
@@ -21,7 +21,7 @@ public class MyBatisHelper {
 			String config = "mybatis-config.xml";
 			InputStream configInputStream = Resources.getResourceAsStream(config);
 			MyBatisDebbyConfiguration myBatisDebbyConfiguration = new MyBatisDebbyConfiguration();
-			myBatisDebbyConfiguration.setDebugEnabled(true);
+			myBatisDebbyConfiguration.setDebugEnabled(false);
 			myBatisDebbyConfiguration.setMapperXmlOutputPath(System.getProperty("user.home") + File.separator + ".debby" + File.separator);
 			myBatisDebbyConfiguration.setTablePrefix("t_");
 			myBatisDebbyConfiguration.setDialect("h2");

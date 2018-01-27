@@ -15,7 +15,7 @@
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName">
-			<value>${h2.driver}</value>
+			<value>com.p6spy.engine.spy.P6SpyDriver</value>
 		</property>
 		<property name="url">
 			<value>${h2.url}</value>
@@ -32,7 +32,7 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
-	<bean id="debbyConfiguration" class="com.debby.mybatis.DebbyConfiguration">
+	<bean id="debbyConfiguration" class="com.debby.mybatis.MyBatisDebbyConfiguration">
 		<property name="debugEnabled" value="false"/>
 		<property name="mapperXmlOutputPath" value="f://test//mapper"/>
 		<property name="tablePrefix" value="t_"/>
@@ -40,7 +40,7 @@
 		<property name="camelToUnderscore" value="true"/>
 	</bean>
 
-	<bean id="sqlSessionFactory" class="com.debby.mybatis.spring.DebbySqlSessionFactoryBean">
+	<bean id="sqlSessionFactory" class="com.debby.mybatis.spring.MyBatisDebbySqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="configLocation" value="classpath:mybatis-config.xml"/>
 		<!-- <property name="mapperLocations" value="classpath:assets/**/*Mapper.xml"/> -->
@@ -52,10 +52,10 @@
 	</bean>
 
 	<!-- <bean id="productMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.debby.mybatis.normal.ProductMapper" />
+		<property name="mapperInterface" value="com.debby.mybatis.association.ProductMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean> -->
 	
-	 <mybatis:scan base-package="com.debby.mybatis" marker-interface="com.debby.mybatis.DebbyMapper" template-ref="sqlSessionTemplate"/>
+	 <mybatis:scan base-package="com.debby.mybatis" marker-interface="com.debby.mybatis.MyBatisDebbyMapper" template-ref="sqlSessionTemplate"/>
 
 </beans>
