@@ -68,8 +68,7 @@ public class MyBatisDebbyConfiguration {
         this.tablePrefix = tablePrefix;
     }
 
-	public Dialect getDialect()
-	{
+	public Dialect getDialect() {
 		if (StringUtils.isNullOrEmpty(dialect)) {
 			throw new MyBatisDebbyException("Dialect is required.");
 		}
@@ -77,8 +76,7 @@ public class MyBatisDebbyConfiguration {
 		return instance;
 	}
 
-	public void setDialect(String dialect)
-	{
+	public void setDialect(String dialect) {
 		this.dialect = dialect;
 	}
 

@@ -3,13 +3,13 @@ package com.debby.mybatis.key.strategy.sequence;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.debby.mybatis.AbstractDebbyMapperTest;
+import com.debby.mybatis.AbstractMyBatisDebbyMapperTest;
 
 /**
  * @author rocky.hu
  * @date 2017-11-29 9:41 PM
  */
-public class AuthorMapperTest extends AbstractDebbyMapperTest<AuthorMapper> {
+public class AuthorMapperTest extends AbstractMyBatisDebbyMapperTest<AuthorMapper> {
 	
 	public AuthorMapperTest() {
 		super();

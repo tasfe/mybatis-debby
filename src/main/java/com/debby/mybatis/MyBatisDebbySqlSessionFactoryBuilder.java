@@ -29,32 +29,32 @@ import java.util.Properties;
  */
 public class MyBatisDebbySqlSessionFactoryBuilder extends SqlSessionFactoryBuilder {
 
-    private MyBatisDebbyConfiguration myBatisDebbyConfiguration;
+    private MyBatisDebbyConfiguration debbyConfiguration;
 
-    public MyBatisDebbySqlSessionFactoryBuilder(MyBatisDebbyConfiguration myBatisDebbyConfiguration) {
-        this.myBatisDebbyConfiguration = myBatisDebbyConfiguration;
+    public MyBatisDebbySqlSessionFactoryBuilder(MyBatisDebbyConfiguration debbyConfiguration) {
+        this.debbyConfiguration = debbyConfiguration;
     }
 
     @Override
     public SqlSessionFactory build(Reader reader, String environment, Properties properties) {
         SqlSessionFactory sqlSessionFactory = super.build(reader, environment, properties);
-        MyBatisDebbyBooster.boost(myBatisDebbyConfiguration, sqlSessionFactory.getConfiguration());
+        MyBatisDebbyBooster.boost(debbyConfiguration, sqlSessionFactory.getConfiguration());
         return sqlSessionFactory;
     }
 
     @Override
     public SqlSessionFactory build(InputStream inputStream, String environment, Properties properties) {
         SqlSessionFactory sqlSessionFactory = super.build(inputStream, environment, properties);
-        MyBatisDebbyBooster.boost(myBatisDebbyConfiguration, sqlSessionFactory.getConfiguration());
+        MyBatisDebbyBooster.boost(debbyConfiguration, sqlSessionFactory.getConfiguration());
         return sqlSessionFactory;
     }
 
     public MyBatisDebbyConfiguration getDebbyConfiguration() {
-        return myBatisDebbyConfiguration;
+        return debbyConfiguration;
     }
 
-    public void setDebbyConfiguration(MyBatisDebbyConfiguration myBatisDebbyConfiguration) {
-        this.myBatisDebbyConfiguration = myBatisDebbyConfiguration;
+    public void setDebbyConfiguration(MyBatisDebbyConfiguration debbyConfiguration) {
+        this.debbyConfiguration = debbyConfiguration;
     }
 
 }

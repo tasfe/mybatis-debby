@@ -3,13 +3,13 @@ package com.debby.mybatis.key.composite;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.debby.mybatis.AbstractDebbyMapperTest;
+import com.debby.mybatis.AbstractMyBatisDebbyMapperTest;
 
 /**
  * @author rocky.hu
  * @date 2017-11-29 9:41 PM
  */
-public class MemberMapperTest extends AbstractDebbyMapperTest<MemberMapper> {
+public class MemberMapperTest extends AbstractMyBatisDebbyMapperTest<MemberMapper> {
 	
 	public MemberMapperTest() {
 		super();

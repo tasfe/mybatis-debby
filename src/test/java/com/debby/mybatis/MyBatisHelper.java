@@ -20,14 +20,14 @@ public class MyBatisHelper {
     	try {
 			String config = "mybatis-config.xml";
 			InputStream configInputStream = Resources.getResourceAsStream(config);
-			MyBatisDebbyConfiguration myBatisDebbyConfiguration = new MyBatisDebbyConfiguration();
-			myBatisDebbyConfiguration.setDebugEnabled(false);
-			myBatisDebbyConfiguration.setMapperXmlOutputPath(System.getProperty("user.home") + File.separator + ".debby" + File.separator);
-			myBatisDebbyConfiguration.setTablePrefix("t_");
-			myBatisDebbyConfiguration.setDialect("h2");
-			myBatisDebbyConfiguration.setCamelToUnderscore(true);
+			MyBatisDebbyConfiguration debbyConfiguration = new MyBatisDebbyConfiguration();
+			debbyConfiguration.setDebugEnabled(false);
+			debbyConfiguration.setMapperXmlOutputPath(System.getProperty("user.home") + File.separator + ".debby" + File.separator);
+			debbyConfiguration.setTablePrefix("t_");
+			debbyConfiguration.setDialect("h2");
+			debbyConfiguration.setCamelToUnderscore(true);
 
-			sqlSessionFactory = new MyBatisDebbySqlSessionFactoryBuilder(myBatisDebbyConfiguration).build(configInputStream);
+			sqlSessionFactory = new MyBatisDebbySqlSessionFactoryBuilder(debbyConfiguration).build(configInputStream);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();

@@ -41,6 +41,7 @@
 		<mapper resource="mapper/MemberMapper.xml" />
 		<mapper resource="mapper/AuthorMapper.xml" />
 		<mapper resource="mapper/ArticleMapper.xml" />
+		<mapper resource="mapper/AnimalMapper.xml" />
  	</mappers>
 
 </configuration>

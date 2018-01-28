@@ -33,12 +33,12 @@ public class IntrospectedContext {
     private Class<?> entityType;
     private ResultMap resultMap;
     private Configuration configuration;
-    private MyBatisDebbyConfiguration myBatisDebbyConfiguration;
+    private MyBatisDebbyConfiguration debbyConfiguration;
     private List<InternalStatements> alreadyOwnedInternalStatements;
 
-    public IntrospectedContext(Configuration configuration, MyBatisDebbyConfiguration myBatisDebbyConfiguration) {
+    public IntrospectedContext(Configuration configuration, MyBatisDebbyConfiguration debbyConfiguration) {
         this.configuration = configuration;
-        this.myBatisDebbyConfiguration = myBatisDebbyConfiguration;
+        this.debbyConfiguration = debbyConfiguration;
     }
 
     public Class<?> getEntityType() {
@@ -61,8 +61,8 @@ public class IntrospectedContext {
         if (mappingTable != null) {
             tableName = mappingTable.name();
         } else {
-            if (!StringUtils.isNullOrEmpty(myBatisDebbyConfiguration.getTablePrefix())) {
-                tablePrefix = myBatisDebbyConfiguration.getTablePrefix();
+            if (!StringUtils.isNullOrEmpty(debbyConfiguration.getTablePrefix())) {
+                tablePrefix = debbyConfiguration.getTablePrefix();
             }
             tableName = tablePrefix + StringUtils.camelToUnderscore(type.getSimpleName(), false);
         }
@@ -87,11 +87,11 @@ public class IntrospectedContext {
     }
 
     public MyBatisDebbyConfiguration getDebbyConfiguration() {
-        return myBatisDebbyConfiguration;
+        return debbyConfiguration;
     }
 
-    public void setDebbyConfiguration(MyBatisDebbyConfiguration myBatisDebbyConfiguration) {
-        this.myBatisDebbyConfiguration = myBatisDebbyConfiguration;
+    public void setDebbyConfiguration(MyBatisDebbyConfiguration debbyConfiguration) {
+        this.debbyConfiguration = debbyConfiguration;
     }
 
     public List<InternalStatements> getAlreadyOwnedInternalStatements() {

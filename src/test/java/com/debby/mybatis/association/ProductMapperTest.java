@@ -1,6 +1,6 @@
 package com.debby.mybatis.association;
 
-import com.debby.mybatis.AbstractDebbyMapperTest;
+import com.debby.mybatis.AbstractMyBatisDebbyMapperTest;
 import com.debby.mybatis.criteria.EntityCriteria;
 import com.debby.mybatis.criteria.criterion.Conjunction;
 import com.debby.mybatis.criteria.criterion.Disjunction;
@@ -17,7 +17,7 @@ import java.util.List;
  * @author rocky.hu
  * @date 2017-11-29 9:41 PM
  */
-public class ProductMapperTest extends AbstractDebbyMapperTest<ProductMapper> {
+public class ProductMapperTest extends AbstractMyBatisDebbyMapperTest<ProductMapper> {
 	
 	public ProductMapperTest() {
 		super();

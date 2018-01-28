@@ -3,7 +3,7 @@ package com.debby.mybatis.pagination;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.debby.mybatis.AbstractDebbyMapperTest;
+import com.debby.mybatis.AbstractMyBatisDebbyMapperTest;
 import com.debby.mybatis.bean.Page;
 import com.debby.mybatis.criteria.EntityCriteria;
 import com.debby.mybatis.criteria.sort.Order;
@@ -12,7 +12,7 @@ import com.debby.mybatis.criteria.sort.Order;
  * @author rocky.hu
  * @date Jan 5, 2018 2:30:50 PM
  */
-public class ArticleMapperTest extends AbstractDebbyMapperTest<ArticleMapper> {
+public class ArticleMapperTest extends AbstractMyBatisDebbyMapperTest<ArticleMapper> {
 
 	public ArticleMapperTest() {
 		super();
