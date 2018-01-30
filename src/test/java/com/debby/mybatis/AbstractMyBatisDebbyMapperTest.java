@@ -61,7 +61,7 @@ public abstract class AbstractMyBatisDebbyMapperTest<MAPPER extends MyBatisDebby
 	}
 
 	// test methods
-	
+	public void testBatchInsert(){};
     public void testInsert(){};
     public void testInsertSelective(){};
     public void testUpdateById(){};

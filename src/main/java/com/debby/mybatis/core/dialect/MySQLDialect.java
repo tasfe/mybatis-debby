@@ -15,8 +15,6 @@
  */
 package com.debby.mybatis.core.dialect;
 
-import com.debby.mybatis.core.dialect.identity.IdentityColumnStrategy;
-import com.debby.mybatis.core.dialect.identity.MySQLIdentityColumnStrategy;
 import com.debby.mybatis.core.dom.xml.Attribute;
 import com.debby.mybatis.core.dom.xml.TextElement;
 import com.debby.mybatis.core.dom.xml.XmlElement;
@@ -27,10 +25,10 @@ import com.debby.mybatis.core.dom.xml.XmlElement;
  */
 public class MySQLDialect extends Dialect {
 
-    @Override
-    public IdentityColumnStrategy getIdentityColumnStrategy() {
-        return new MySQLIdentityColumnStrategy();
-    }
+	@Override
+	public boolean supportsIdentityColumns() {
+		return true;
+	}
 
 	@Override
 	public void processLimitSuffixSqlFragment(XmlElement parentElement) {

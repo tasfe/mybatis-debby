@@ -15,15 +15,16 @@
  */
 package com.debby.mybatis.batch;
 
-import com.debby.mybatis.AbstractMyBatisDebbyMapperTest;
-import com.debby.mybatis.MyBatisHelper;
-import org.apache.ibatis.session.ExecutorType;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.TransactionIsolationLevel;
-import org.testng.annotations.Test;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import com.debby.mybatis.AbstractMyBatisDebbyMapperTest;
+import com.debby.mybatis.MyBatisHelper;
 
 /**
  * @author rocky.hu
@@ -41,7 +42,7 @@ public class AnimalMapperTest extends AbstractMyBatisDebbyMapperTest<AnimalMappe
 
         List<Animal> animalList = new ArrayList<>();
 
-        SqlSession sqlSession = MyBatisHelper.getSqlSessionFactory().openSession(ExecutorType.BATCH, TransactionIsolationLevel.SERIALIZABLE);
+        SqlSession sqlSession = MyBatisHelper.getSqlSessionFactory().openSession(ExecutorType.BATCH);
         AnimalMapper animalMapper = sqlSession.getMapper(AnimalMapper.class);
 
         Animal animal = null;
@@ -49,13 +50,25 @@ public class AnimalMapperTest extends AbstractMyBatisDebbyMapperTest<AnimalMappe
             animal = new Animal();
             animal.setName("dog" + i);
             animal.setWeight(i);
-            animalList.add(animal);
 
             animalMapper.insert(animal);
+            
+            animalList.add(animal);
         }
 
         sqlSession.commit();
         sqlSession.close();
+        
+        Assert.assertEquals(animalList.get(0).getId().intValue(), 1);
+        Assert.assertEquals(animalList.get(1).getId().intValue(), 2);
+        Assert.assertEquals(animalList.get(2).getId().intValue(), 3);
+        Assert.assertEquals(animalList.get(3).getId().intValue(), 4);
+        Assert.assertEquals(animalList.get(4).getId().intValue(), 5);
+        Assert.assertEquals(animalList.get(5).getId().intValue(), 6);
+        Assert.assertEquals(animalList.get(6).getId().intValue(), 7);
+        Assert.assertEquals(animalList.get(7).getId().intValue(), 8);
+        Assert.assertEquals(animalList.get(8).getId().intValue(), 9);
+        Assert.assertEquals(animalList.get(9).getId().intValue(), 10);
     }
 
 }

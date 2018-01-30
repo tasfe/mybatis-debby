@@ -41,11 +41,8 @@ public class InsertElementGenerator extends AbstractXmlElementGenerator {
         
         ResultMap resultMap = introspectedContext.getResultMap();
         answer.addAttribute(new Attribute("parameterType", resultMap.getType().getName()));
-        answer.addAttribute(new Attribute("keyColumn", "id"));
-        answer.addAttribute(new Attribute("keyProperty", "id"));
-        answer.addAttribute(new Attribute("useGeneratedKeys", "true"));
 
-//        addSelectKey(resultMap, answer);
+        addGeneratedIdentifier(resultMap, answer);
         
         StringBuilder insertClause = new StringBuilder();
         StringBuilder valuesClause = new StringBuilder();

@@ -15,8 +15,6 @@
  */
 package com.debby.mybatis.core.dialect;
 
-import com.debby.mybatis.core.dialect.identity.H2IdentityColumnStrategy;
-import com.debby.mybatis.core.dialect.identity.IdentityColumnStrategy;
 import com.debby.mybatis.core.dom.xml.Attribute;
 import com.debby.mybatis.core.dom.xml.TextElement;
 import com.debby.mybatis.core.dom.xml.XmlElement;
@@ -28,12 +26,12 @@ import com.debby.mybatis.exception.MappingException;
  */
 public class H2Dialect extends Dialect {
 
-    @Override
-    public IdentityColumnStrategy getIdentityColumnStrategy() {
-        return new H2IdentityColumnStrategy();
-    }
-    
-    @Override
+	@Override
+	public boolean supportsIdentityColumns() {
+		return true;
+	}
+
+	@Override
     public String getSequenceNextValString(String sequenceName) throws MappingException {
         return "call next value for " + sequenceName;
     }

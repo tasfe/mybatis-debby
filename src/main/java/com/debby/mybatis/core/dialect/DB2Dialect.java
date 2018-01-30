@@ -15,8 +15,6 @@
  */
 package com.debby.mybatis.core.dialect;
 
-import com.debby.mybatis.core.dialect.identity.DB2IdentityColumnStrategy;
-import com.debby.mybatis.core.dialect.identity.IdentityColumnStrategy;
 import com.debby.mybatis.core.dom.xml.Attribute;
 import com.debby.mybatis.core.dom.xml.TextElement;
 import com.debby.mybatis.core.dom.xml.XmlElement;
@@ -29,8 +27,8 @@ import com.debby.mybatis.exception.MappingException;
 public class DB2Dialect extends Dialect {
 
 	@Override
-	public IdentityColumnStrategy getIdentityColumnStrategy() {
-		return new DB2IdentityColumnStrategy();
+	public boolean supportsIdentityColumns() {
+		return true;
 	}
 
 	@Override

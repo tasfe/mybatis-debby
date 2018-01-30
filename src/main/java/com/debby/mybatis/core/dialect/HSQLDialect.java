@@ -15,8 +15,6 @@
  */
 package com.debby.mybatis.core.dialect;
 
-import com.debby.mybatis.core.dialect.identity.HSQLIdentityColumnStrategy;
-import com.debby.mybatis.core.dialect.identity.IdentityColumnStrategy;
 import com.debby.mybatis.core.dom.xml.Attribute;
 import com.debby.mybatis.core.dom.xml.TextElement;
 import com.debby.mybatis.core.dom.xml.XmlElement;
@@ -34,8 +32,8 @@ import com.debby.mybatis.exception.MappingException;
 public class HSQLDialect extends Dialect {
 
 	@Override
-	public IdentityColumnStrategy getIdentityColumnStrategy() {
-		return new HSQLIdentityColumnStrategy();
+	public boolean supportsIdentityColumns() {
+		return true;
 	}
 
 	@Override

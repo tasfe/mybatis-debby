@@ -1,19 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="TEST">
-	<test name="Key_Composite">
-		<classes>
-			<class name="com.debby.mybatis.key.composite.MemberMapperTest" />
-		</classes>
-	</test>
-	<test name="Key_Strategy_Sequence">
-		<classes>
-			<class name="com.debby.mybatis.key.strategy.sequence.AuthorMapperTest" />
-		</classes>
-	</test>
 	<test name="Association">
 		<classes>
 			<class name="com.debby.mybatis.association.ProductMapperTest" />
+		</classes>
+	</test>
+	<test name="Batch">
+		<classes>
+			<class name="com.debby.mybatis.batch.AnimalMapperTest" />
+		</classes>
+	</test>
+	<test name="Criteria">
+		<classes>
+			<class name="com.debby.mybatis.criteria.EntityCriteraBuilderTest" />
+			<class name="com.debby.mybatis.criteria.RestrctionsTest" />
+			<class name="com.debby.mybatis.criteria.SimpleCriterionTest" />
+		</classes>
+	</test>
+	<test name="Key">
+		<classes>
+			<class name="com.debby.mybatis.key.composite.MemberMapperTest" />
+			<class name="com.debby.mybatis.key.strategy.sequence.AuthorMapperTest" />
+		</classes>
+	</test>
+	<test name="mapping">
+		<classes>
+			<class name="com.debby.mybatis.mapping.EntityHelperTest" />
 		</classes>
 	</test>
 	<test name="Pagination">

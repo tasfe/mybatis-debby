@@ -209,20 +209,22 @@ public abstract class AbstractXmlElementGenerator extends AbstractGenerator {
     }
 
     /**
-     * Add 'SelectKey' element for insert statement.
+     * Handle Generated Identifier.
      *
      * @param resultMap
      * @param parentElement
      */
-    protected void addSelectKey(ResultMap resultMap, XmlElement parentElement) {
+    protected void addGeneratedIdentifier(ResultMap resultMap, XmlElement parentElement) {
         if (getIdResultMappingsCount(resultMap) > 0) {
         	List<ResultMapping> idResultMappingList = getIdResultMappings(resultMap);
             Class<?> entityType = resultMap.getType();
+            String idColumn = null;
             String idProperty = null;
             Field idField = null;
             if (idResultMappingList.size() == 1) {
             	ResultMapping idResultMapping = idResultMappingList.get(0);
             	idProperty = idResultMapping.getProperty();
+            	idColumn = idResultMapping.getColumn();
             	idField = ReflectUtils.findField(entityType, idProperty);
             	MappingId mappingId = idField.getAnnotation(MappingId.class);
             	if (mappingId == null) {
@@ -239,6 +241,12 @@ public abstract class AbstractXmlElementGenerator extends AbstractGenerator {
         		}
 
         		idProperty = compositeIdField.getName() + "." + idField.getName();
+        		for (ResultMapping resultMapping : idResultMappingList) {
+        			if (idProperty.equals(resultMapping.getProperty())) {
+        				idColumn = resultMapping.getColumn();
+        				break;
+        			}
+        		}
             }
 
             MappingId mappingId = idField.getAnnotation(MappingId.class);
@@ -251,13 +259,18 @@ public abstract class AbstractXmlElementGenerator extends AbstractGenerator {
 
         	Dialect dialect = introspectedContext.getDebbyConfiguration().getDialect();
 
-            XmlElement selectKeyElement = new XmlElement("selectKey");
-            selectKeyElement.addAttribute(new Attribute("keyProperty", idProperty));
-            selectKeyElement.addAttribute(new Attribute("resultType", idField.getType().getName()));
             if (keyGenerationStrategy == KeyGenerationStrategy.IDENTITY) {
-                selectKeyElement.addAttribute(new Attribute("order", "AFTER" ));
-                selectKeyElement.addElement(new TextElement(dialect.getIdentityColumnStrategy().getIdentitySelectString()));
+            	if (!dialect.supportsIdentityColumns()) {
+            		throw new MappingException(dialect.getClass().getName() + " does not support identity" );
+            	}
+            	
+            	parentElement.addAttribute(new Attribute("keyColumn", idColumn));
+            	parentElement.addAttribute(new Attribute("keyProperty", idProperty));
+            	parentElement.addAttribute(new Attribute("useGeneratedKeys", "true"));
             } else if (keyGenerationStrategy == KeyGenerationStrategy.SEQUENCE){
+            	XmlElement selectKeyElement = new XmlElement("selectKey");
+                selectKeyElement.addAttribute(new Attribute("keyProperty", idProperty));
+                selectKeyElement.addAttribute(new Attribute("resultType", idField.getType().getName()));
             	String generator = mappingId.generator();
             	KeySequenceGenerator sequenceGenerator = idField.getAnnotation(KeySequenceGenerator.class);
             	if (StringUtils.isNullOrEmpty(generator) || sequenceGenerator == null || !generator.equals(sequenceGenerator.name())) {
@@ -266,9 +279,8 @@ public abstract class AbstractXmlElementGenerator extends AbstractGenerator {
             	String sequenceName = sequenceGenerator.sequenceName();
                 selectKeyElement.addAttribute(new Attribute("order", "BEFORE" ));
                 selectKeyElement.addElement(new TextElement(dialect.getSequenceNextValString(sequenceName)));
+                parentElement.addElement(selectKeyElement);
             }
-
-            parentElement.addElement(selectKeyElement);
 
         }
     }

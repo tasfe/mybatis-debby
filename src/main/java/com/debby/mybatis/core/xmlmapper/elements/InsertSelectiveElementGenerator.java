@@ -40,7 +40,7 @@ public class InsertSelectiveElementGenerator extends AbstractXmlElementGenerator
         ResultMap resultMap = introspectedContext.getResultMap();
         answer.addAttribute(new Attribute("parameterType", resultMap.getType().getName()));
 
-        addSelectKey(resultMap, answer);
+        addGeneratedIdentifier(resultMap, answer);
 
         StringBuilder sb = new StringBuilder();
         sb.append("INSERT INTO ");

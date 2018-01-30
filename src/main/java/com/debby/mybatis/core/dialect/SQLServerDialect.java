@@ -15,8 +15,6 @@
  */
 package com.debby.mybatis.core.dialect;
 
-import com.debby.mybatis.core.dialect.identity.IdentityColumnStrategy;
-import com.debby.mybatis.core.dialect.identity.SQLServerIdentityColumnStrategy;
 import com.debby.mybatis.core.dom.xml.TextElement;
 import com.debby.mybatis.core.dom.xml.XmlElement;
 
@@ -28,10 +26,10 @@ import com.debby.mybatis.core.dom.xml.XmlElement;
  */
 public class SQLServerDialect extends Dialect {
 
-    @Override
-    public IdentityColumnStrategy getIdentityColumnStrategy() {
-        return new SQLServerIdentityColumnStrategy();
-    }
+	@Override
+	public boolean supportsIdentityColumns() {
+		return true;
+	}
 
 	@Override
 	public void processLimitPrefixSqlFragment(XmlElement parentElement) {

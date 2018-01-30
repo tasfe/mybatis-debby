@@ -15,8 +15,6 @@
  */
 package com.debby.mybatis.core.dialect;
 
-import com.debby.mybatis.core.dialect.identity.IdentityColumnStrategy;
-import com.debby.mybatis.core.dialect.identity.IdentityColumnStrategyImpl;
 import com.debby.mybatis.core.dom.xml.Attribute;
 import com.debby.mybatis.core.dom.xml.TextElement;
 import com.debby.mybatis.core.dom.xml.XmlElement;
@@ -28,9 +26,9 @@ import com.debby.mybatis.exception.MappingException;
  */
 public abstract class Dialect {
 
-	public IdentityColumnStrategy getIdentityColumnStrategy(){
-        return new IdentityColumnStrategyImpl();
-    }
+	public boolean supportsIdentityColumns() {
+		return false;
+	}
 
 	public String getSequenceNextValString(String sequenceName) throws MappingException {
         throw new MappingException( getClass().getName() + " does not support sequences" );
